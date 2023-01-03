@@ -22,6 +22,8 @@ public class FocusSpell extends StandardSpell {
             return !WitchcraftAPI.minecraft.isPet(caster, living);
         });
         for (Entity entity : entities) {
+            if (!(entity instanceof LivingEntity living)) continue;
+            if (!WitchcraftAPI.minecraft.isPet(caster, living)) continue;
             // todo make target
         }
     }
