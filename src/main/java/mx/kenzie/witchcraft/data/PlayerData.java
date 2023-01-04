@@ -3,6 +3,8 @@ package mx.kenzie.witchcraft.data;
 import mx.kenzie.fern.Fern;
 import mx.kenzie.witchcraft.Session;
 import mx.kenzie.witchcraft.data.achievement.Achievement;
+import mx.kenzie.witchcraft.data.modifier.Modifier;
+import mx.kenzie.witchcraft.data.modifier.ModifierMap;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -27,6 +29,10 @@ public class PlayerData extends CasterData {
     private transient Player player;
     
     PlayerData() {
+    }
+    
+    public double getModifier(Modifier.Type type) {
+        return temporary.modifiers.get(type);
     }
     
     public static PlayerData getData(Player player) {
@@ -192,6 +198,7 @@ public class PlayerData extends CasterData {
     
     public class Temporary {
         public Session session;
+        public final ModifierMap modifiers = new ModifierMap();
     }
     
     public class Memory {
