@@ -33,7 +33,7 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
     protected static final Map<UUID, WorldData> ALL = new HashMap<>();
     protected static final Cache<World, WorldData> DATA = Cache.soft(WeakHashMap::new);
     protected static final String DEFAULT_HASH = "71208163dbbefe6a9f4d4e19c39c89d84d5cb2897e5d924983b38f6ab94163";
-    public String id, name = "Unknown World", description, hash = DEFAULT_HASH;
+    public String id, name = "Unknown World", description = "", hash = DEFAULT_HASH;
     public boolean major_realm, pocket_realm, safe, indestructible;
     public @Name("protected") boolean restricted;
     protected transient UUID uuid;
@@ -45,6 +45,8 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
     public WorldData(World world) {
         this.world = world;
         this.uuid = world.getUID();
+        this.id = world.key().asString();
+        this.name = world.getName();
     }
     
     public static void reloadAll() {
