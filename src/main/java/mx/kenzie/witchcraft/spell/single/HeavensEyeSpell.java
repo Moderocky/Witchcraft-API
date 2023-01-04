@@ -4,14 +4,13 @@ import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +39,8 @@ public class HeavensEyeSpell extends AbstractWardSpell {
         final ParticleCreator creator = WitchcraftAPI.client.particles(ticker);
         final Location centre = caster.getEyeLocation();
         cube.setMajorTickConsumer(thing -> {
-            WitchcraftAPI.executor.submit(() -> {
-                final int particles = 80;
-                final VectorShape circle = creator.createCircle(new Vector(0, -1, 0), 10, particles);
-                for (Vector vector : circle) {
-                    final Location point = centre.clone().add(vector);
-                    this.builder.location(point).spawn();
-                    try {
-                        Thread.sleep(4000 / particles); // 4 rings drawing at a time
-                    } catch (InterruptedException ignored) {}
-                }
-            });
+            centre.getWorld().playSound(centre, Sound.BLOCK_BEACON_AMBIENT, 0.7F, 1.8F);
+            WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
             final List<Entity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
             list.removeIf(found -> {
                 if (thing == found) return true;

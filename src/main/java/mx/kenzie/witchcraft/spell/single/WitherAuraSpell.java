@@ -4,14 +4,13 @@ import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.util.Vector;
 
 import java.awt.*;
 import java.util.Map;
@@ -45,6 +44,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
             .force(true);
         final ParticleCreator creator = WitchcraftAPI.client.particles(ticker);
         cube.setMajorTickConsumer(thing -> {
+            thing.getWorld().playSound(thing.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.4F, 0.2F);
             for (final Entity found : thing.getNearbyEntities(10, 5, 10)) {
                 WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.WITHER);
                 for (int i = 0; i < 3; i++) {
@@ -54,17 +54,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
                 }
             }
             final Location centre = thing.getEyeLocation();
-            WitchcraftAPI.executor.submit(() -> {
-                final int particles = 80;
-                final VectorShape circle = creator.createCircle(new Vector(0, -1, 0), 10, particles);
-                for (Vector vector : circle) {
-                    final Location point = centre.clone().add(vector);
-                    this.builder.location(point).spawn();
-                    try {
-                        Thread.sleep(4000 / particles); // 4 rings drawing at a time
-                    } catch (InterruptedException ignored) {}
-                }
-            });
+            WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
     }

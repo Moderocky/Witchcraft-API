@@ -5,7 +5,6 @@ import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.client.AbstractClientArmorStand;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
 import org.bukkit.*;
@@ -51,21 +50,17 @@ public class FireballSpell extends AbstractProjectileSpell {
             @Override
             public void onTick() {
                 skull.velocity(direction);
-                skull.move(getPotentialNext().add(0, -1, 0));
+                skull.move(getPotentialNext().add(0, -1.2, 0));
                 final Location start = getPrevious();
-                final VectorShape line = creator.createLine(start, getLocation(), 0.4);
+                creator.drawPoof(start, 0.3, 4);
                 this.drawLine(lava, start, getLocation(), 0.8);
-                for (Vector vector : line) {
-                    vector.add(new Vector((random.nextDouble() - 0.5) * 0.3, (random.nextDouble() - 0.5) * 0.3, (random.nextDouble() - 0.5) * 0.3));
-                    builder.location(start.clone().add(vector)).spawn();
-                }
             }
             
             @Override
             public void onLaunch() {
                 world.playSound(getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.75F, 0.9F);
                 Location loc = WitchcraftAPI.minecraft.getRelative(getPotentialNext(), 90, 0, 0.36);
-                skull.setLocation(loc.add(0, -1, 0));
+                skull.setLocation(loc.add(0, -1.2, 0));
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getLocation().distanceSquared(location) < 50 * 50)
                         skull.show(player);
