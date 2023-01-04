@@ -38,6 +38,12 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         return blocks;
     }
     
+    public static boolean isValidResult(Block block, boolean stand) {
+        if (AbstractTeleportSpell.isInvalidStand(block)) return false;
+        if (AbstractTeleportSpell.isInvalidAbove(block)) return false;
+        return !stand || !AbstractTeleportSpell.isInvalidBelow(block);
+    }
+    
     public static boolean isInvalidStand(Block block) {
         return block.getType().isCollidable();
     }
