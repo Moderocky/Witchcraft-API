@@ -1,10 +1,9 @@
 package mx.kenzie.witchcraft.data;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
-import mx.kenzie.witchcraft.data.item.ItemMaterial;
 import mx.kenzie.witchcraft.data.item.Rarity;
 import mx.kenzie.witchcraft.data.item.Tag;
+import mx.kenzie.witchcraft.data.world.WorldData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -67,27 +66,23 @@ public interface Position extends ItemArchetype {
     
     @Override
     default ItemStack create() {
-        final ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        if (!this.isValid()) return new ItemStack(Material.AIR);
+        final WorldData data = WorldData.getData(this.getWorld());
+        final ItemStack item = data.create();
         final ItemMeta meta = item.getItemMeta();
         meta.displayName(this.displayName());
-        if (this.isValid()) {
-            final Block block = this.getLocation().getBlock();
-            meta.displayName(this.displayName());
-            meta.lore(List.of(
-                Component.text(block.getWorld().getName())
-                    .color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                Component.text("(" + block.getX() + ", " + block.getY() + ", " + block.getX() + ")")
-                    .color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
-            ));
-            if (meta instanceof SkullMeta skull) {
-                final PlayerProfile profile;
-                if (this instanceof Major major) profile = ItemMaterial.createProfile(major.texture);
-                else if (this instanceof Person person) profile = person.player.getPlayerProfile();
-                else
-                    profile = ItemMaterial.createProfile("6a4bdb660d934b3d8be5993790f26ee805dcaa65336671cfdba7f6fe37775179");
-                skull.setPlayerProfile(profile);
-            }
-        }
+        final Block block = this.getLocation().getBlock();
+        meta.lore(List.of(
+            Component.text(block.getWorld().getName())
+                .color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+            Component.text("(" + block.getX() + ", " + block.getY() + ", " + block.getX() + ")")
+                .color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+            Component.text(""),
+            data.getRealmType().color(data.rarity().color())
+                .decoration(TextDecoration.ITALIC, false)
+        ));
+        if (this instanceof Person person && meta instanceof SkullMeta skull)
+            skull.setPlayerProfile(person.player.getPlayerProfile());
         item.setItemMeta(meta);
         return item;
     }
@@ -102,9 +97,6 @@ public interface Position extends ItemArchetype {
     }
     
     record Major(Location getLocation, String name, String texture) implements Position {
-        // Mortal realm 6a4bdb660d934b3d8be5993790f26ee805dcaa65336671cfdba7f6fe37775179
-        // Demon realm 6ec58c1efdbd3307632022638d8db5bf63635cbc620b26e5d4d2f3fe32284cfd
-        // Death realm d23fe3671b3c916c2f24fdcbebd7cf131aad38673a56be63e0ee50932efad84d
         
         @Override
         public World getWorld() {
