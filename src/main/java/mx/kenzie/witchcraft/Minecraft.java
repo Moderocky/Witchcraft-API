@@ -4,6 +4,8 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
@@ -11,71 +13,158 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+/**
+ * These methods access the world, the custom entity registry or other minecraft data.
+ * It's recommended to write data (e.g. 'do' stuff) only on the main thread.
+ * Data here is fairly safe to read (e.g. 'check' stuff) off the main thread.
+ */
 public interface Minecraft {
-    boolean isAlly(org.bukkit.entity.Entity target, org.bukkit.entity.Entity source);
     
-    boolean isPet(org.bukkit.entity.LivingEntity owner, org.bukkit.entity.LivingEntity pet);
+    /**
+     * If the target is an ally of the source.
+     * Allies include:
+     * - the source
+     * - the source's summons
+     * - the source's coven members
+     * - the source's coven members' summons
+     */
+    boolean isAlly(Entity target, Entity source);
     
-    void damageEntitySafely(org.bukkit.entity.Entity target, org.bukkit.entity.Entity source, double amount, EntityDamageEvent.DamageCause reason);
+    /**
+     * For checking who summons belong to.
+     */
+    boolean isPet(LivingEntity owner, LivingEntity pet);
     
-    boolean isEnemy(org.bukkit.entity.Entity target, org.bukkit.entity.Entity source);
+    /**
+     * The source damages the target safely.
+     * Allies will not be damaged.
+     */
+    void damageEntitySafely(Entity target, Entity source, double amount, EntityDamageEvent.DamageCause reason);
     
-    void damageEntity(org.bukkit.entity.Entity target, org.bukkit.entity.Entity damager, double amount, EntityDamageEvent.DamageCause reason);
+    /**
+     * If the target is an enemy of the source.
+     * Enemies include:
+     * - players in different covens
+     * - summons of players in different covens
+     * - monsters
+     */
+    boolean isEnemy(Entity target, Entity source);
     
-    boolean isSameVehicle(org.bukkit.entity.Entity target, org.bukkit.entity.Entity passenger);
+    /**
+     * The source damages the target.
+     * This will damage allies, etc. indiscriminately.
+     */
+    void damageEntity(Entity target, Entity source, double amount, EntityDamageEvent.DamageCause reason);
     
-    boolean isInteractible(org.bukkit.entity.Entity entity);
+    boolean isSameVehicle(Entity target, Entity passenger);
+    
+    /**
+     * If entity responds to collisions, etc.
+     */
+    boolean isInteractible(Entity entity);
     
     CollisionTraceResult collisionCheck(AbstractProjectile projectile);
     
-    CollisionTraceResult collisionCheck(Location location, Vector motion, @Nullable org.bukkit.entity.Entity source);
+    CollisionTraceResult collisionCheck(Location location, Vector motion, @Nullable Entity source);
     
     boolean hasLineOfSight(Location bukkitStart, Location endStart);
     
-    boolean hasLineOfSight(org.bukkit.entity.LivingEntity creature, Location end);
+    boolean hasLineOfSight(LivingEntity creature, Location end);
     
-    boolean hasLineOfSight(Location start, Location end, org.bukkit.entity.Entity shape);
+    boolean hasLineOfSight(Location start, Location end, Entity shape);
     
     Location getRelative(Location location, float horizontalAngle, float verticalAngle, double distance);
     
-    org.bukkit.entity.Entity spawn(String id, Location location, boolean natural);
+    /**
+     * Summons an entity by its Minecraft ID.
+     */
+    Entity spawn(String id, Location location, boolean natural);
     
-    Summon getAsSummon(org.bukkit.entity.Entity entity);
+    /**
+     * Returns the Summon handle of an entity.
+     */
+    Summon getAsSummon(Entity entity);
     
-    org.bukkit.entity.LivingEntity summonWardCube(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * Summons a new ward cube.
+     * This will rotate, but has no behaviour.
+     */
+    LivingEntity summonWardCube(LivingEntity owner, Location location);
     
-    Summon summon(org.bukkit.entity.LivingEntity owner, String id, Location location);
+    /**
+     * Summons a 'summon' entity by its Minecraft ID.
+     */
+    Summon summon(LivingEntity owner, String id, Location location);
     
-    org.bukkit.entity.LivingEntity summonMarrArmour(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:marr_armour
+     */
+    LivingEntity summonMarrArmour(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonArcana(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:arcana_summon
+     */
+    LivingEntity summonArcana(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonArmour(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:armour_summon
+     */
+    LivingEntity summonArmour(LivingEntity owner, Location location);
     
+    /**
+     * minecraft:tang_portal
+     */
     MalleablePortal tangPortal(Location location);
     
+    /**
+     * minecraft:nether_portal
+     */
     MalleablePortal netherPortal(Location location);
     
-    org.bukkit.entity.LivingEntity summonPlantGuardian(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:plant_guardian_summon
+     */
+    LivingEntity summonPlantGuardian(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonSkeleton(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:skeleton_summon
+     */
+    LivingEntity summonSkeleton(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonZombie(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:zombie_summon
+     */
+    LivingEntity summonZombie(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonWarpWarden(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:warp_warden_summon
+     */
+    LivingEntity summonWarpWarden(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonWitherBeast(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:wither_beast_summon
+     */
+    LivingEntity summonWitherBeast(LivingEntity owner, Location location);
     
-    org.bukkit.entity.LivingEntity summonWarhammerTotem(org.bukkit.entity.LivingEntity owner, Location location);
+    /**
+     * minecraft:warhammer_totem
+     */
+    LivingEntity summonWarhammerTotem(LivingEntity owner, Location location);
     
-    String getID(org.bukkit.entity.Entity entity);
+    String getID(Entity entity);
     
+    /**
+     * Spawns a player 'NPC' entity. Natively unsafe to use.
+     */
     NPC spawnNPC(Location loc, PlayerProfile profile, Consumer<Player> o);
     
-    org.bukkit.entity.Entity getTargetEntity(Location location, double maxDist, double accuracy);
+    Entity getTargetEntity(Location location, double maxDist, double accuracy);
     
     @SuppressWarnings("unchecked")
-    <Type extends Handle> Type getHandle(org.bukkit.entity.Entity entity);
+    <Type extends Handle> Type getHandle(Entity entity);
     
-    int nearbySummons(org.bukkit.entity.LivingEntity owner, @Nullable String type);
+    /**
+     * Returns the number of nearby summons of the given ID.
+     */
+    int nearbySummons(LivingEntity owner, @Nullable String type);
 }
