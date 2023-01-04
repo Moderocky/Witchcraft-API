@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -45,5 +46,14 @@ abstract class AbstractWardSpell extends StandardSpell {
             } catch (InterruptedException ignored) {}
         }
     }
-    
+
+    protected List<LivingEntity> getAffected(LivingEntity caster, LivingEntity totem, boolean includeAllies) {
+        final Location centre = caster.getEyeLocation();
+        final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
+        list.removeIf(found -> {
+            if (totem == found) return true;
+            return !includeAllies && WitchcraftAPI.minecraft.isAlly(found, caster);
+        });
+        return list;
+    }
 }

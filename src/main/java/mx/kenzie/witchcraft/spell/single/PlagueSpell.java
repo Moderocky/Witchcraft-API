@@ -43,11 +43,7 @@ public class PlagueSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, 0.6F, 0.5F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
-            list.removeIf(found -> {
-                if (thing == found) return true;
-                return WitchcraftAPI.minecraft.isAlly(found, caster);
-            });
+            final List<LivingEntity> list = this.getAffected(caster, entity, false);
             if (list.isEmpty()) return;
             for (LivingEntity living : list) {
                 bubbles.drawPoof(living.getLocation(), 0.6, 8);

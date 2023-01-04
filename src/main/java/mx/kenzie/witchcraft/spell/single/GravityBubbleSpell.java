@@ -45,10 +45,7 @@ public class GravityBubbleSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BEACON_AMBIENT, 0.7F, 0.7F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
-            list.removeIf(found -> (thing == found));
-            if (list.isEmpty()) return;
-            for (LivingEntity living : list) {
+            for (LivingEntity living : this.getAffected(caster, entity, true)) {
                 bubbles.drawPoof(living.getLocation(), 0.6, 8);
                 living.removePotionEffect(PotionEffectType.SLOW_FALLING);
                 living.addPotionEffect(effect);

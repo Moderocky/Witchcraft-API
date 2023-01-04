@@ -45,7 +45,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
         final ParticleCreator creator = WitchcraftAPI.client.particles(ticker);
         cube.setMajorTickConsumer(thing -> {
             thing.getWorld().playSound(thing.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.4F, 0.2F);
-            for (final Entity found : thing.getNearbyEntities(10, 5, 10)) {
+            for (final Entity found : this.getAffected(caster, entity, true)) {
                 WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.WITHER);
                 for (int i = 0; i < 3; i++) {
                     final Location point = found.getLocation();

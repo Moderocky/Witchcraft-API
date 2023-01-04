@@ -41,15 +41,10 @@ public class HeavensEyeSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BEACON_AMBIENT, 0.7F, 1.8F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            final List<Entity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
-            list.removeIf(found -> {
-                if (thing == found) return true;
-                return WitchcraftAPI.minecraft.isAlly(found, caster);
-            });
+            final List<LivingEntity> list = this.getAffected(caster, entity, false);
             if (list.isEmpty()) return;
-            final Entity target = list.get(random.nextInt(list.size()));
-            if (!(target instanceof LivingEntity living)) return;
-            creator.drawLightning(thing.getEyeLocation(), living.getEyeLocation(), 0.15);
+            final LivingEntity target = list.get(random.nextInt(list.size()));
+            creator.drawLightning(thing.getEyeLocation(), target.getEyeLocation(), 0.15);
             WitchcraftAPI.minecraft.damageEntitySafely(target, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
