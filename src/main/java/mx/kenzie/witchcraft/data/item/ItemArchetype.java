@@ -115,4 +115,8 @@ public interface ItemArchetype {
         return true;
     }
     
+    default MutableArchetype mutate() {
+        return new MutableArchetype(this);
+    }
+    
 }
