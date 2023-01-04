@@ -52,6 +52,8 @@ public interface Minecraft {
     
     org.bukkit.entity.LivingEntity summonArmour(org.bukkit.entity.LivingEntity owner, Location location);
     
+    MalleablePortal tangPortal(Location location);
+    
     MalleablePortal netherPortal(Location location);
     
     org.bukkit.entity.LivingEntity summonPlantGuardian(org.bukkit.entity.LivingEntity owner, Location location);
