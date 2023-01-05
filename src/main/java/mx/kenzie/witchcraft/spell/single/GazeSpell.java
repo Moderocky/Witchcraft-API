@@ -29,7 +29,7 @@ public class GazeSpell extends StandardSpell {
         final World world = caster.getWorld();
         final Location targetLocation;
         final Entity targetEntity;
-        computeTarget:
+        compute_target:
         {
             final Location start = caster.getEyeLocation();
             final Vector direction = caster.getLocation().getDirection();
@@ -38,7 +38,7 @@ public class GazeSpell extends StandardSpell {
             if (result != null) {
                 targetEntity = result.getHitEntity();
                 targetLocation = result.getHitPosition().toLocation(world);
-                break computeTarget;
+                break compute_target;
             }
             return;
         }
