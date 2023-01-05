@@ -153,6 +153,8 @@ public interface Minecraft {
     
     LivingEntity summonHuman(LivingEntity owner, Location location);
     
+    LivingEntity summonKnight(LivingEntity owner, Location location);
+    
     String getID(Entity entity);
     
     /**
