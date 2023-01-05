@@ -37,6 +37,8 @@ public interface SpellManager {
     
     double getAmplitude(LivingEntity caster, EntityEquipment equipment);
     
+    boolean cast(LivingEntity caster, Spell spell, float scale);
+    
     boolean cast(LivingEntity caster, String id, float scale);
     
     int getRange(LivingEntity caster, EntityEquipment equipment);
