@@ -26,8 +26,6 @@ import java.util.UUID;
 
 public interface Position extends ItemArchetype {
     
-    World getWorld();
-    
     default void teleport(LivingEntity entity) {
         entity.teleportAsync(this.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
@@ -87,9 +85,11 @@ public interface Position extends ItemArchetype {
         return item;
     }
     
-    Component displayName();
-    
     boolean isValid();
+    
+    World getWorld();
+    
+    Component displayName();
     
     @Override
     default boolean isEmpty() {

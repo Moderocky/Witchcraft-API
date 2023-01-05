@@ -145,6 +145,8 @@ public interface SpellManager {
     
     Spell getSpell(String id);
     
+    Set<Spell> getSpells();
+    
     default PaginatedGUI spellsListAdmin() {
         final Set<LearnedSpell> set = new HashSet<>();
         for (Spell spell : this.getSpells()) {
@@ -153,6 +155,4 @@ public interface SpellManager {
         }
         return this.spellsList(set);
     }
-    
-    Set<Spell> getSpells();
 }
