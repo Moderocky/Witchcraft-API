@@ -101,10 +101,18 @@ public interface SpellManager {
     default Set<LearnedSpell> knownSpells(LivingEntity caster, EntityEquipment equipment) {
         final Set<LearnedSpell> set;
         if (caster instanceof Player player) {
-            set = new HashSet<>(PlayerData.getData(player).getSpells());
-            for (ItemStack stack : player.getInventory()) {
-                final ItemArchetype item = ItemArchetype.of(stack);
-                set.addAll(item.getSpells());
+            if (WitchcraftAPI.resources.contains(player.getInventory(), ItemArchetype.of("admin_wand"))) {
+                set = new HashSet<>();
+                for (Spell spell : this.getSpells()) {
+                    if (spell.getClass() == StandardSpell.NO_EFFECT) continue;
+                    set.add(new LearnedSpell(spell));
+                }
+            } else {
+                set = new HashSet<>(PlayerData.getData(player).getSpells());
+                for (ItemStack stack : player.getInventory()) {
+                    final ItemArchetype item = ItemArchetype.of(stack);
+                    set.addAll(item.getSpells());
+                }
             }
         } else {
             set = new HashSet<>();

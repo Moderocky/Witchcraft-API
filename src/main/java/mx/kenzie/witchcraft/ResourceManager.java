@@ -96,6 +96,10 @@ public interface ResourceManager {
     
     boolean hasMaterial(String id);
     
+    boolean contains(Inventory inventory, ItemArchetype archetype);
+    
+    boolean contains(ItemStack[] items, ItemArchetype archetype);
+    
     Set<ItemMaterial> getMaterials();
     
     void update(ItemStack stack);
