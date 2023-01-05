@@ -151,6 +151,8 @@ public interface Minecraft {
      */
     LivingEntity summonWarhammerTotem(LivingEntity owner, Location location);
     
+    LivingEntity summonHuman(LivingEntity owner, Location location);
+    
     String getID(Entity entity);
     
     /**
