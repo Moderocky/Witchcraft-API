@@ -31,10 +31,6 @@ public class PlayerData extends CasterData {
     PlayerData() {
     }
     
-    public double getModifier(Modifier.Type type) {
-        return temporary.modifiers.get(type);
-    }
-    
     public static PlayerData getData(Player player) {
         final PlayerData data = getData(player.getUniqueId());
         data.player = player;
@@ -50,6 +46,10 @@ public class PlayerData extends CasterData {
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
+    }
+    
+    public double getModifier(Modifier.Type type) {
+        return temporary.modifiers.get(type);
     }
     
     public boolean hasAchievement(Achievement achievement) {
@@ -197,8 +197,8 @@ public class PlayerData extends CasterData {
     }
     
     public class Temporary {
-        public Session session;
         public final ModifierMap modifiers = new ModifierMap();
+        public Session session;
     }
     
     public class Memory {

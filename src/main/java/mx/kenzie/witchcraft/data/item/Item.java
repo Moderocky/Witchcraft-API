@@ -2,8 +2,10 @@ package mx.kenzie.witchcraft.data.item;
 
 import mx.kenzie.fern.Fern;
 import mx.kenzie.fern.meta.Name;
+import mx.kenzie.fern.meta.Optional;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.LearnedSpell;
+import mx.kenzie.witchcraft.data.outfit.OutfitData;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -32,6 +34,7 @@ public class Item implements ItemArchetype {
     public @Name("protected") boolean restricted;
     public int data;
     public String[] tags = new String[0];
+    public @Optional OutfitData outfit;
     private transient ItemStack stack;
     
     public Item(InputStream stream) {
@@ -48,6 +51,11 @@ public class Item implements ItemArchetype {
     }
     
     public Item() {
+    }
+    
+    @Override
+    public boolean isOutfit() {
+        return outfit != null && outfit.isValid();
     }
     
     @Override

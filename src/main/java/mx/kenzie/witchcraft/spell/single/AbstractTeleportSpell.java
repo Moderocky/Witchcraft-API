@@ -38,12 +38,6 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         return blocks;
     }
     
-    public static boolean isValidResult(Block block, boolean stand) {
-        if (AbstractTeleportSpell.isInvalidStand(block)) return false;
-        if (AbstractTeleportSpell.isInvalidAbove(block)) return false;
-        return !stand || !AbstractTeleportSpell.isInvalidBelow(block);
-    }
-    
     public static boolean isInvalidStand(Block block) {
         return block.getType().isCollidable();
     }
@@ -54,6 +48,12 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
     
     public static boolean isInvalidBelow(Block block) {
         return !block.getRelative(BlockFace.DOWN).getType().isSolid();
+    }
+    
+    public static boolean isValidResult(Block block, boolean stand) {
+        if (AbstractTeleportSpell.isInvalidStand(block)) return false;
+        if (AbstractTeleportSpell.isInvalidAbove(block)) return false;
+        return !stand || !AbstractTeleportSpell.isInvalidBelow(block);
     }
     
     public static List<Block> getValidTeleportSpacesNoSight(Location centre, double radius) {

@@ -38,6 +38,10 @@ public interface ItemArchetype {
         return BukkitMaterial.AIR;
     }
     
+    default boolean isOutfit() {
+        return false;
+    }
+    
     boolean isProtected();
     
     default boolean hasTag(String tag) {
