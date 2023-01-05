@@ -4,10 +4,7 @@ import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -15,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.awt.*;
+import java.awt.Color;
 import java.util.Map;
 
 public class AfflictionSpell extends AbstractProjectileSpell {
@@ -44,7 +42,7 @@ public class AfflictionSpell extends AbstractProjectileSpell {
             @Override
             public void onCollide(Entity entity) {
                 world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
-                if (entity instanceof LivingEntity living) living.addPotionEffect(effect);
+                if (entity instanceof LivingEntity living) Bukkit.getScheduler().callSyncMethod(WitchcraftAPI.plugin, () -> living.addPotionEffect(effect));
                 creator.drawPoof(entity.getLocation(), 1, 12);
             }
             
