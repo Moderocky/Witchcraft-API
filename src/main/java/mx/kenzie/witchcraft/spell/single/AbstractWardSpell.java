@@ -48,7 +48,7 @@ abstract class AbstractWardSpell extends StandardSpell {
     }
     
     protected List<LivingEntity> getAffected(LivingEntity caster, LivingEntity totem, boolean includeAllies) {
-        final Location centre = caster.getEyeLocation();
+        final Location centre = totem.getLocation();
         final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
         list.removeIf(found -> {
             if (totem == found) return true;

@@ -22,6 +22,8 @@ public interface ParticleCreator {
     
     VectorShape createPoof(double radius, int particles);
     
+    VectorShape createPoof(double radiusX, double radiusY, int particles);
+    
     void drawLightning(Location start, Location end, double spread);
     
     VectorShape createLightning(Location start, Location end, double spread);
