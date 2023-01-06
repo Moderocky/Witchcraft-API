@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class ThunderboltSpell extends StandardSpell {
+public class ThunderboltSpell extends AbstractTargetedSpell {
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.ELECTRIC_SPARK).count(0)
         .force(true);
     
@@ -23,21 +23,10 @@ public class ThunderboltSpell extends StandardSpell {
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final World world = caster.getWorld();
-        final Location target;
-        final Entity found;
-        compute_target:
-        {
-            final Location start = caster.getEyeLocation();
-            final Vector direction = caster.getLocation().getDirection();
-            final RayTraceResult result = world.rayTrace(start, direction, range, FluidCollisionMode.NEVER, true, 0.5, entity -> !entity.equals(caster));
-            if (result != null) {
-                found = result.getHitEntity();
-                target = result.getHitPosition().toLocation(world);
-                break compute_target;
-            }
-            return;
-        }
+        final AbstractTargetedSpell.Target trace = this.getTarget(caster, range);
+        if (trace == null) return;
+        final Location target = trace.target();
+        final Entity found = trace.entity();
         final Location cloud = target.clone().add(0, 5, 0).setDirection(new Vector(0, -1, 0));
         final ParticleCreator white = WitchcraftAPI.client.particles(Particle.CLOUD.builder().count(0)),
             smoke = WitchcraftAPI.client.particles(Particle.CAMPFIRE_COSY_SMOKE.builder().count(0));
