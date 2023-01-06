@@ -20,7 +20,7 @@ public class Part {
         return new EmptyPart();
     }
     
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return inner == Render.NONE && outer == Render.NONE;
     }
     
@@ -31,7 +31,7 @@ public class Part {
 
 class EmptyPart extends Part {
     @Override
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return true;
     }
 }

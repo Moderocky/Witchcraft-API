@@ -47,7 +47,7 @@ public class PlayerData extends CasterData {
         if (CasterData.DATA.get(uuid) instanceof PlayerData player) return player;
         final PlayerData data = new PlayerData();
         data.uuid = uuid;
-        data.file = new File("data/player/" + uuid + ".fern");
+        data.file = new File("data/player/" + uuid + "/" + "data.fern");
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
