@@ -53,6 +53,10 @@ public class PlayerData extends CasterData {
         return data;
     }
     
+    public boolean hasModifier(Modifier.Type type) {
+        return temporary.modifiers.isPresent(type);
+    }
+    
     public double getModifier(Modifier.Type type) {
         return temporary.modifiers.get(type);
     }

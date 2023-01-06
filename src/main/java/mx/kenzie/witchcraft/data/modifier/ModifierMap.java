@@ -47,4 +47,12 @@ public class ModifierMap extends HashMap<String, Modifier> {
         if (this.isEmpty()) return;
         this.values().removeIf(value -> value.type() == type);
     }
+    
+    public boolean isPresent(Modifier.Type type) {
+        for (Modifier value : this.values()) {
+            if (value.type() != type) continue;
+            if (value.amount() > 0) return true;
+        }
+        return false;
+    }
 }
