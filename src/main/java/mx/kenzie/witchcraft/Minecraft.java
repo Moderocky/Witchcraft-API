@@ -127,6 +127,11 @@ public interface Minecraft {
     LivingEntity summonPlantGuardian(LivingEntity owner, Location location);
     
     /**
+     * minecraft:grotesque_summon
+     */
+    LivingEntity summonGrotesque(LivingEntity owner, Location location);
+    
+    /**
      * minecraft:skeleton_summon
      */
     LivingEntity summonSkeleton(LivingEntity owner, Location location);
