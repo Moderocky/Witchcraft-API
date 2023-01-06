@@ -59,6 +59,11 @@ public class Item implements ItemArchetype {
     }
     
     @Override
+    public OutfitData asOutfit() {
+        return outfit;
+    }
+    
+    @Override
     public boolean isProtected() {
         return restricted;
     }

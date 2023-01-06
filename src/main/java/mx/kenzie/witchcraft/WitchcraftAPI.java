@@ -40,6 +40,10 @@ public class WitchcraftAPI {
      */
     public static Client client;
     /**
+     * Access to the outfit renderer process.
+     */
+    public static Wardrobe wardrobe;
+    /**
      * Access to the plugin instance and some core resources.
      */
     public static IPlugin plugin;

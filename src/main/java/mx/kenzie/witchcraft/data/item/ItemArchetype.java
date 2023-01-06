@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.data.item;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.LearnedSpell;
+import mx.kenzie.witchcraft.data.outfit.OutfitData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -40,6 +41,10 @@ public interface ItemArchetype {
     
     default boolean isOutfit() {
         return false;
+    }
+    
+    default OutfitData asOutfit() {
+        return null;
     }
     
     boolean isProtected();

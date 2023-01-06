@@ -99,6 +99,11 @@ public interface Position extends ItemArchetype {
     record Major(Location getLocation, String name, String texture) implements Position {
         
         @Override
+        public boolean isValid() {
+            return true;
+        }
+        
+        @Override
         public World getWorld() {
             return getLocation.getWorld();
         }
@@ -106,11 +111,6 @@ public interface Position extends ItemArchetype {
         @Override
         public Component displayName() {
             return Component.text(name);
-        }
-        
-        @Override
-        public boolean isValid() {
-            return true;
         }
     }
     
@@ -133,6 +133,12 @@ public interface Position extends ItemArchetype {
         }
         
         @Override
+        public Location getLocation() {
+            if (location != null) return location;
+            return location = new Location(this.getWorld(), x, y, z);
+        }
+        
+        @Override
         public boolean isValid() {
             return location != null || Bukkit.getWorld(world) != null;
         }
@@ -146,20 +152,9 @@ public interface Position extends ItemArchetype {
         public Component displayName() {
             return Component.text(name);
         }
-        
-        @Override
-        public Location getLocation() {
-            if (location != null) return location;
-            return location = new Location(this.getWorld(), x, y, z);
-        }
     }
     
     record Person(Player player) implements Position {
-        
-        @Override
-        public World getWorld() {
-            return player.getWorld();
-        }
         
         @Override
         public Location getLocation() {
@@ -167,13 +162,18 @@ public interface Position extends ItemArchetype {
         }
         
         @Override
-        public Component displayName() {
-            return player.displayName();
+        public boolean isValid() {
+            return player.isOnline();
         }
         
         @Override
-        public boolean isValid() {
-            return player.isOnline();
+        public World getWorld() {
+            return player.getWorld();
+        }
+        
+        @Override
+        public Component displayName() {
+            return player.displayName();
         }
     }
     

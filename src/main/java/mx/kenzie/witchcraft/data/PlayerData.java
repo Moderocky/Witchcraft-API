@@ -1,10 +1,13 @@
 package mx.kenzie.witchcraft.data;
 
 import mx.kenzie.fern.Fern;
+import mx.kenzie.fern.meta.Optional;
 import mx.kenzie.witchcraft.Session;
 import mx.kenzie.witchcraft.data.achievement.Achievement;
+import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.data.modifier.ModifierMap;
+import mx.kenzie.witchcraft.data.outfit.Clothing;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -18,6 +21,7 @@ import java.util.*;
 public class PlayerData extends CasterData {
     public transient final Temporary temporary = new Temporary();
     public final Memory memory = new Memory();
+    public @Optional String[] clothes = new String[0];
     public MagicClass style = MagicClass.PURE;
     public UUID coven;
     public String nickname, name;
@@ -27,6 +31,7 @@ public class PlayerData extends CasterData {
     public Title current_title = Title.NOVICE;
     public int generation = 1;
     private transient Player player;
+    private transient List<ItemArchetype> outfit;
     
     PlayerData() {
     }
@@ -194,6 +199,33 @@ public class PlayerData extends CasterData {
     public void save() {
         this.memory.style = style;
         super.save();
+    }
+    
+    public void wear(ItemArchetype archetype) {
+        if (!archetype.isOutfit()) return;
+        final Clothing slot = archetype.asOutfit().slot;
+        this.getClothes(); // updates transient outfit
+        this.outfit.removeIf(item -> !item.isOutfit() || item.asOutfit().slot == slot);
+        this.saveOutfit();
+    }
+    
+    public ItemArchetype[] getClothes() {
+        if (outfit != null) return outfit.toArray(new ItemArchetype[0]);
+        final String[] clothes = this.clothes == null ? new String[0] : this.clothes;
+        this.outfit = new ArrayList<>(6);
+        for (String clothe : clothes) outfit.add(ItemArchetype.of(clothe));
+        return outfit.toArray(new ItemArchetype[0]);
+    }
+    
+    private void saveOutfit() {
+        final ItemArchetype[] items = outfit.toArray(new ItemArchetype[0]);
+        final String[] clothes = new String[items.length];
+        for (int i = 0; i < items.length; i++) clothes[i] = items[i].id();
+        this.scheduleSave();
+    }
+    
+    public boolean canWear(ItemArchetype archetype) {
+        return archetype.isOutfit();
     }
     
     public class Temporary {

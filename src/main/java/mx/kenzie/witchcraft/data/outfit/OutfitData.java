@@ -27,6 +27,11 @@ public class OutfitData implements Comparable<Integer> {
     public int weight = 0;
     
     /**
+     * What kind of outfit this counts as.
+     */
+    public Clothing slot = Clothing.JACKET;
+    
+    /**
      * The body parts, where this will be rendered.
      */
     public @NotNull
