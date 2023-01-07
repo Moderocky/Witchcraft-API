@@ -142,6 +142,11 @@ public interface Minecraft {
     LivingEntity summonZombie(LivingEntity owner, Location location);
     
     /**
+     * minecraft:bat_summon
+     */
+    LivingEntity summonBat(LivingEntity owner, Location location);
+    
+    /**
      * minecraft:warp_warden_summon
      */
     LivingEntity summonWarpWarden(LivingEntity owner, Location location);
