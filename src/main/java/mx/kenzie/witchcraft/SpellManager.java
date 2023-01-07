@@ -7,6 +7,7 @@ import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.recipe.StorageGUI;
 import mx.kenzie.witchcraft.spell.*;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,8 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public interface SpellManager {
@@ -89,8 +88,10 @@ public interface SpellManager {
                 spell.cast(clicker, 25, 1.0F, 1.0 + (stack.getAmount() / 10.0));
             } else {
                 clicker.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
+                final Location location = clicker.getEyeLocation();
+                location.add(location.getDirection().multiply(1.2));
                 WitchcraftAPI.plugin.getOrCreate(clicker)
-                    .drawPattern(spell.getPattern(), Duration.of(3, ChronoUnit.SECONDS));
+                    .drawPattern(spell.getPattern(), location, 25);
             }
 //            clicker.updateInventory();
         });

@@ -4,6 +4,7 @@ import mx.kenzie.witchcraft.entity.Client;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * This class provides access to the core features from Witchcraft.
@@ -57,9 +58,6 @@ public class WitchcraftAPI {
      * This can be used on EXECUTOR threads, e.g. during animations.
      */
     public static void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ignore) {
-        }
+        LockSupport.parkNanos(millis*1000000L);
     }
 }
