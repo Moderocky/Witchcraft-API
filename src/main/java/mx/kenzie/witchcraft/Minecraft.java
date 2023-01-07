@@ -147,6 +147,11 @@ public interface Minecraft {
     LivingEntity summonBat(LivingEntity owner, Location location);
     
     /**
+     * minecraft:pumpkin_summon
+     */
+    LivingEntity summonPumpkin(LivingEntity owner, Location location);
+    
+    /**
      * minecraft:warp_warden_summon
      */
     LivingEntity summonWarpWarden(LivingEntity owner, Location location);
