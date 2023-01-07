@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.*;
 
 public interface SpellManager {
@@ -90,8 +91,9 @@ public interface SpellManager {
             } else {
                 clicker.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
                 final Location location = clicker.getEyeLocation();
-                location.add(location.getDirection().multiply(1.6));
-                WitchcraftAPI.plugin.getOrCreate(clicker).drawPattern(spell.getPattern(), location, 25);
+                location.add(location.getDirection().multiply(1.2));
+                WitchcraftAPI.plugin.getOrCreate(clicker)
+                    .drawPattern(spell.getPattern(), Duration.ofSeconds(3));
             }
         });
         gui.finalise();
