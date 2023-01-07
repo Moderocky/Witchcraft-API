@@ -31,7 +31,7 @@ public class Coven extends LazyWrittenData {
         final Coven coven;
         if (entity instanceof Player player) coven = getCoven(player);
         else if (WitchcraftAPI.minecraft.getHandle(entity) instanceof Summon summon) {
-            final UUID id = summon.getOwnerUUID();
+            final UUID id = summon.getOwnerID();
             if (id == null) coven = null;
             else {
                 final Player player = Bukkit.getPlayer(id);

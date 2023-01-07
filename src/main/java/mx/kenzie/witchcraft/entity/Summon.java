@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface Summon extends Handle {
     
-    UUID getOwnerUUID();
+    UUID getOwnerID();
     
     void setOwner(UUID uuid);
     
