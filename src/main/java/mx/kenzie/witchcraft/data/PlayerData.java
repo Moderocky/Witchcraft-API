@@ -225,6 +225,7 @@ public class PlayerData extends CasterData {
         final ItemArchetype[] items = outfit.toArray(new ItemArchetype[0]);
         final String[] clothes = new String[items.length];
         for (int i = 0; i < items.length; i++) clothes[i] = items[i].id();
+        this.clothes = clothes;
         this.scheduleSave();
     }
     
