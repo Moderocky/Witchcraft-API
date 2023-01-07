@@ -7,6 +7,7 @@ import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.recipe.StorageGUI;
 import mx.kenzie.witchcraft.spell.*;
+import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
@@ -56,12 +57,12 @@ public interface SpellManager {
         return this.spellsList(this.knownSpells(player, player.getEquipment()));
     }
     
+    void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
+    
     default PaginatedGUI spellsList(Collection<LearnedSpell> collection) {
         final List<LearnedSpell> spells = new ArrayList<>(collection);
-        spells.sort(Comparator.comparing(LearnedSpell::getStyle)
-            .thenComparing(spell -> spell.getSpell().getPoints())
-            .thenComparing(spell -> spell.getSpell().getEnergy())
-        );
+        spells.sort(Comparator.comparing(LearnedSpell::getStyle).thenComparing(spell -> spell.getSpell().getPoints())
+            .thenComparing(spell -> spell.getSpell().getEnergy()));
         final List<ItemStack> list = new ArrayList<>(spells.size());
         for (LearnedSpell spell : spells) list.add(spell.create());
         final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Known Spells") {
@@ -89,11 +90,9 @@ public interface SpellManager {
             } else {
                 clicker.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
                 final Location location = clicker.getEyeLocation();
-                location.add(location.getDirection().multiply(1.2));
-                WitchcraftAPI.plugin.getOrCreate(clicker)
-                    .drawPattern(spell.getPattern(), location, 25);
+                location.add(location.getDirection().multiply(1.6));
+                WitchcraftAPI.plugin.getOrCreate(clicker).drawPattern(spell.getPattern(), location, 25);
             }
-//            clicker.updateInventory();
         });
         gui.finalise();
         return gui;
