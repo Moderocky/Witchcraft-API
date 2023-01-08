@@ -22,7 +22,7 @@ public class CommandArcanaSpell extends AbstractSummonSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);
-        WitchcraftAPI.client.particles(Particle.SOUL).playSpiral(
+        WitchcraftAPI.client.particles(Particle.SOUL_FIRE_FLAME.builder().count(0)).playSpiral(
             location.setDirection(new Vector(0, 1, 0)),
             0.6, 2, 10, 1
         );
