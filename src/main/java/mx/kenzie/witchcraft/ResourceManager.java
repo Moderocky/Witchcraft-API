@@ -40,8 +40,8 @@ public interface ResourceManager {
     boolean isCustom(ItemStack stack);
     
     static String pascalCase(String string) {
-        String[] words = string.split("\\s");
-        StringBuilder capitaliseWord = new StringBuilder();
+        final String[] words = string.split("\\s");
+        final StringBuilder capitaliseWord = new StringBuilder();
         for (String word : words) {
             String first = word.substring(0, 1);
             String substring = word.substring(1);
