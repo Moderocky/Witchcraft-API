@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
@@ -84,6 +85,8 @@ public interface Minecraft {
      */
     Entity spawn(String id, Location location, boolean natural);
     
+    Entity spawn(CustomEntityType type, Location location, boolean natural);
+    
     /**
      * Returns the Summon handle of an entity.
      */
@@ -99,6 +102,8 @@ public interface Minecraft {
      * Summons a 'summon' entity by its Minecraft ID.
      */
     Summon summon(LivingEntity owner, String id, Location location);
+    
+    Summon summon(LivingEntity owner, CustomEntityType type, Location location);
     
     /**
      * minecraft:marr_armour
