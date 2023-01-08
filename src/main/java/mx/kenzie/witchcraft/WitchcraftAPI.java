@@ -45,6 +45,10 @@ public class WitchcraftAPI {
      */
     public static TextureManager textures;
     /**
+     * Access to the recipe book system.
+     */
+    public static RecipeManager recipes;
+    /**
      * Access to the plugin instance and some core resources.
      */
     public static IPlugin plugin;
