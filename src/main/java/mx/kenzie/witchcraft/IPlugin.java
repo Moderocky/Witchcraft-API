@@ -10,6 +10,10 @@ import java.util.List;
 
 public interface IPlugin extends Plugin {
     
+    static IPlugin getInstance() {
+        return WitchcraftAPI.plugin;
+    }
+    
     /**
      * This is the off-thread projectile ray trace ticker.
      */

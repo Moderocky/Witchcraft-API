@@ -30,6 +30,10 @@ public interface SpellManager {
     // Maximum average deviation for a cast to be accepted as a given pattern as a factor of SCALE
     double MAXIMUM_DEVIATION = 0.15;
     
+    static SpellManager getInstance() {
+        return WitchcraftAPI.spells;
+    }
+    
     Pattern generate(int points, Random random);
     
     @NotNull SpellSupplier create(String id);

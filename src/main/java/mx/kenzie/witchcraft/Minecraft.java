@@ -20,6 +20,10 @@ import java.util.function.Consumer;
  */
 public interface Minecraft {
     
+    static Minecraft getInstance() {
+        return WitchcraftAPI.minecraft;
+    }
+    
     /**
      * If the target is an ally of the source.
      * Allies include:

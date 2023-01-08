@@ -16,7 +16,12 @@ import java.util.List;
 import java.util.Set;
 
 public interface ResourceManager {
+    
     TextColor DEFAULT_COLOUR = TextColor.color(123, 130, 135);
+    
+    static ResourceManager getInstance() {
+        return WitchcraftAPI.resources;
+    }
     
     static ItemArchetype convert(ItemStack stack) {
         return (WitchcraftAPI.resources.getArchetype(stack));
