@@ -41,10 +41,10 @@ public class FireballSpell extends AbstractProjectileSpell {
             .extra(0.2)
             .force(true);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final ParticleBuilder lava = new ParticleBuilder(Particle.LAVA)
+        final ParticleCreator lava = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.LAVA)
             .location(location)
             .count(0)
-            .force(true);
+            .force(true));
         return new MagicProjectile(caster, location, damage) {
             
             @Override
@@ -52,8 +52,8 @@ public class FireballSpell extends AbstractProjectileSpell {
                 skull.velocity(direction);
                 skull.move(getPotentialNext().add(0, -1.2, 0));
                 final Location start = getPrevious();
-                creator.drawPoof(start, 0.3, 4);
-                this.drawLine(lava, start, getLocation(), 0.8);
+                creator.drawPoof(start, 0.4, 4);
+                lava.drawPoof(start, 0.2, 1);
             }
             
             @Override
