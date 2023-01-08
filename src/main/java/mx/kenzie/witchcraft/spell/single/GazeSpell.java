@@ -7,6 +7,8 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class GazeSpell extends AbstractTargetedSpell {
         final Location target = trace.target();
         final Entity found = trace.entity();
         this.explode(caster, target, scale);
-        WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 2 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
+        WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 2.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
     }
     
     @Override
@@ -35,7 +37,8 @@ public class GazeSpell extends AbstractTargetedSpell {
     }
     
     private void explode(Entity caster, final Location target, float scale) {
-        target.getWorld().createExplosion(target, 2 * scale, false, false, caster);
+        final PotionEffect effect = new PotionEffect(PotionEffectType.CONFUSION, 40, 1, false, false, false);
+        for (LivingEntity entity : target.getNearbyLivingEntities(3)) entity.addPotionEffect(effect);
         final Sound sound = sound().type(ENTITY_SKELETON_HORSE_DEATH)
             .volume(1).pitch(1).source(Source.AMBIENT)
             .build();
