@@ -17,9 +17,7 @@ import org.bukkit.util.Vector;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class HexSpell extends AbstractTargetedSpell {
     
@@ -63,6 +61,7 @@ public class HexSpell extends AbstractTargetedSpell {
                     WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, damage, EntityDamageEvent.DamageCause.MAGIC);
                 return set.size() > 0;
             });
+            target.getWorld().playSound(target, Sound.BLOCK_GLASS_BREAK, 0.6F, 0.2F);
             creator.drawPoof(target, 1.1, 16);
         });
     }
@@ -72,13 +71,4 @@ public class HexSpell extends AbstractTargetedSpell {
         return true;
     }
     
-    
-    private void explode(Location location) {
-        final Random random = ThreadLocalRandom.current();
-        location.getWorld().playSound(location, Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
-        for (int i = 0; i < 6; i++) {
-            final Location loc = location.clone().add(ParticleCreator.random());
-            builder.location(loc).spawn();
-        }
-    }
 }
