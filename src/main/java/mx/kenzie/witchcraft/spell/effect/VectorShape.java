@@ -7,6 +7,8 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 public interface VectorShape extends List<Vector> {
+    VectorShape rotate(Vector axis, double degrees);
+    
     @Override
     int size();
     

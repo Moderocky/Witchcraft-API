@@ -30,6 +30,8 @@ public interface ParticleCreator {
     
     void draw(Location location, VectorShape shape);
     
+    Polygon createPolygon(Vector axis, double radius, int vertices);
+    
     VectorShape createLightning(Vector direction, double distance, double spread);
     
     VectorShape createLightning(Vector start, Vector direction, double distance, double spread);
@@ -57,6 +59,8 @@ public interface ParticleCreator {
     VectorShape createLine(Vector direction, double distance, double spread);
     
     VectorShape createLine(Vector start, Vector direction, double distance, double spread);
+    
+    VectorShape createLine(Vector start, Vector end, double spread);
     
     VectorShape createSphere(double radius, int density);
     
