@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.effect;
 
 import com.destroystokyo.paper.ParticleBuilder;
+import mx.kenzie.witchcraft.WitchcraftAPI;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -15,6 +16,16 @@ public interface VectorShape extends List<Vector> {
     List<Vector> getVectors();
     
     void draw(Location location);
+    
+    default void draw(Location location, long delay) {
+        WitchcraftAPI.executor.submit(() -> {
+            for (Vector vector : this.getVectors()) {
+                final Location point = location.clone().add(vector);
+                this.builder().location(point).spawn();
+                WitchcraftAPI.sleep(delay);
+            }
+        });
+    }
     
     ParticleBuilder builder();
 }
