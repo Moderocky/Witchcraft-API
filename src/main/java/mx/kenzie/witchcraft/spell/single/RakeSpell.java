@@ -33,9 +33,9 @@ public class RakeSpell extends AbstractTargetedSpell {
             WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 3 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         final ParticleCreator creator = ParticleCreator.of(builder);
         for (int i = 0; i < 5; i++) {
-            final Vector first = ParticleCreator.random().multiply(1.6);
-            final Vector second = ParticleCreator.random().multiply(1.6);
-            creator.createLine(effect.clone().add(first), effect.clone().add(second), 0.2).draw(effect, 30);
+            final Vector first = ParticleCreator.random().multiply(1.8);
+            final Vector second = ParticleCreator.random().multiply(1.8);
+            creator.createLine(first, second, 0.2).draw(effect.clone().add(first), 30);
         }
     }
     
