@@ -29,8 +29,6 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
         .count(0)
         .force(true);
-    protected transient final ParticleBuilder dust = new ParticleBuilder(Particle.DRIPPING_OBSIDIAN_TEAR)
-        .count(0).force(true);
     
     public PrismaticRaySpell(Map<String, Object> map) {
         super(map);
@@ -42,11 +40,10 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         final Location target = trace.target();
         final Entity found = trace.entity();
         final Location eye = caster.getEyeLocation(), locked = eye.clone();
-        final Vector direction = eye.getDirection(), reverse = direction.clone().multiply(-2.5);
+        final Vector direction = eye.getDirection();
         locked.setPitch(0);
         final Vector step = locked.getDirection().rotateAroundAxis(new Vector(0, 1, 0), Math.toRadians(-90));
         final double damage = 2.5 + amplitude;
-        this.dust.offset(reverse.getX(), reverse.getY(), reverse.getZ());
         eye.add(direction);
         caster.getWorld().playSound(eye, Sound.BLOCK_BEACON_AMBIENT, 0.4F, 1.8F);
         WitchcraftAPI.executor.submit(() -> {
