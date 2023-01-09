@@ -26,7 +26,8 @@ public enum CustomEntityType {
     HUMAN,
     KNIGHT_HUMAN,
     WIZARD_HUMAN,
-    OGDEN_MARR_HUMAN;
+    OGDEN_MARR_HUMAN,
+    RAINBOW_BRIDGE;
     
     public final String key;
     public final boolean summon;

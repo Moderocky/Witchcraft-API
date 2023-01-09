@@ -10,6 +10,7 @@ import mx.kenzie.witchcraft.spell.*;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
 import java.util.*;
 
 public interface SpellManager {
@@ -96,8 +96,8 @@ public interface SpellManager {
                 clicker.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
                 final Location location = clicker.getEyeLocation();
                 location.add(location.getDirection().multiply(1.2));
-                WitchcraftAPI.plugin.getOrCreate(clicker)
-                    .drawPattern(spell.getPattern(), Duration.ofSeconds(3));
+                WitchcraftAPI.spells.drawPattern(spell, location, 20, ParticleCreator.of(Particle.ELECTRIC_SPARK.builder()
+                    .count(0).receivers(clicker)));
             }
         });
         gui.finalise();
