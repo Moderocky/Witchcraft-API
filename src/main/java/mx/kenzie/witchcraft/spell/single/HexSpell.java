@@ -42,7 +42,7 @@ public class HexSpell extends AbstractTargetedSpell {
         final Vector direction = eye.getDirection(), reverse = direction.clone().multiply(-2.5);
         final double damage = 2.5 + amplitude;
         this.dust.offset(reverse.getX(), reverse.getY(), reverse.getZ());
-        eye.add(direction.clone().multiply(5));
+        eye.add(direction.clone().multiply(2));
         final Polygon polygon = ParticleCreator.of(dust).createPolygon(direction, 1.1, 5).fillInLines(true, 0.14);
         polygon.draw(eye);
         caster.getWorld().playSound(eye, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.4F);
