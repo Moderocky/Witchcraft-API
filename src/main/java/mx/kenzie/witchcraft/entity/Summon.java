@@ -15,4 +15,6 @@ public interface Summon extends Handle {
     
     LivingEntity getBukkitOwner();
     
+    void setTarget(LivingEntity target);
+    
 }
