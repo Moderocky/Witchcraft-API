@@ -27,7 +27,8 @@ public enum CustomEntityType {
     KNIGHT_HUMAN,
     WIZARD_HUMAN,
     OGDEN_MARR_HUMAN,
-    RAINBOW_BRIDGE;
+    RAINBOW_BRIDGE,
+    MIRROR_IMAGE(true);
     
     public final String key;
     public final boolean summon;
@@ -53,11 +54,11 @@ public enum CustomEntityType {
     }
     
     public Entity spawn(Location location) {
-        return WitchcraftAPI.minecraft.spawn(key, location, false);
+        return WitchcraftAPI.minecraft.spawn(this, location, false);
     }
     
     public Entity summon(LivingEntity owner, Location location) {
-        return WitchcraftAPI.minecraft.summon(owner, key, location).getBukkitEntity();
+        return WitchcraftAPI.minecraft.summon(owner, this, location).getBukkitEntity();
     }
     
 }

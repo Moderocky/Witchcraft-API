@@ -192,6 +192,9 @@ public interface Minecraft {
      */
     NPC spawnNPC(Location loc, PlayerProfile profile, Consumer<Player> o);
     
+    @SuppressWarnings("unchecked")
+    LivingEntity spawnMirrorImage(Location location, Player player);
+    
     Entity getTargetEntity(Location location, double maxDist, double accuracy);
     
     @SuppressWarnings("unchecked")
