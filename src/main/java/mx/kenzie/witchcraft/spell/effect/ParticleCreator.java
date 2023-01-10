@@ -38,6 +38,8 @@ public interface ParticleCreator {
     
     VectorShape createLightning(Location start, Location end, double spread);
     
+    VectorShape createLightning(Location start, Location end, double spread, double zig);
+    
     void draw(Location location, VectorShape shape);
     
     Polygon createPolygon(Vector axis, double radius, int vertices);
@@ -45,6 +47,8 @@ public interface ParticleCreator {
     VectorShape createLightning(Vector direction, double distance, double spread);
     
     VectorShape createLightning(Vector start, Vector direction, double distance, double spread);
+    
+    VectorShape createLightning(Vector start, Vector direction, double distance, double spread, double zig);
     
     void drawPlate(Location start, double radius, int particles);
     
