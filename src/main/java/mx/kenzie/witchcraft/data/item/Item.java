@@ -135,7 +135,7 @@ public class Item implements ItemArchetype {
     
     @Override
     public boolean isHelmet() {
-        return helmet;
+        return helmet || this.hasTag(Tag.parse("HELMET"));
     }
     
     @Override

@@ -1,9 +1,11 @@
 package mx.kenzie.witchcraft.data;
 
+import mx.kenzie.witchcraft.ResourceManager;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.item.Rarity;
 import mx.kenzie.witchcraft.data.item.Tag;
+import mx.kenzie.witchcraft.data.recipe.Ingredient;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -91,8 +93,28 @@ public class LearnedSpell implements ItemArchetype {
         if (color != null && meta instanceof PotionMeta potion) potion.setColor(Color.fromRGB(color.value()));
         meta.displayName(this.itemName());
         final List<Component> lore = new ArrayList<>();
-        lore.add(spell.getStyle().displayName().decoration(TextDecoration.ITALIC, false));
-        lore.add(spell.getType().displayName().decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text(" ⚡ " + spell.getEnergy() + " Energy")
+            .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
+        for (Ingredient ingredient : this.spell.getMaterials()) {
+            if (ingredient.equals(Ingredient.EMPTY)) continue;
+            if (ingredient.getType() == null) continue;
+            final Component component = Component.textOfChildren(
+                Component.text(" "),
+                switch (ingredient.getType()) {
+                    case ID, ITEM -> WitchcraftAPI.resources.getArchetype(ingredient.id).itemName()
+                        .color(TextColor.color(104, 130, 161)).decoration(TextDecoration.ITALIC, false);
+                    case TAG -> Component.text(ResourceManager.pascalCase(ingredient.tag.replace("_", " ")))
+                        .color(TextColor.color(104, 130, 161)).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text(" (Any)").color(NamedTextColor.GRAY)
+                            .decoration(TextDecoration.ITALIC, false));
+                    case MATERIAL -> Component.translatable(ingredient.material)
+                        .color(TextColor.color(104, 130, 161)).decoration(TextDecoration.ITALIC, false);
+                },
+                Component.text(" ×" + ingredient.count)
+                    .color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false)
+            );
+            lore.add(component);
+        }
         lore.add(Component.empty());
         lore.addAll(this.itemLore());
         lore.add(Component.empty());
@@ -105,6 +127,12 @@ public class LearnedSpell implements ItemArchetype {
         meta.getPersistentDataContainer().set(WitchcraftAPI.plugin.getKey("spell_id"), PersistentDataType.STRING, id);
         item.setItemMeta(meta);
         return item;
+    }
+    
+    @Override
+    public Component typeDescriptor() {
+        return Component.text("Level " + spell.getPoints() + " " + spell.getType().qualifiedName())
+            .color(this.rarity().color());
     }
     
     public MagicClass getStyle() {

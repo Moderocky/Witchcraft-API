@@ -79,9 +79,27 @@ public interface ItemArchetype {
                 .color(TextColor.color(200, 200, 200))
                 .decoration(TextDecoration.ITALIC, true).build()));
         components.add(Component.text(""));
-        components.add(Component.text(this.rarity().qualifiedName()).color(this.rarity().color())
-            .decoration(TextDecoration.ITALIC, false));
+        components.add(this.typeDescriptor().decoration(TextDecoration.ITALIC, false));
         return components;
+    }
+    
+    default Component typeDescriptor() {
+        return (this instanceof ItemMaterial
+            ? Component.text(this.rarity().qualifiedName() + " Material")
+            : this.hasTag("staff")
+            ? Component.text(this.rarity().qualifiedName() + " Staff")
+            : this.hasTag("wand")
+            ? Component.text(this.rarity().qualifiedName() + " Wand")
+            : this.hasTag("sword")
+            ? Component.text(this.rarity().qualifiedName() + " Sword")
+            : this.hasTag("arcane")
+            ? Component.text(this.rarity().qualifiedName() + " Artefact")
+            : this.hasTag("helmet")
+            ? Component.text(this.rarity().qualifiedName() + " Helmet")
+            : this instanceof Item
+            ? Component.text(this.rarity().qualifiedName() + " Item")
+            : Component.text(this.rarity().qualifiedName())
+        ).color(this.rarity().color());
     }
     
     String description();

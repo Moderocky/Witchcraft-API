@@ -23,8 +23,11 @@ public enum SpellType {
     }
     
     public Component displayName() {
-        return Component.text(ResourceManager.pascalCase(this.name().replace('_', ' ')))
-            .color(this.colour());
+        return Component.text(this.qualifiedName()).color(this.colour());
+    }
+    
+    public String qualifiedName() {
+        return ResourceManager.pascalCase(this.name().replace('_', ' '));
     }
     
     public TextColor colour() {
