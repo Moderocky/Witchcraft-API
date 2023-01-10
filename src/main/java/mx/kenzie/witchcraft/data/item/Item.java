@@ -8,6 +8,7 @@ import mx.kenzie.witchcraft.data.LearnedSpell;
 import mx.kenzie.witchcraft.data.outfit.OutfitData;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -96,12 +97,18 @@ public class Item implements ItemArchetype {
             list.add(Component.text("Soulbound").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
         if (galvanised)
             list.add(Component.text("Galvanised").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (this.isMagic()) {
-            list.add(Component.text("Magic Item").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (this.bonusEnergy() > 0)
+            list.add(Component.text(" ⚡ " + this.bonusEnergy() + " Energy")
+                .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
+        if (magic != null) {
+            if (magic.amplitude > 0)
+                list.add(Component.text(" ☽ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
+                    .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
             if (magic.spells.length > 0) for (LearnedSpell spell : this.getSpells())
                 list.add(Component.textOfChildren(
-                    Component.text("◆ ").decoration(TextDecoration.ITALIC, false).color(spell.rarity().color()),
-                    spell.itemName()
+                    Component.text(" ✶ ").decoration(TextDecoration.ITALIC, false)
+                        .color(TextColor.color(139, 166, 199)),
+                    spell.itemName().color(TextColor.color(139, 166, 199))
                 ));
         }
         return list;
