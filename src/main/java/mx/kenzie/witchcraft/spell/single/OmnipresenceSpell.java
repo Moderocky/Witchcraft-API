@@ -47,7 +47,7 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
                 this.splash(entity.getLocation());
                 entity.remove();
             }
-        }, 9 * 20);
+        }, Math.min(Math.max(((long) scale * 8), 8), 20) * 20);
     }
     
     @Override
