@@ -13,8 +13,6 @@ public interface VectorShape extends List<Vector> {
     @Override
     int size();
     
-    List<Vector> getVectors();
-    
     void draw(Location location);
     
     default void draw(Location location, long delay) {
@@ -26,6 +24,8 @@ public interface VectorShape extends List<Vector> {
             }
         });
     }
+    
+    List<Vector> getVectors();
     
     ParticleBuilder builder();
 }

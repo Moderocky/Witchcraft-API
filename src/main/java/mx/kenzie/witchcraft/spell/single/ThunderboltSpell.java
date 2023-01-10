@@ -2,13 +2,13 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.Map;

@@ -13,24 +13,24 @@ import java.util.Map;
 
 public class TemporalDuplicateSpell extends AbstractSummonSpell {
     
+    transient final ParticleCreator creator = WitchcraftAPI.client.particles(Particle.SOUL.builder().count(0));
+    
     public TemporalDuplicateSpell(Map<String, Object> map) {
         super(map);
     }
-    
-    transient final ParticleCreator creator = WitchcraftAPI.client.particles(Particle.SOUL.builder().count(0));
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);
-        creator.playSpiral(
+        this.creator.playSpiral(
             location.setDirection(new Vector(0, 1, 0)),
             0.8, 2, 10, 2
         );
         final LivingEntity image = WitchcraftAPI.minecraft.spawnMirrorImage(location, player);
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, () -> {
             if (image.isDead()) return;
-            creator.playSpiral(
+            this.creator.playSpiral(
                 image.getLocation().setDirection(new Vector(0, 1, 0)),
                 0.8, 2, 10, 2
             );

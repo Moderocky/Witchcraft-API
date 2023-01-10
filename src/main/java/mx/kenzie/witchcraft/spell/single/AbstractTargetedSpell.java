@@ -18,6 +18,10 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         super(map);
     }
     
+    protected Target getTarget(LivingEntity caster, int range) {
+        return this.getTarget(caster, range, false);
+    }
+    
     protected Target getTarget(LivingEntity caster, int range, boolean strikeAir) {
         final World world = caster.getWorld();
         final Location start = caster.getEyeLocation();
@@ -28,10 +32,6 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         final Entity found = result.getHitEntity();
         final Location target = result.getHitPosition().toLocation(world);
         return new Target(target, found);
-    }
-    
-    protected Target getTarget(LivingEntity caster, int range) {
-        return this.getTarget(caster, range, false);
     }
     
     protected record Target(Location target, @Nullable Entity entity) {}

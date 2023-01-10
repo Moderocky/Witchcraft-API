@@ -62,6 +62,6 @@ public class WitchcraftAPI {
      * This can be used on EXECUTOR threads, e.g. during animations.
      */
     public static void sleep(long millis) {
-        LockSupport.parkNanos(millis*1000000L);
+        LockSupport.parkNanos(millis * 1000000L);
     }
 }

@@ -62,8 +62,6 @@ public interface SpellManager {
         return this.spellsList(this.knownSpells(player, player.getEquipment()));
     }
     
-    void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
-    
     default PaginatedGUI spellsList(Collection<LearnedSpell> collection) {
         final List<LearnedSpell> spells = new ArrayList<>(collection);
         spells.sort(Comparator.comparing(LearnedSpell::getStyle).thenComparing(spell -> spell.getSpell().getPoints())
@@ -150,6 +148,8 @@ public interface SpellManager {
     }
     
     Spell getSpell(String id);
+    
+    void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
     
     Set<Spell> getSpells();
     
