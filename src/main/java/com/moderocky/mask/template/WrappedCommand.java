@@ -1,9 +1,7 @@
 package com.moderocky.mask.template;
 
-import mx.kenzie.mirror.Mirror;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
@@ -20,12 +18,10 @@ import java.util.logging.Level;
 
 public interface WrappedCommand extends CommandExecutor, TabCompleter {
     
-    default @NotNull BaseComponent[] getHelpMessage(int i, @NotNull String[] args) {
-        PluginCommand command = Bukkit.getPluginCommand(getCommand());
-        if (command == null)
-            return new ComponentBuilder("No instructions found.").color(ChatColor.GRAY).create();
-        return new ComponentBuilder("Usage: ").color(ChatColor.WHITE).append(command.getUsage()).color(ChatColor.GRAY)
-            .create();
+    default @NotNull Component getHelpMessage(int i, @NotNull String[] args) {
+        final PluginCommand command = Bukkit.getPluginCommand(this.getCommand());
+        if (command == null) return Component.text("No instructions found.", NamedTextColor.GRAY);
+        return Component.text("Usage: " + command.getUsage(), NamedTextColor.GRAY);
     }
     
     @NotNull
@@ -54,29 +50,33 @@ public interface WrappedCommand extends CommandExecutor, TabCompleter {
      *
      * @param plugin Your plugin
      */
+    @SuppressWarnings("deprecation")
     default void register(Plugin plugin) {
-        WrappedCommand command = this;
         try {
-            Constructor<PluginCommand> commandConstructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            if (!commandConstructor.isAccessible())
-                commandConstructor.setAccessible(true);
-            PluginCommand pluginCommand = commandConstructor.newInstance(command.getCommand(), plugin);
-            pluginCommand.setAliases(command.getAliases());
-            pluginCommand.setDescription(command.getDescription());
-            pluginCommand.setPermission(command.getPermission());
-            pluginCommand.setPermissionMessage(command.getPermissionMessage());
-            pluginCommand.setUsage(command.getUsage());
-            pluginCommand.register(getCommandMap());
-            if (getCommandMap().register(command.getCommand(), plugin.getName(), pluginCommand)) {
-                pluginCommand.setExecutor(command);
-                pluginCommand.setTabCompleter(command);
+            final Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            if (!constructor.isAccessible()) constructor.setAccessible(true);
+            final PluginCommand command = constructor.newInstance(this.getCommand(), plugin);
+            command.setAliases(this.getAliases());
+            command.setDescription(this.getDescription());
+            command.setPermission(this.getPermission());
+            command.permissionMessage(this.getPermissionMessage());
+            command.setUsage(this.getUsage());
+            command.register(this.getCommandMap());
+            if (this.getCommandMap().register(this.getCommand(), plugin.getName(), command)) {
+                command.setExecutor(this);
+                command.setTabCompleter(this);
             } else {
-                Command com = getCommandMap().getCommand(pluginCommand.getName());
-                if (com instanceof PluginCommand) {
-                    ((PluginCommand) com).setExecutor(command);
-                    ((PluginCommand) com).setTabCompleter(command);
+                final Command current = this.getCommandMap().getCommand(command.getName());
+                if (current instanceof PluginCommand found) {
+                    found.setExecutor(this);
+                    found.setTabCompleter(this);
+                    found.setAliases(this.getAliases());
+                    found.setDescription(this.getDescription());
+                    found.setPermission(this.getPermission());
+                    found.permissionMessage(this.getPermissionMessage());
+                    found.setUsage(this.getUsage());
                 }
-                Bukkit.getLogger().log(Level.WARNING, "A command '/" + command.getCommand() + "' is already defined!");
+                Bukkit.getLogger().log(Level.WARNING, "A command '/" + this.getCommand() + "' is already defined!");
                 Bukkit.getLogger().log(Level.WARNING, "As this cannot be replaced, the executor will be overridden.");
                 Bukkit.getLogger()
                     .log(Level.WARNING, "To avoid this warning, please do not add WrappedCommands to your plugin.yml.");
@@ -105,7 +105,7 @@ public interface WrappedCommand extends CommandExecutor, TabCompleter {
     /**
      * @return The no-permission message
      */
-    @Nullable String getPermissionMessage();
+    @Nullable Component getPermissionMessage();
     
     /**
      * @return The 'correct usage' string
@@ -113,7 +113,7 @@ public interface WrappedCommand extends CommandExecutor, TabCompleter {
     @NotNull String getUsage();
     
     default CommandMap getCommandMap() {
-        return Mirror.of(Bukkit.getServer()).<CommandMap>field("commandMap").get();
+        return Bukkit.getCommandMap();
     }
     
     @Override
