@@ -53,4 +53,12 @@ public enum MagicClass {
         return NamedTextColor.WHITE;
     }
     
+    public static MagicClass of(String text) {
+        try {
+            return MagicClass.valueOf(text.toUpperCase().replace(' ', '_'));
+        } catch (Throwable ex) {
+            return MagicClass.PURE;
+        }
+    }
+    
 }

@@ -1,7 +1,9 @@
 package mx.kenzie.witchcraft;
 
+import com.moderocky.mask.command.Commander;
 import mx.kenzie.witchcraft.data.Position;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -18,6 +20,8 @@ public interface IPlugin extends Plugin {
      * This is the off-thread projectile ray trace ticker.
      */
     List<AbstractProjectile> projectiles();
+    
+    ColorProfile getColors();
     
     /**
      * Create a key.
@@ -39,4 +43,5 @@ public interface IPlugin extends Plugin {
      */
     Position getSpawn();
     
+    Component getCommandHelpMessage(Commander<?> commander);
 }
