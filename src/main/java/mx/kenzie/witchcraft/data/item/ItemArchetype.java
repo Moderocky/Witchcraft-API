@@ -33,7 +33,7 @@ public interface ItemArchetype {
     }
     
     static @NotNull ItemArchetype of(String id) {
-        if (id == null) return BukkitMaterial.AIR;
+        if (id == null || id.isBlank()) return BukkitMaterial.AIR;
         final ItemArchetype sample = WitchcraftAPI.resources.getArchetype(id);
         if (sample != null) return sample;
         return BukkitMaterial.AIR;

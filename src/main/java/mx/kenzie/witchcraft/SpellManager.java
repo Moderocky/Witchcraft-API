@@ -161,4 +161,17 @@ public interface SpellManager {
         }
         return this.spellsList(set);
     }
+    
+    LearnResult attemptLearnSpell(Player player, Value value);
+    
+    interface Value {
+        boolean worth();
+        
+        int value();
+        
+        float amount();
+    }
+    
+    record LearnResult(Spell spell, boolean success, boolean learned, boolean levelled) {
+    }
 }

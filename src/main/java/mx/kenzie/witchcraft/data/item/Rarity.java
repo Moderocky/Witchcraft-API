@@ -209,4 +209,8 @@ public enum Rarity {
         return new String[0];
     }
     
+    public static Rarity of(int index) {
+        return Rarity.values()[Math.min(Math.max(index, 0), Rarity.values().length)];
+    }
+    
 }

@@ -36,6 +36,7 @@ public class VisualGUI implements InventoryGUI, Listener {
     protected final boolean editable;
     protected final Plugin plugin;
     protected final List<Consumer<?>> preActionConsumers = new ArrayList<>();
+    protected BiConsumer<Player, InventoryCloseEvent> closeConsumer;
     
     protected boolean finished = false;
     protected String[] layout = new String[0];
@@ -141,9 +142,7 @@ public class VisualGUI implements InventoryGUI, Listener {
     public void finalise() {
         map.clear();
         inventory.clear();
-        for (Consumer<?> consumer : preActionConsumers) {
-            consumer.accept(null);
-        }
+        for (Consumer<?> consumer : preActionConsumers) consumer.accept(null);
         finished = true;
     }
     
@@ -182,11 +181,16 @@ public class VisualGUI implements InventoryGUI, Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (players.isEmpty()) return;
-        Player player = (Player) event.getPlayer();
+        final Player player = (Player) event.getPlayer();
         if (event.getInventory() != inventory) return;
         if (!players.contains(player)) return;
-        players.remove(player);
-        remove();
+        this.players.remove(player);
+        if (closeConsumer != null) closeConsumer.accept(player, event);
+        this.remove();
+    }
+    
+    public void onClose(BiConsumer<Player, InventoryCloseEvent> consumer) {
+        this.closeConsumer = consumer;
     }
     
     protected void remove() {
