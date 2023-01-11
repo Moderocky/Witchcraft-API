@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft.data;
 import mx.kenzie.fern.Fern;
 import mx.kenzie.fern.meta.Optional;
 import mx.kenzie.witchcraft.Session;
+import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.achievement.Achievement;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.modifier.Modifier;
@@ -25,7 +26,7 @@ public class PlayerData extends CasterData {
     public MagicClass style = MagicClass.PURE;
     public UUID coven;
     public String nickname, name;
-    public long joined, seen;
+    public long joined, seen, discord_id;
     public Title[] titles = new Title[] {Title.NOVICE};
     public Achievement[] achievements = new Achievement[0];
     public Title current_title = Title.NOVICE;
@@ -51,6 +52,19 @@ public class PlayerData extends CasterData {
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
+    }
+    
+    public long getDiscordId() {
+        return discord_id;
+    }
+    
+    public boolean isDiscordLinked() {
+        return discord_id > 0;
+    }
+    
+    public void setDiscordId(long discord) {
+        this.discord_id = discord;
+        this.scheduleSave();
     }
     
     public boolean hasModifier(Modifier.Type type) {
@@ -133,6 +147,7 @@ public class PlayerData extends CasterData {
         this.style = style;
         if (player != null) player.displayName(this.displayName());
         this.scheduleSave();
+        WitchcraftAPI.plugin.syncToDiscord(this);
         return old;
     }
     

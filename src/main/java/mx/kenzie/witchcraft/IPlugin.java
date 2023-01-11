@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft;
 
 import com.moderocky.mask.command.Commander;
+import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.Position;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import net.kyori.adventure.text.Component;
@@ -20,6 +21,8 @@ public interface IPlugin extends Plugin {
      * This is the off-thread projectile ray trace ticker.
      */
     List<AbstractProjectile> projectiles();
+    
+    void syncToDiscord(PlayerData data);
     
     ColorProfile getColors();
     

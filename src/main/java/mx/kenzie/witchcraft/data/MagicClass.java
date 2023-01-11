@@ -12,11 +12,21 @@ public enum MagicClass {
         public TextColor colour() {
             return TextColor.color(95, 207, 99);
         }
+        
+        @Override
+        public long discordId() {
+            return 1062365627404259368L;
+        }
     },
     NECROMANCER {
         @Override
         public TextColor colour() {
             return TextColor.color(151, 86, 191);
+        }
+        
+        @Override
+        public long discordId() {
+            return 1062691446353829978L;
         }
     },
     GLADIOMAGUS {
@@ -24,11 +34,21 @@ public enum MagicClass {
         public TextColor colour() {
             return TextColor.color(219, 93, 70);
         }
+        
+        @Override
+        public long discordId() {
+            return 1062691533276585994L;
+        }
     },
     THAUMATURGE {
         @Override
         public TextColor colour() {
             return TextColor.color(70, 137, 232);
+        }
+        
+        @Override
+        public long discordId() {
+            return 1062691359154262056L;
         }
     },
     WARLOCK {
@@ -36,11 +56,21 @@ public enum MagicClass {
         public TextColor colour() {
             return TextColor.color(232, 194, 56);
         }
+        
+        @Override
+        public long discordId() {
+            return 1062691586858811473L;
+        }
     },
     DIVINE {
         @Override
         public TextColor colour() {
             return TextColor.color(247, 49, 148);
+        }
+        
+        @Override
+        public long discordId() {
+            return 1062326851151855627L;
         }
     };
     
@@ -51,6 +81,10 @@ public enum MagicClass {
     
     public TextColor colour() {
         return NamedTextColor.WHITE;
+    }
+    
+    public long discordId() {
+        return 1062802667816099961L;
     }
     
     public static MagicClass of(String text) {
