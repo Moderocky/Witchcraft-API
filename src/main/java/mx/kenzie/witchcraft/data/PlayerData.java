@@ -89,6 +89,14 @@ public class PlayerData extends CasterData {
         return true;
     }
     
+    public boolean forgetSpell(Spell spell) { // true if yes, false if none
+        final Set<LearnedSpell> set = this.getSpells();
+        final boolean result = set.removeIf(learned -> learned.getSpell() == spell);
+        this.memory.spells = set.toArray(new LearnedSpell[0]);
+        this.scheduleSave();
+        return result;
+    }
+    
     public Set<LearnedSpell> getSpells() {
         return new HashSet<>(List.of(memory.spells));
     }
