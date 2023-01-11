@@ -90,6 +90,12 @@ public class Item implements ItemArchetype {
     }
     
     @Override
+    public Component itemName() {
+        return Component.translatable("item." + this.id).color(this.rarity().color())
+            .decoration(TextDecoration.ITALIC, false);
+    }
+    
+    @Override
     public List<Component> itemLore() {
         final List<Component> list = ItemArchetype.super.itemLore();
         if (fragile) list.add(Component.text("Fragile").decoration(TextDecoration.ITALIC, false).color(rarity.color()));

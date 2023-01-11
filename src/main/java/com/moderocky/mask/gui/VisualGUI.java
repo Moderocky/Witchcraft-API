@@ -84,7 +84,7 @@ public class VisualGUI implements InventoryGUI, Listener {
     
     public VisualGUI createButton(char ch, @NotNull ItemStack itemStack, @NotNull BiConsumer<Player, InventoryClickEvent> consumer) {
         preActionConsumers.add(o -> {
-            for (int slot : getSlots(ch)) {
+            for (int slot : this.getSlots(ch)) {
                 map.put(Math.max(0, Math.min(inventory.getSize(), slot)), consumer);
                 inventory.setItem(Math.max(0, Math.min(inventory.getSize(), slot)), itemStack);
             }
