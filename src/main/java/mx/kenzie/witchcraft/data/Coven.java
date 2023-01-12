@@ -66,6 +66,10 @@ public class Coven extends LazyWrittenData {
         return coven.getTeam();
     }
     
+    public UUID getId() {
+        return uuid;
+    }
+    
     public Team getTeam() {
         if (team != null) return team;
         final Team here = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(uuid.toString());
@@ -108,7 +112,8 @@ public class Coven extends LazyWrittenData {
     }
     
     public void setHome(Block block) {
-        this.home = new Position.Static(block.getLocation());
+        if (block == null) home = null;
+        else home = new Position.Static(block.getLocation());
     }
     
     public int size() {

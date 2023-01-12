@@ -24,6 +24,11 @@ public interface ParticleCreator {
         return new Vector((random.nextDouble() - 0.5), (random.nextDouble() - 0.5), (random.nextDouble() - 0.5));
     }
     
+    static Vector randomHorizontal() {
+        final Random random = ThreadLocalRandom.current();
+        return new Vector((random.nextDouble() - 0.5), 0, (random.nextDouble() - 0.5));
+    }
+    
     ParticleBuilder getBuilder();
     
     double drawLine(Location start, Location end, double spread);
