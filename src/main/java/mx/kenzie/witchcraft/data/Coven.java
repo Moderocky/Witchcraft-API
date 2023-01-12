@@ -4,8 +4,8 @@ import mx.kenzie.sloth.Cache;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.Summon;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
@@ -24,6 +24,7 @@ public class Coven extends LazyWrittenData {
     protected Set<UUID> members = new HashSet<>(13);
     protected Position.Static home;
     protected transient Team team;
+    private transient byte wasHomeValid;
     
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
@@ -85,8 +86,30 @@ public class Coven extends LazyWrittenData {
         return coven;
     }
     
+    public boolean isHomeValid(boolean guarantee) {
+        if (home == null) return false;
+        final World world = home.getWorld();
+        final Location location = home.getLocation();
+        if (home.getLocation().isChunkLoaded() || guarantee) {
+            if (location.getBlock().getType() == Material.ENCHANTING_TABLE) wasHomeValid = 2;
+            else wasHomeValid = 1;
+        } else if (wasHomeValid == 0) {
+            if (home.getLocation().getBlock().getType() == Material.ENCHANTING_TABLE) wasHomeValid = 2;
+            else wasHomeValid = 1;
+        } else world.getChunkAtAsync(location).thenAccept(chunk -> {
+            if (home.getLocation().getBlock().getType() == Material.ENCHANTING_TABLE) wasHomeValid = 2;
+            else wasHomeValid = 1;
+        });
+        return (wasHomeValid == 2);
+    }
+    
     public Position getHome() {
         return home;
+    }
+    
+    public void setHome(Block block) {
+        if (block.getType() != Material.ENCHANTING_TABLE) return;
+        this.home = new Position.Static(block.getLocation());
     }
     
     public int size() {
