@@ -95,7 +95,7 @@ public interface ResourceManager {
     
     Set<Item> getItems();
     
-    ItemArchetype getMaterial(ItemStack stack);
+    ItemMaterial getMaterial(ItemStack stack);
     
     ItemArchetype getItem(ItemStack stack);
     
