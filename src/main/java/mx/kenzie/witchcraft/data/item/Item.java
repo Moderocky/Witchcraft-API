@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.data.item;
 
+import com.destroystokyo.paper.Namespaced;
 import mx.kenzie.fern.Fern;
 import mx.kenzie.fern.meta.Name;
 import mx.kenzie.fern.meta.Optional;
@@ -19,10 +20,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Item implements ItemArchetype {
     
@@ -31,12 +29,13 @@ public class Item implements ItemArchetype {
     public String name, description, material;
     public Rarity rarity = Rarity.COMMON;
     public MagicData magic;
-    public boolean fragile, soulbound, galvanised, helmet;
+    public boolean fragile, soulbound, galvanised, helmet, placeable;
     public @Name("protected") boolean restricted;
     public int data;
     public String[] tags = new String[0];
     public @Optional OutfitData outfit;
     private transient ItemStack stack;
+    private transient Set<Namespaced> placedOn = Collections.emptySet(), canBreak = Collections.emptySet();
     
     public Item(InputStream stream) {
         final Fern fern = new Fern(stream);
@@ -48,6 +47,7 @@ public class Item implements ItemArchetype {
                 this.magic.spellKeys[i] = NamespacedKey.fromString(magic.spells[i]);
             }
         }
+        if (placeable) placedOn = PlaceableMaterial.BLOCK_KEYS;
         for (String tag : tags) _tags.add(Tag.register(tag));
     }
     
@@ -132,7 +132,7 @@ public class Item implements ItemArchetype {
         final ItemMeta meta = stack.getItemMeta();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
         meta.setDestroyableKeys(new ArrayList<>());
-        meta.setPlaceableKeys(new ArrayList<>());
+        meta.setPlaceableKeys(placedOn);
         container.set(WitchcraftAPI.plugin.getKey("custom_item"), PersistentDataType.BYTE, (byte) 1);
         container.set(WitchcraftAPI.plugin.getKey("custom_id"), PersistentDataType.STRING, id);
         if (restricted) container.set(WitchcraftAPI.plugin.getKey("protected"), PersistentDataType.BYTE, (byte) 1);

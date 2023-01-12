@@ -108,7 +108,6 @@ public class Coven extends LazyWrittenData {
     }
     
     public void setHome(Block block) {
-        if (block.getType() != Material.ENCHANTING_TABLE) return;
         this.home = new Position.Static(block.getLocation());
     }
     
