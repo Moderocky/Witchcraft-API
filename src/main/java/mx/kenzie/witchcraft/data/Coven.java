@@ -54,6 +54,7 @@ public class Coven extends LazyWrittenData {
         final Coven coven = new Coven();
         coven.uuid = id;
         coven.file = new File("data/coven/" + coven.uuid + ".fern");
+        if (!coven.file.exists()) return null;
         coven.scheduleLoad();
         COVEN_CACHE.put(id, coven);
         return coven;
@@ -83,8 +84,12 @@ public class Coven extends LazyWrittenData {
     public static Coven createNewCoven(UUID creator) {
         final Coven coven = new Coven();
         coven.uuid = UUID.randomUUID();
+        coven.file = new File("data/coven/" + coven.uuid + ".fern");
         coven.creator = creator;
         coven.members.add(creator);
+        final Player player = Bukkit.getPlayer(creator);
+        if (player != null) coven.name = player.getName() + "'s Coven";
+        COVEN_CACHE.put(coven.uuid, coven);
         coven.scheduleSave();
         coven.finish();
         return coven;
@@ -112,8 +117,34 @@ public class Coven extends LazyWrittenData {
     }
     
     public void setHome(Block block) {
+        final Position old = home;
         if (block == null) home = null;
         else home = new Position.Static(block.getLocation());
+        this.scheduleSave();
+        final boolean changed = old != home;
+        if (changed && home == null) {
+            this.messagePlayers(Component.textOfChildren(
+                Component.text(" !! ", WitchcraftAPI.plugin.getColors().pop()),
+                Component.text("Your coven home was destroyed.", WitchcraftAPI.plugin.getColors().lowlight())
+            ));
+        } else if (changed) {
+            assert block != null;
+            final Component position = Component.text("(" + block.getX() + ", " + block.getY() + ", " + block.getX() + ")");
+            this.messagePlayers(Component.textOfChildren(
+                Component.text(" !! ", WitchcraftAPI.plugin.getColors().pop()),
+                Component.text("Your coven home was placed at ", WitchcraftAPI.plugin.getColors().lowlight()),
+                position.color(WitchcraftAPI.plugin.getColors().highlight()),
+                Component.text(".", WitchcraftAPI.plugin.getColors().lowlight())
+            ));
+        }
+    }
+    
+    public void messagePlayers(Component component) {
+        for (UUID member : members) {
+            final Player player = Bukkit.getPlayer(member);
+            if (player == null || !player.isOnline()) continue;
+            player.sendMessage(component);
+        }
     }
     
     public int size() {
@@ -136,12 +167,19 @@ public class Coven extends LazyWrittenData {
     
     public Component displayName() {
         if (name != null) return Component.text(name);
-        final PlayerData data = PlayerData.getData(creator);
-        return data.nickname().append(Component.text("'s Coven"));
+        return Component.text("Unknown Coven");
     }
     
     public boolean addMember(UUID id) {
-        return members.add(id);
+        final boolean add = members.add(id);
+        this.scheduleSave();
+        return add;
+    }
+    
+    public boolean removeMember(UUID id) {
+        final boolean remove = members.remove(id);
+        this.scheduleSave();
+        return remove;
     }
     
     public List<OfflinePlayer> getMembers() {

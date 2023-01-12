@@ -6,6 +6,7 @@ import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -205,4 +206,6 @@ public interface Minecraft {
     int nearbySummons(LivingEntity owner, @Nullable String type);
     
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
+    
+    void updateEnchanter(Block block, Coven coven);
 }

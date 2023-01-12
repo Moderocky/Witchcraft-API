@@ -32,6 +32,15 @@ public interface Position extends ItemArchetype {
     
     Location getLocation();
     
+    default boolean is(Block block) {
+        if (!this.isValid()) return false;
+        final Location location = this.getLocation();
+        return block.getWorld() == location.getWorld()
+            && block.getX() == location.getBlockX()
+            && block.getY() == location.getBlockY()
+            && block.getZ() == location.getBlockZ();
+    }
+    
     @Override
     default boolean isProtected() {
         return true;

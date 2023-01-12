@@ -7,15 +7,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -143,6 +142,21 @@ public interface ItemArchetype {
     
     default boolean isEmpty() {
         return true;
+    }
+    
+    default void giveSafely(Player player) {
+        final HashMap<Integer, ItemStack> rest = player.getInventory().addItem(this.create());
+        if (rest.size() > 0) {
+            final Location location = player.getLocation();
+            for (ItemStack value : rest.values()) {
+                location.getWorld().spawn(location, org.bukkit.entity.Item.class, item -> {
+                    item.setItemStack(value);
+                    item.setOwner(player.getUniqueId());
+                    item.setInvulnerable(true);
+                    item.setCanMobPickup(false);
+                });
+            }
+        }
     }
     
     default MutableArchetype mutate() {
