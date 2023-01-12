@@ -51,15 +51,11 @@ public interface ItemArchetype {
     
     boolean isProtected();
     
-    default boolean hasTag(String tag) {
-        return this.tags().contains(Tag.parse(tag));
-    }
-    
-    Set<Tag> tags();
-    
     default boolean hasTag(Tag tag) {
         return this.tags().contains(tag);
     }
+    
+    Set<Tag> tags();
     
     default Component itemName() {
         return Component.text(this.name()).color(this.rarity().color()).decoration(TextDecoration.ITALIC, false);
@@ -85,6 +81,8 @@ public interface ItemArchetype {
         return components;
     }
     
+    String description();
+    
     default Component typeDescriptor() {
         return (this instanceof ItemMaterial
             ? Component.text(this.rarity().qualifiedName() + " Material")
@@ -104,7 +102,9 @@ public interface ItemArchetype {
         ).color(this.rarity().color());
     }
     
-    String description();
+    default boolean hasTag(String tag) {
+        return this.tags().contains(Tag.parse(tag));
+    }
     
     default void update(ItemStack item) {
         if (item == null) return;

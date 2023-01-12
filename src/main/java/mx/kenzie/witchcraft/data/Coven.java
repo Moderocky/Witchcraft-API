@@ -28,12 +28,6 @@ public class Coven extends LazyWrittenData {
     protected transient Set<UUID> _members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
     private transient byte wasHomeValid;
     
-    @Override
-    public void load() {
-        super.load();
-        this._members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
-    }
-    
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
         if (ENTITY_COVEN_CACHE.containsKey(entity)) return ENTITY_COVEN_CACHE.get(entity);
@@ -75,10 +69,6 @@ public class Coven extends LazyWrittenData {
         return coven.getTeam();
     }
     
-    public UUID getId() {
-        return uuid;
-    }
-    
     public Team getTeam() {
         if (team != null) return team;
         final Team here = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(uuid.toString());
@@ -101,6 +91,16 @@ public class Coven extends LazyWrittenData {
         COVEN_CACHE.put(coven.uuid, coven);
         coven.scheduleSave();
         return coven;
+    }
+    
+    @Override
+    public void load() {
+        super.load();
+        this._members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
+    }
+    
+    public UUID getId() {
+        return uuid;
     }
     
     public boolean isHomeValid(boolean guarantee) {

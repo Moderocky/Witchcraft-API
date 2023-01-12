@@ -189,6 +189,10 @@ public enum Rarity {
         }
     };
     
+    public static Rarity of(int index) {
+        return Rarity.values()[Math.min(Math.max(index, 0), Rarity.values().length)];
+    }
+    
     public int weight() {
         return 10;
     }
@@ -207,10 +211,6 @@ public enum Rarity {
     
     public String[] description() {
         return new String[0];
-    }
-    
-    public static Rarity of(int index) {
-        return Rarity.values()[Math.min(Math.max(index, 0), Rarity.values().length)];
     }
     
 }

@@ -20,13 +20,13 @@ import static org.bukkit.Sound.BLOCK_BEACON_ACTIVATE;
 import static org.bukkit.Sound.ENTITY_SKELETON_DEATH;
 
 public class ExecuteSpell extends AbstractTargetedSpell {
-    public ExecuteSpell(Map<String, Object> map) {
-        super(map);
-    }
-    
     private static final Sound DIE = sound().type(ENTITY_SKELETON_DEATH).volume(1.6F).pitch(0.5F).source(Source.AMBIENT)
         .build(),
         SHOOT = sound().type(BLOCK_BEACON_ACTIVATE).volume(0.5F).pitch(1.9F).source(Source.AMBIENT).build();
+    
+    public ExecuteSpell(Map<String, Object> map) {
+        super(map);
+    }
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {

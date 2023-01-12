@@ -17,13 +17,15 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RepositionSpell extends WarpSpell {
-    protected transient final ParticleCreator
-        creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.DRIPPING_OBSIDIAN_TEAR).force(true)
-        .count(1));
+    protected transient final ParticleCreator creator;
     protected transient Location end;
     
     public RepositionSpell(Map<String, Object> map) {
         super(map);
+        if (!WitchcraftAPI.isTest)
+            creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.DRIPPING_OBSIDIAN_TEAR).force(true)
+                .count(1));
+        else creator = null;
     }
     
     @Override

@@ -74,6 +74,14 @@ public enum MagicClass {
         }
     };
     
+    public static MagicClass of(String text) {
+        try {
+            return MagicClass.valueOf(text.toUpperCase().replace(' ', '_'));
+        } catch (Throwable ex) {
+            return MagicClass.PURE;
+        }
+    }
+    
     public Component displayName() {
         return Component.text(ResourceManager.pascalCase(this.name().replace('_', ' ')))
             .color(this.colour());
@@ -85,14 +93,6 @@ public enum MagicClass {
     
     public long discordId() {
         return 1062802667816099961L;
-    }
-    
-    public static MagicClass of(String text) {
-        try {
-            return MagicClass.valueOf(text.toUpperCase().replace(' ', '_'));
-        } catch (Throwable ex) {
-            return MagicClass.PURE;
-        }
     }
     
 }

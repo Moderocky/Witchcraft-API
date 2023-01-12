@@ -13,11 +13,14 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 
 public class RememberSpell extends StandardSpell {
-    protected transient final ParticleCreator creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.FIREWORKS_SPARK)
-        .count(0).force(true));
+    protected transient final ParticleCreator creator;
     
     public RememberSpell(Map<String, Object> map) {
         super(map);
+        if (!WitchcraftAPI.isTest)
+            creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.FIREWORKS_SPARK)
+                .count(0).force(true));
+        else creator = null;
     }
     
     @Override

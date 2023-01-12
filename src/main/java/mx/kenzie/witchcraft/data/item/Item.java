@@ -35,7 +35,8 @@ public class Item implements ItemArchetype {
     public String[] tags = new String[0];
     public @Optional OutfitData outfit;
     private transient ItemStack stack;
-    private transient Collection<Namespaced> placedOn = Collections.emptySet(), canBreak = Collections.emptySet();
+    private transient Collection<Namespaced> placedOn = Collections.emptySet();
+    private final transient Collection<Namespaced> canBreak = Collections.emptySet();
     
     public Item(InputStream stream) {
         final Fern fern = new Fern(stream);
@@ -75,6 +76,12 @@ public class Item implements ItemArchetype {
     }
     
     @Override
+    public Component itemName() {
+        return Component.translatable("item." + this.id).color(this.rarity().color())
+            .decoration(TextDecoration.ITALIC, false);
+    }
+    
+    @Override
     public String name() {
         return name;
     }
@@ -87,12 +94,6 @@ public class Item implements ItemArchetype {
     @Override
     public String id() {
         return id;
-    }
-    
-    @Override
-    public Component itemName() {
-        return Component.translatable("item." + this.id).color(this.rarity().color())
-            .decoration(TextDecoration.ITALIC, false);
     }
     
     @Override

@@ -189,10 +189,6 @@ public class VisualGUI implements InventoryGUI, Listener {
         this.remove();
     }
     
-    public void onClose(BiConsumer<Player, InventoryCloseEvent> consumer) {
-        this.closeConsumer = consumer;
-    }
-    
     protected void remove() {
         new BukkitRunnable() {
             @Override
@@ -204,6 +200,10 @@ public class VisualGUI implements InventoryGUI, Listener {
     
     public void unregister() {
         HandlerList.unregisterAll(this);
+    }
+    
+    public void onClose(BiConsumer<Player, InventoryCloseEvent> consumer) {
+        this.closeConsumer = consumer;
     }
     
 }

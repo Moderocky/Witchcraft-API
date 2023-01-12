@@ -41,6 +41,8 @@ public interface Position extends ItemArchetype {
             && block.getZ() == location.getBlockZ();
     }
     
+    boolean isValid();
+    
     @Override
     default boolean isProtected() {
         return true;
@@ -94,8 +96,6 @@ public interface Position extends ItemArchetype {
         return item;
     }
     
-    boolean isValid();
-    
     World getWorld();
     
     Component displayName();
@@ -132,6 +132,10 @@ public interface Position extends ItemArchetype {
         public Static() {
         }
         
+        public Static(Location location) {
+            this(location, "Known Location");
+        }
+        
         public Static(Location location, String name) {
             this.location = location;
             this.world = location.getWorld().getUID();
@@ -139,10 +143,6 @@ public interface Position extends ItemArchetype {
             this.y = location.getY();
             this.z = location.getZ();
             this.name = name;
-        }
-        
-        public Static(Location location) {
-            this(location, "Known Location");
         }
         
         @Override

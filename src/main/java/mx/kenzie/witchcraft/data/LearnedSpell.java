@@ -76,6 +76,12 @@ public class LearnedSpell implements ItemArchetype {
     }
     
     @Override
+    public Component typeDescriptor() {
+        return Component.text("Level " + spell.getPoints() + " " + spell.getType().qualifiedName())
+            .color(this.rarity().color());
+    }
+    
+    @Override
     public ItemStack create() {
         final ItemStack item = (switch (this.getStyle()) {
             case PURE -> ItemArchetype.of("pure_spell_book");
@@ -127,12 +133,6 @@ public class LearnedSpell implements ItemArchetype {
         meta.getPersistentDataContainer().set(WitchcraftAPI.plugin.getKey("spell_id"), PersistentDataType.STRING, id);
         item.setItemMeta(meta);
         return item;
-    }
-    
-    @Override
-    public Component typeDescriptor() {
-        return Component.text("Level " + spell.getPoints() + " " + spell.getType().qualifiedName())
-            .color(this.rarity().color());
     }
     
     public MagicClass getStyle() {

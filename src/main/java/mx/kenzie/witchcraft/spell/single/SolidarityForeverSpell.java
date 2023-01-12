@@ -22,12 +22,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class SolidarityForeverSpell extends AbstractTeleportSpell {
-    protected transient final ParticleCreator creator =
-        WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(2).force(true));
+    protected transient final ParticleCreator creator;
     protected transient List<Block> blocks;
     
     public SolidarityForeverSpell(Map<String, Object> map) {
         super(map);
+        if (!WitchcraftAPI.isTest)
+            creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(2).force(true));
+        else creator = null;
     }
     
     @Override

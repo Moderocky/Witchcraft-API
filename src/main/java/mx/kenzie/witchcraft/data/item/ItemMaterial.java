@@ -96,10 +96,6 @@ public class ItemMaterial implements ItemArchetype {
         return item;
     }
     
-    public Set<PlaceableMaterial> getBuilding() {
-        return new LinkedHashSet<>(List.of(building));
-    }
-    
     public String baseConvert(String url) {
         URI actualUrl;
         try {
@@ -148,6 +144,10 @@ public class ItemMaterial implements ItemArchetype {
         JsonObject object = new JsonObject();
         object.add("textures", skin);
         return Base64.getEncoder().encodeToString(object.toString().getBytes(StandardCharsets.UTF_8));
+    }
+    
+    public Set<PlaceableMaterial> getBuilding() {
+        return new LinkedHashSet<>(List.of(building));
     }
     
     @Override

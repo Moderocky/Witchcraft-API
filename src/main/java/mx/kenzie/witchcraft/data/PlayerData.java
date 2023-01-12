@@ -58,13 +58,13 @@ public class PlayerData extends CasterData {
         return discord_id;
     }
     
-    public boolean isDiscordLinked() {
-        return discord_id > 0;
-    }
-    
     public void setDiscordId(long discord) {
         this.discord_id = discord;
         this.scheduleSave();
+    }
+    
+    public boolean isDiscordLinked() {
+        return discord_id > 0;
     }
     
     public boolean hasModifier(Modifier.Type type) {
@@ -103,16 +103,16 @@ public class PlayerData extends CasterData {
         return true;
     }
     
+    public Set<LearnedSpell> getSpells() {
+        return new HashSet<>(List.of(memory.spells));
+    }
+    
     public boolean forgetSpell(Spell spell) { // true if yes, false if none
         final Set<LearnedSpell> set = this.getSpells();
         final boolean result = set.removeIf(learned -> learned.getSpell() == spell);
         this.memory.spells = set.toArray(new LearnedSpell[0]);
         this.scheduleSave();
         return result;
-    }
-    
-    public Set<LearnedSpell> getSpells() {
-        return new HashSet<>(List.of(memory.spells));
     }
     
     public boolean knows(Spell spell) {

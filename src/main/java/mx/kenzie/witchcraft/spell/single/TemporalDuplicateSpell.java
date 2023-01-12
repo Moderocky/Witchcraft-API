@@ -13,10 +13,13 @@ import java.util.Map;
 
 public class TemporalDuplicateSpell extends AbstractSummonSpell {
     
-    transient final ParticleCreator creator = WitchcraftAPI.client.particles(Particle.SOUL.builder().count(0));
+    transient final ParticleCreator creator;
     
     public TemporalDuplicateSpell(Map<String, Object> map) {
         super(map);
+        if (!WitchcraftAPI.isTest)
+            creator = WitchcraftAPI.client.particles(Particle.SOUL.builder().count(0));
+        else creator = null;
     }
     
     @Override

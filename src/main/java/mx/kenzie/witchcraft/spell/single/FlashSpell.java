@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class FlashSpell extends AbstractTeleportSpell {
             final Location point = location.clone().add(vector).add(ParticleCreator.random());
             creator.getBuilder().location(point).spawn();
         }
-        caster.teleport(end);
+        caster.teleport(end, PlayerTeleportEvent.TeleportCause.PLUGIN);
         world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 0.8F, 1.4F);
         world.playSound(end, Sound.ENTITY_ENDERMAN_TELEPORT, 0.8F, 1.4F);
     }

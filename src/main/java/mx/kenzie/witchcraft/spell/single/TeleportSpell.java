@@ -70,13 +70,14 @@ public class TeleportSpell extends AbstractTeleportSpell {
         final Location location = target.getLocation();
         final List<Block> blocks = getValidTeleportSpacesNoSight(location, 5);
         final Location result = blocks.isEmpty() ? location : blocks.get(0).getLocation().add(0.5, 0.1, 0.5);
+        result.setDirection(location.toVector().add(new Vector(0, 1, 0)).subtract(result.toVector()));
         final VectorShape spiral = WitchcraftAPI.client.particles(soul)
             .createSpiral(new Vector(0, 1, 0), 2, 0.65, 2, 16);
         final VectorShape poof = WitchcraftAPI.client.particles(builder).createPoof(0.8, 12);
         caster.teleportAsync(result).thenAccept(thing -> {
             if (!thing) return;
             poof.draw(result.add(0, 1, 0));
-            this.drawShape(spiral, result);
+            this.drawShape(spiral, result.setDirection(new Vector(0, 1, 0)));
         });
         poof.draw(start.add(0, 1, 0));
         this.drawShape(spiral, start);
