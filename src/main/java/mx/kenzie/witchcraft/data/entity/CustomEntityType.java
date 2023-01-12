@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.data.entity;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.data.Coven;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -28,7 +29,13 @@ public enum CustomEntityType {
     WIZARD_HUMAN,
     OGDEN_MARR_HUMAN,
     RAINBOW_BRIDGE,
-    MIRROR_IMAGE(true);
+    MIRROR_IMAGE(true),
+    ENCHANTING_TABLE {
+        @Override
+        public LivingEntity spawn(Location location, Coven coven) {
+            return WitchcraftAPI.minecraft.spawnEnchantingTable(this, location, coven);
+        }
+    };
     
     public final String key;
     public final boolean summon;
@@ -61,4 +68,7 @@ public enum CustomEntityType {
         return WitchcraftAPI.minecraft.summon(owner, this, location).getBukkitEntity();
     }
     
+    public LivingEntity spawn(Location location, Coven coven) {
+        throw new RuntimeException("Not an enchanting table.");
+    }
 }
