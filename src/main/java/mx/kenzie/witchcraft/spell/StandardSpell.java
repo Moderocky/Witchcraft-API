@@ -54,7 +54,7 @@ public abstract class StandardSpell implements Spell {
         this.pattern = WitchcraftAPI.spells.generate(points, new Random(id.hashCode()));
     }
     
-    protected static void assembleMenu(Player player, List<ItemStack> buttons, PaginatedGUI gui, BiConsumer<Player, InventoryClickEvent> consumer) {
+    public static void assembleMenu(Player player, List<ItemStack> buttons, PaginatedGUI gui, BiConsumer<Player, InventoryClickEvent> consumer) {
         SpellManager.makeMenu(gui);
         gui.setEntryConsumer(consumer);
         gui.setEntryChar('#');

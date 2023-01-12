@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public interface ItemArchetype {
         if (stack.getType() == Material.AIR) return BukkitMaterial.AIR;
         final ItemArchetype sample = WitchcraftAPI.resources.getArchetype(stack);
         if (sample != null) return sample;
+        final PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
+        if (container.has(WitchcraftAPI.plugin.getKey("building"))) return new PlaceableMaterial(stack.getType());
         return new BukkitMaterial(stack.getType());
     }
     

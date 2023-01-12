@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.data.item;
 
 import com.destroystokyo.paper.Namespaced;
 import mx.kenzie.witchcraft.ResourceManager;
+import mx.kenzie.witchcraft.WitchcraftAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -10,6 +11,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -84,6 +87,9 @@ public record PlaceableMaterial(Material material) implements ItemArchetype {
             meta.lore(this.itemLore());
             meta.setPlaceableKeys(BLOCK_KEYS);
             meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(WitchcraftAPI.plugin.getKey("ephemeral"), PersistentDataType.BYTE, (byte) 1);
+            container.set(WitchcraftAPI.plugin.getKey("building"), PersistentDataType.BYTE, (byte) 1);
         });
         return new ItemStack(material);
     }
