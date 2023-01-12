@@ -46,6 +46,7 @@ public class ItemMaterial implements ItemArchetype {
     public String modelPath;
     private PlayerProfile profile = null;
     private ItemStack stack = null;
+    private PlaceableMaterial[] building = new PlaceableMaterial[0];
     
     public ItemMaterial() {
     }
@@ -87,7 +88,16 @@ public class ItemMaterial implements ItemArchetype {
             } catch (Throwable ignore) {
             }
         }
+        if (map.get("building") instanceof List<?> list && list.size() > 0) {
+            final List<PlaceableMaterial> materials = new ArrayList<>(list.size());
+            for (Object o : list) materials.add(new PlaceableMaterial(Material.valueOf(o.toString())));
+            item.building = materials.toArray(new PlaceableMaterial[0]);
+        }
         return item;
+    }
+    
+    public Set<PlaceableMaterial> getBuilding() {
+        return new LinkedHashSet<>(List.of(building));
     }
     
     public String baseConvert(String url) {
