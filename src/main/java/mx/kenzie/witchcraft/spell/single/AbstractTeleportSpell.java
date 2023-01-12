@@ -87,7 +87,6 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
                     final Block block = sample.getBlock();
                     if (AbstractTeleportSpell.isInvalidStand(block)) continue;
                     if (AbstractTeleportSpell.isInvalidAbove(block)) continue;
-                    if (!WitchcraftAPI.minecraft.hasLineOfSight(sample, centre)) continue;
                     blocks.add(sample.getBlock());
                 }
             }
