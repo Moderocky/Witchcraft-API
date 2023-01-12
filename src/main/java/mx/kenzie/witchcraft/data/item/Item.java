@@ -35,7 +35,7 @@ public class Item implements ItemArchetype {
     public String[] tags = new String[0];
     public @Optional OutfitData outfit;
     private transient ItemStack stack;
-    private transient Set<Namespaced> placedOn = Collections.emptySet(), canBreak = Collections.emptySet();
+    private transient Collection<Namespaced> placedOn = Collections.emptySet(), canBreak = Collections.emptySet();
     
     public Item(InputStream stream) {
         final Fern fern = new Fern(stream);
@@ -47,7 +47,7 @@ public class Item implements ItemArchetype {
                 this.magic.spellKeys[i] = NamespacedKey.fromString(magic.spells[i]);
             }
         }
-        if (placeable) placedOn = PlaceableMaterial.BLOCK_KEYS;
+        if (placeable) placedOn = PlaceableMaterial.FULL_BLOCKS;
         for (String tag : tags) _tags.add(Tag.register(tag));
     }
     
@@ -131,13 +131,15 @@ public class Item implements ItemArchetype {
         this.stack = Bukkit.getItemFactory().createItemStack(material);
         final ItemMeta meta = stack.getItemMeta();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
-        meta.setDestroyableKeys(new ArrayList<>());
+        meta.setDestroyableKeys(canBreak);
         meta.setPlaceableKeys(placedOn);
         container.set(WitchcraftAPI.plugin.getKey("custom_item"), PersistentDataType.BYTE, (byte) 1);
         container.set(WitchcraftAPI.plugin.getKey("custom_id"), PersistentDataType.STRING, id);
         if (restricted) container.set(WitchcraftAPI.plugin.getKey("protected"), PersistentDataType.BYTE, (byte) 1);
         meta.setCustomModelData(data);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE);
+        if (placedOn.size() > 6) meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        if (canBreak.size() > 6) meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.setUnbreakable(galvanised);
         meta.displayName(this.itemName());
         meta.lore(this.itemLore());

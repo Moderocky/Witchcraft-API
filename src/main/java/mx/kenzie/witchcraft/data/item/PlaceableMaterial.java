@@ -21,8 +21,12 @@ import java.util.stream.Collectors;
 
 public record PlaceableMaterial(Material material) implements ItemArchetype {
     
-    static final Set<Namespaced> BLOCK_KEYS = Arrays.stream(Material.values()).filter(Material::isBlock)
-        .map(Material::getKey).collect(Collectors.toSet());
+    public static final Set<Namespaced>
+        BLOCKS = Arrays.stream(Material.values())
+        .filter(Material::isBlock).map(Material::getKey).collect(Collectors.toSet()),
+        FULL_BLOCKS = Arrays.stream(Material.values())
+            .filter(Material::isBlock).filter(Material::isSolid).filter(Material::isOccluding).map(Material::getKey)
+            .collect(Collectors.toSet());
     
     public PlaceableMaterial(BukkitMaterial material) {
         this(material.material());
@@ -86,7 +90,7 @@ public record PlaceableMaterial(Material material) implements ItemArchetype {
         final ItemMeta meta = stack.getItemMeta();
         meta.displayName(this.itemName());
         meta.lore(this.itemLore());
-        meta.setPlaceableKeys(BLOCK_KEYS);
+        meta.setPlaceableKeys(BLOCKS);
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
         final PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(WitchcraftAPI.plugin.getKey("ephemeral"), PersistentDataType.BYTE, (byte) 1);
