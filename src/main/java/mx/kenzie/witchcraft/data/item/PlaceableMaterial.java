@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -82,15 +83,15 @@ public record PlaceableMaterial(Material material) implements ItemArchetype {
     @Override
     public ItemStack create() {
         final ItemStack stack = new ItemStack(material);
-        stack.editMeta(meta -> {
-            meta.displayName(this.itemName());
-            meta.lore(this.itemLore());
-            meta.setPlaceableKeys(BLOCK_KEYS);
-            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-            final PersistentDataContainer container = meta.getPersistentDataContainer();
-            container.set(WitchcraftAPI.plugin.getKey("ephemeral"), PersistentDataType.BYTE, (byte) 1);
-            container.set(WitchcraftAPI.plugin.getKey("building"), PersistentDataType.BYTE, (byte) 1);
-        });
-        return new ItemStack(material);
+        final ItemMeta meta = stack.getItemMeta();
+        meta.displayName(this.itemName());
+        meta.lore(this.itemLore());
+        meta.setPlaceableKeys(BLOCK_KEYS);
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(WitchcraftAPI.plugin.getKey("ephemeral"), PersistentDataType.BYTE, (byte) 1);
+        container.set(WitchcraftAPI.plugin.getKey("building"), PersistentDataType.BYTE, (byte) 1);
+        stack.setItemMeta(meta);
+        return stack;
     }
 }
