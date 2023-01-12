@@ -20,10 +20,8 @@ public class LazyWrittenData extends Lazy<Void> {
     public void save() {
         assert this.isReady();
         try {
-            if (!file.exists()) {
-                this.file.getParentFile().mkdirs();
-                this.file.createNewFile();
-            }
+            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if (!file.exists()) this.file.createNewFile();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

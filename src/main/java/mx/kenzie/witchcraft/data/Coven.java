@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.data;
 
 import mx.kenzie.sloth.Cache;
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.data.collection.ArrayLinkedSet;
 import mx.kenzie.witchcraft.entity.Summon;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -21,10 +22,17 @@ public class Coven extends LazyWrittenData {
     protected UUID uuid;
     protected String name;
     protected UUID creator;
-    protected Set<UUID> members = new HashSet<>(13);
+    protected UUID[] members = new UUID[0];
     protected Position.Static home;
     protected transient Team team;
+    protected transient Set<UUID> _members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
     private transient byte wasHomeValid;
+    
+    @Override
+    public void load() {
+        super.load();
+        this._members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
+    }
     
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
@@ -86,12 +94,12 @@ public class Coven extends LazyWrittenData {
         coven.uuid = UUID.randomUUID();
         coven.file = new File("data/coven/" + coven.uuid + ".fern");
         coven.creator = creator;
-        coven.members.add(creator);
+        coven._members.add(creator);
         final Player player = Bukkit.getPlayer(creator);
         if (player != null) coven.name = player.getName() + "'s Coven";
+        coven.finish();
         COVEN_CACHE.put(coven.uuid, coven);
         coven.scheduleSave();
-        coven.finish();
         return coven;
     }
     
@@ -119,7 +127,7 @@ public class Coven extends LazyWrittenData {
     public void setHome(Block block) {
         final Position old = home;
         if (block == null) home = null;
-        else home = new Position.Static(block.getLocation());
+        else home = new Position.Static(block.getLocation(), "Coven Home");
         this.scheduleSave();
         final boolean changed = old != home;
         if (changed && home == null) {
@@ -148,11 +156,11 @@ public class Coven extends LazyWrittenData {
     }
     
     public int size() {
-        return members.size();
+        return _members.size();
     }
     
     public Collection<Position> getPositions() {
-        final List<Position> positions = new ArrayList<>(members.size());
+        final List<Position> positions = new ArrayList<>(_members.size());
         for (UUID member : members) {
             final Player player = Bukkit.getPlayer(member);
             if (player == null || !player.isOnline()) continue;
@@ -171,19 +179,19 @@ public class Coven extends LazyWrittenData {
     }
     
     public boolean addMember(UUID id) {
-        final boolean add = members.add(id);
+        final boolean add = _members.add(id);
         this.scheduleSave();
         return add;
     }
     
     public boolean removeMember(UUID id) {
-        final boolean remove = members.remove(id);
+        final boolean remove = _members.remove(id);
         this.scheduleSave();
         return remove;
     }
     
     public List<OfflinePlayer> getMembers() {
-        final List<OfflinePlayer> list = new ArrayList<>(members.size());
+        final List<OfflinePlayer> list = new ArrayList<>(_members.size());
         for (UUID member : members) list.add(Bukkit.getOfflinePlayer(member));
         return list;
     }
@@ -205,15 +213,15 @@ public class Coven extends LazyWrittenData {
     }
     
     public boolean isMember(UUID id) {
-        return members.contains(id);
+        return _members.contains(id);
     }
     
     public boolean isMember(OfflinePlayer entity) {
-        return members.contains(entity.getUniqueId());
+        return _members.contains(entity.getUniqueId());
     }
     
     public boolean isMember(Entity entity) {
-        return members.contains(entity.getUniqueId());
+        return _members.contains(entity.getUniqueId());
     }
     
 }
