@@ -29,7 +29,7 @@ public class FlashSpell extends AbstractTeleportSpell {
         final Location end = blocks.get(0).getLocation()
             .add(0.5, 0.1, 0.5);
         end.setDirection(location.getDirection());
-        ParticleCreator creator = WitchcraftAPI.client.particles(Particle.FIREWORKS_SPARK);
+        final ParticleCreator creator = WitchcraftAPI.client.particles(Particle.FIREWORKS_SPARK);
         creator.getBuilder().force(true).count(3);
         for (Vector vector : creator.createLine(location, end, 0.3)) {
             final Location point = location.clone().add(vector).add(ParticleCreator.random());

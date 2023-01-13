@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.data;
 
+import mx.kenzie.eris.api.entity.Channel;
 import mx.kenzie.sloth.Cache;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.collection.ArrayLinkedSet;
@@ -24,9 +25,11 @@ public class Coven extends LazyWrittenData {
     protected UUID creator;
     protected UUID[] members = new UUID[0];
     protected Position.Static home;
+    protected long discord_id;
     protected transient Team team;
     protected transient Set<UUID> _members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
     private transient byte wasHomeValid;
+    public transient Channel channel;
     
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
@@ -93,10 +96,22 @@ public class Coven extends LazyWrittenData {
         return coven;
     }
     
+    public void sendDiscordMessage(String message) {
+        WitchcraftAPI.discord.sendMessage(this, message);
+    }
+    
     @Override
     public void load() {
         super.load();
         this._members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
+    }
+    
+    public long getDiscordId() {
+        return discord_id;
+    }
+    
+    public void setDiscordId(long id) {
+        this.discord_id = id;
     }
     
     public UUID getId() {
@@ -135,6 +150,7 @@ public class Coven extends LazyWrittenData {
                 Component.text(" !! ", WitchcraftAPI.plugin.getColors().pop()),
                 Component.text("Your coven home was destroyed.", WitchcraftAPI.plugin.getColors().lowlight())
             ));
+            this.sendDiscordMessage("Your coven home was destroyed.");
         } else if (changed) {
             assert block != null;
             final Component position = Component.text("(" + block.getX() + ", " + block.getY() + ", " + block.getX() + ")");
@@ -144,7 +160,19 @@ public class Coven extends LazyWrittenData {
                 position.color(WitchcraftAPI.plugin.getColors().highlight()),
                 Component.text(".", WitchcraftAPI.plugin.getColors().lowlight())
             ));
+            this.sendDiscordMessage("Your coven home was placed at " + "`" + block.getX() + ", " + block.getY() + ", " + block.getX() + "`.");
         }
+    }
+    
+    public void delete() {
+        if (file != null) file.delete();
+        COVEN_CACHE.remove(this.uuid);
+        this.file = null;
+        this.home = null;
+        this.members = new UUID[0];
+        if (team != null) team.unregister();
+        final Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(this.uuid.toString());
+        if (team != null) team.unregister();
     }
     
     public void messagePlayers(Component component) {

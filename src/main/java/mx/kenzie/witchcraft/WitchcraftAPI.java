@@ -52,6 +52,8 @@ public class WitchcraftAPI {
      * Access to the plugin instance and some core resources.
      */
     public static IPlugin plugin;
+    
+    public static Discord discord;
     /**
      * If this is running in test mode: server/minecraft features are unavailable.
      */
