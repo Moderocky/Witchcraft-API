@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.data.Coven;
 import mx.kenzie.witchcraft.data.entity.CustomEntityType;
+import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
@@ -86,6 +87,8 @@ public interface Minecraft {
      * Summons an entity by its Minecraft ID.
      */
     Entity spawn(String id, Location location, boolean natural);
+    
+    LivingEntity spawnBroomstick(ItemArchetype archetype, Location location);
     
     Entity spawn(CustomEntityType type, Location location, boolean natural);
     
