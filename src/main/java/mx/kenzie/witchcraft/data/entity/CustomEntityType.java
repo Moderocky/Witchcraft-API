@@ -35,7 +35,8 @@ public enum CustomEntityType {
         public LivingEntity spawn(Location location, Coven coven) {
             return WitchcraftAPI.minecraft.spawnEnchantingTable(this, location, coven);
         }
-    };
+    },
+    BROOMSTICK;
     
     public final String key;
     public final boolean summon;
