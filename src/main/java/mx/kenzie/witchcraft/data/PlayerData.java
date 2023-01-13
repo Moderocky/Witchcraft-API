@@ -204,9 +204,10 @@ public class PlayerData extends CasterData {
     public List<Position> getKnownLocations() {
         final Coven coven = this.getCoven();
         final int online = coven == null ? 0 : coven.size();
-        final List<Position> positions = new ArrayList<>(memory.locations.length + online + 3);
+        final List<Position> positions = new ArrayList<>(memory.locations.length + online + 5);
         positions.addAll(List.of(memory.locations));
         if (coven != null) positions.addAll(coven.getPositions());
+        if (coven != null && coven.isHomeValid(false)) positions.add(coven.getHome());
         return positions;
     }
     
