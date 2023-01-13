@@ -25,6 +25,7 @@ import java.util.*;
 public class Item implements ItemArchetype {
     
     private transient final Set<Tag> _tags = new HashSet<>();
+    private final transient Collection<Namespaced> canBreak = Collections.emptySet();
     public transient String id;
     public String name, description, material;
     public Rarity rarity = Rarity.COMMON;
@@ -36,7 +37,6 @@ public class Item implements ItemArchetype {
     public @Optional OutfitData outfit;
     private transient ItemStack stack;
     private transient Collection<Namespaced> placedOn = Collections.emptySet();
-    private final transient Collection<Namespaced> canBreak = Collections.emptySet();
     
     public Item(InputStream stream) {
         final Fern fern = new Fern(stream);

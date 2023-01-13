@@ -19,7 +19,7 @@ public class Coven extends LazyWrittenData {
     
     private static final Cache<UUID, Coven> COVEN_CACHE = Cache.soft(WeakHashMap::new);
     private static final Cache<Entity, Coven> ENTITY_COVEN_CACHE = Cache.soft(WeakHashMap::new);
-    
+    public transient Channel channel;
     protected UUID uuid;
     protected String name;
     protected UUID creator;
@@ -29,7 +29,6 @@ public class Coven extends LazyWrittenData {
     protected transient Team team;
     protected transient Set<UUID> _members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
     private transient byte wasHomeValid;
-    public transient Channel channel;
     
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
@@ -96,10 +95,6 @@ public class Coven extends LazyWrittenData {
         return coven;
     }
     
-    public void sendDiscordMessage(String message) {
-        WitchcraftAPI.discord.sendMessage(this, message);
-    }
-    
     @Override
     public void load() {
         super.load();
@@ -164,6 +159,18 @@ public class Coven extends LazyWrittenData {
         }
     }
     
+    public void messagePlayers(Component component) {
+        for (UUID member : members) {
+            final Player player = Bukkit.getPlayer(member);
+            if (player == null || !player.isOnline()) continue;
+            player.sendMessage(component);
+        }
+    }
+    
+    public void sendDiscordMessage(String message) {
+        WitchcraftAPI.discord.sendMessage(this, message);
+    }
+    
     public void delete() {
         if (file != null) file.delete();
         COVEN_CACHE.remove(this.uuid);
@@ -173,14 +180,6 @@ public class Coven extends LazyWrittenData {
         if (team != null) team.unregister();
         final Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(this.uuid.toString());
         if (team != null) team.unregister();
-    }
-    
-    public void messagePlayers(Component component) {
-        for (UUID member : members) {
-            final Player player = Bukkit.getPlayer(member);
-            if (player == null || !player.isOnline()) continue;
-            player.sendMessage(component);
-        }
     }
     
     public int size() {
