@@ -3,7 +3,7 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
+import mx.kenzie.witchcraft.spell.effect.Polygon;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
 import org.bukkit.Location;
@@ -18,11 +18,13 @@ import java.util.Map;
 
 public class UnholyBlastSpell extends AbstractProjectileSpell {
     
-    protected transient final Color color = new Color(231, 32, 57);
-    protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
-        .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
+    protected transient final Color color = new Color(194, 21, 44);
+    protected transient final ParticleCreator builder = ParticleCreator.of(new ParticleBuilder(Particle.REDSTONE)
+        .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
-        .force(true);
+        .force(true));
+    final ParticleCreator purple = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
+        .force(true));
     
     public UnholyBlastSpell(Map<String, Object> map) {
         super(map);
@@ -34,14 +36,13 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         final World world = location.getWorld();
         final double damage = 3 + amplitude;
         final Vector axis = location.getDirection();
-        final ParticleCreator purple = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
-            .force(true));
-        final VectorShape circle = purple.createCircle(axis, 0.4, 10);
+        final Polygon polygon = purple.createPolygon(axis, 0.4, 5);
+        polygon.fillInLines(false, 0.2);
         return new MagicProjectile(caster, location, damage) {
             @Override
             public void onTick() {
-                builder.location(this.getLocation()).spawn();
-                purple.draw(this.getLocation(), circle);
+                purple.getBuilder().location(this.getLocation()).spawn();
+                builder.draw(this.getLocation(), polygon);
             }
             
             @Override
@@ -52,11 +53,7 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
             @Override
             public void explode(Location location) {
                 world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
-                for (int i = 0; i < 6; i++) {
-                    final Location loc = location.clone()
-                        .add(ParticleCreator.random());
-                    builder.location(loc).spawn();
-                }
+                purple.drawPoof(location, 0.8, 10);
             }
         }.setDiameter(1.2);
     }
