@@ -88,7 +88,7 @@ public interface Minecraft {
      */
     Entity spawn(String id, Location location, boolean natural);
     
-    LivingEntity spawnBroomstick(ItemArchetype archetype, Location location);
+    BroomstickEntity spawnBroomstick(ItemArchetype archetype, Location location);
     
     Entity spawn(CustomEntityType type, Location location, boolean natural);
     

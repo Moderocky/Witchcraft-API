@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PrismaticRaySpell extends AbstractTargetedSpell {
     public static final Color RED = new Color(255, 40, 58),
@@ -32,6 +33,12 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
     
     public PrismaticRaySpell(Map<String, Object> map) {
         super(map);
+    }
+    
+    public static ParticleBuilder setRandom(ParticleBuilder builder) {
+        final Color color = COLORS[ThreadLocalRandom.current().nextInt(COLORS.length)];
+        builder.offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+        return builder;
     }
     
     @Override
