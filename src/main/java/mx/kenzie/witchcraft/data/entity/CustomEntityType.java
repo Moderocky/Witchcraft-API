@@ -36,7 +36,8 @@ public enum CustomEntityType {
             return WitchcraftAPI.minecraft.spawnEnchantingTable(this, location, coven);
         }
     },
-    BROOMSTICK;
+    BROOMSTICK,
+    GRAVESTONE;
     
     public final String key;
     public final boolean summon;

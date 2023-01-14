@@ -19,4 +19,8 @@ public interface Handle {
     
     UUID getUUID();
     
+    default boolean spawnGrave() {
+        return !(this instanceof Summon || this instanceof MalleablePortal || this instanceof NoSpawnGrave);
+    }
+    
 }
