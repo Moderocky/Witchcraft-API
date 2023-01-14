@@ -17,8 +17,8 @@ import java.util.Map;
 public class DarkBlastSpell extends AbstractProjectileSpell {
     
     protected transient final Color color = new Color(33, 5, 44);
-    protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
-        .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
+    protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
+        .color(org.bukkit.Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue()))
         .count(0)
         .force(true);
     
