@@ -206,7 +206,12 @@ public interface Minecraft {
     /**
      * Returns the number of nearby summons of the given ID.
      */
-    int nearbySummons(LivingEntity owner, @Nullable String type);
+    int nearbySummons(LivingEntity owner, @Nullable CustomEntityType type);
+    
+    /**
+     * Returns the number of nearby summons of the given ID.
+     */
+    int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType type);
     
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
     

@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
@@ -16,7 +17,7 @@ public class CommandArcanaSpell extends AbstractSummonSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
-        return WitchcraftAPI.minecraft.nearbySummons(caster, "arcana_summon") < 3 && super.canCast(caster);
+        return WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.ARCANA_SUMMON) < 1 && super.canCast(caster);
     }
     
     @Override

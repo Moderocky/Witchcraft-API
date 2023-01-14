@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.entity;
 
+import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;
@@ -10,7 +11,11 @@ public interface Handle {
     
     boolean isTicking();
     
-    String getTypeId();
+    default String getTypeId() {
+        return this.getKind().key;
+    }
+    
+    CustomEntityType getKind();
     
     UUID getUUID();
     

@@ -24,6 +24,7 @@ abstract class AbstractSummonSpell extends StandardSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
+        if (WitchcraftAPI.minecraft.nearbySummons(caster, null) >= 5) return false;
         Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
         if (block == null) return false;
         block = block.getRelative(BlockFace.UP);

@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
@@ -20,6 +21,11 @@ public class FreeTheBeastSpell extends AbstractSummonSpell {
     
     public FreeTheBeastSpell(Map<String, Object> map) {
         super(map);
+    }
+    
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        return WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.WITHER_BEAST_SUMMON) < 1 && super.canCast(caster);
     }
     
     @Override
