@@ -12,10 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public interface ParticleCreator {
     
     static ParticleCreator of(Particle particle) {
+        if (WitchcraftAPI.isTest) return null;
         return WitchcraftAPI.client.particles(particle);
     }
     
     static ParticleCreator of(ParticleBuilder builder) {
+        if (WitchcraftAPI.isTest) return null;
         return WitchcraftAPI.client.particles(builder);
     }
     
@@ -32,6 +34,14 @@ public interface ParticleCreator {
     ParticleBuilder getBuilder();
     
     double drawLine(Location start, Location end, double spread);
+    
+    Vector drawCurve(Location start, Location end, Vector curve, double spread);
+    
+    VectorShape createArc(Vector direction, double roll, double length, double height, int step);
+    
+    VectorShape createArc(Vector direction, double length, double height, int step);
+    
+    VectorShape createArc(double length, double height, int step);
     
     void drawPoof(Location start, double radius, int particles);
     

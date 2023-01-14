@@ -23,7 +23,7 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
         .force(true));
-    final ParticleCreator purple = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
+    final ParticleCreator purple = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
         .force(true));
     
     public UnholyBlastSpell(Map<String, Object> map) {

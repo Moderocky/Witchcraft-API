@@ -29,6 +29,7 @@ public class LevitationSpell extends StandardSpell {
         final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB).offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
             .count(0).force(true);
         final List<LivingEntity> list = new ArrayList<>(location.getNearbyLivingEntities(range, range / 3.0F));
+        list.removeIf(living -> !WitchcraftAPI.minecraft.isEnemy(living, caster));
         final PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, (int) (20 * (6 + amplitude)), (int) amplitude, true, true, false);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         for (LivingEntity entity : list) entity.addPotionEffect(effect);
