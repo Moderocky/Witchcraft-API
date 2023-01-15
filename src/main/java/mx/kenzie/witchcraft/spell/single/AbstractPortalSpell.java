@@ -12,7 +12,6 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
     protected transient Block target;
@@ -39,8 +38,7 @@ public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
         }
         final List<Block> blocks = AbstractSummonSpell.getValidSpawnSpaces(block.getLocation(), 3);
         if (blocks.isEmpty()) return false;
-        if (blocks.size() == 1) this.target = blocks.get(0);
-        else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
+        this.target = blocks.get(0);
         return true;
     }
     
@@ -48,7 +46,7 @@ public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
         final MalleablePortal portal = WitchcraftAPI.minecraft.tangPortal(location);
         portal.setCollideConsumer(entity -> {
             if (!(entity instanceof LivingEntity living)) return;
-            this.doTeleport(living, position, 5);
+            this.doTeleport(living, position);
             portal.getBukkitEntity().remove();
         });
     }

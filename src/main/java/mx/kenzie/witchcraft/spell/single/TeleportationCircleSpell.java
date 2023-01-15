@@ -1,24 +1,21 @@
 package mx.kenzie.witchcraft.spell.single;
 
-import com.moderocky.mask.gui.PaginatedGUI;
+import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.Position;
-import mx.kenzie.witchcraft.data.recipe.StorageGUI;
 import mx.kenzie.witchcraft.spell.effect.VectorShape;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiConsumer;
 
 public class TeleportationCircleSpell extends TeleportSpell {
     
@@ -33,35 +30,21 @@ public class TeleportationCircleSpell extends TeleportSpell {
         final List<Position> list = new ArrayList<>(data.getKnownLocations());
         list.removeIf(position -> !position.isValid());
         list.removeIf(position -> position.getWorld() != caster.getWorld());
-        final Position[] positions = list.toArray(new Position[0]);
-        final List<ItemStack> buttons = new ArrayList<>(positions.length);
-        for (Position position : positions) buttons.add(position.create());
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Destination") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
-        final BiConsumer<Player, InventoryClickEvent> consumer = (clicker, event) -> {
-            final int slot = event.getSlot();
-            if (slot < 0) return;
-            if (slot >= positions.length) return;
-            final Position position = positions[slot];
-            clicker.closeInventory();
-            this.doTeleport(clicker, position, range);
-            
-        };
-        assembleMenu(player, buttons, gui, consumer);
+        this.createMenu(player, list);
     }
     
+    @Override
     protected void doTeleport(LivingEntity caster, Position target, int range) {
         final Location start = caster.getLocation();
         final Location location = target.getLocation();
         final List<LivingEntity> list = new ArrayList<>(start.getNearbyLivingEntities(range, 10));
         final List<Block> blocks = getValidTeleportSpacesNoSight(location, 12);
         for (LivingEntity entity : list) {
+            if (!Protection.getInstance().canTeleport(entity, location)) {
+                entity.sendMessage(Component.text("Something blocked your teleport from the other side...", WitchcraftAPI.colors()
+                    .lowlight()));
+                return;
+            }
             final Location result = blocks.isEmpty() ? location : blocks
                 .remove(ThreadLocalRandom.current().nextInt(blocks.size())).getLocation().add(0.5, 0.1, 0.5);
             final VectorShape spiral = WitchcraftAPI.client.particles(soul)
