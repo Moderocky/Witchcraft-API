@@ -30,6 +30,7 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
     // Mortal realm 6a4bdb660d934b3d8be5993790f26ee805dcaa65336671cfdba7f6fe37775179
     // Demon realm 6ec58c1efdbd3307632022638d8db5bf63635cbc620b26e5d4d2f3fe32284cfd
     // Death realm d23fe3671b3c916c2f24fdcbebd7cf131aad38673a56be63e0ee50932efad84d
+    public static final String POCKET_REALM_HASH = "f3bab14d5de03d21ccb4b1b3859244cd9048c443918c9bc4528ba378b0bfad96";
     protected static final Map<UUID, WorldData> ALL = new HashMap<>();
     protected static final Cache<World, WorldData> DATA = Cache.soft(WeakHashMap::new);
     protected static final String DEFAULT_HASH = "71208163dbbefe6a9f4d4e19c39c89d84d5cb2897e5d924983b38f6ab94163";
