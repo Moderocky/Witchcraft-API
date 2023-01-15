@@ -264,6 +264,7 @@ public class PlayerData extends CasterData {
     
     public class Memory {
         public MagicClass style;
+        public WarlockDeity deity;
         public LearnedSpell[] spells = new LearnedSpell[0];
         public Position.Static[] locations = new Position.Static[0];
     }
