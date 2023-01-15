@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -200,6 +201,8 @@ public interface Minecraft {
     LivingEntity spawnMirrorImage(Location location, Player player);
     
     Entity getTargetEntity(Location location, double maxDist, double accuracy);
+    
+    Set<Entity> getTargetEntities(Location location, double maxDist, double accuracy);
     
     <Type extends Handle> Type getHandle(Entity entity);
     
