@@ -95,6 +95,12 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
         return data;
     }
     
+    public static void delete(UUID uuid) {
+        WorldData.ALL.remove(uuid);
+        final File file = new File("data/world/" + uuid + ".fern");
+        if (file.exists()) file.delete();
+    }
+    
     public World getWorld() {
         if (world != null) return world;
         return world = Bukkit.getWorld(uuid);
