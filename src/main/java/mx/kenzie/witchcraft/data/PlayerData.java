@@ -9,11 +9,13 @@ import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.data.modifier.ModifierMap;
 import mx.kenzie.witchcraft.data.outfit.Clothing;
+import mx.kenzie.witchcraft.data.world.WorldData;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -229,6 +231,26 @@ public class PlayerData extends CasterData {
         super.save();
     }
     
+    public void banish(World world) {
+        final WorldData data = WorldData.getData(world);
+        if (data.main_world) return;
+        if (data.restricted) return;
+        if (data.safe) return;
+        final Set<UUID> set = new HashSet<>(List.of(memory.banished_planes));
+        set.add(world.getUID());
+        this.memory.banished_planes = set.toArray(new UUID[0]);
+        this.scheduleSave();
+    }
+    
+    public boolean isBanished(World world) {
+        final WorldData data = WorldData.getData(world);
+        if (data.main_world) return false;
+        if (data.restricted) return true;
+        if (data.safe) return false;
+        final Set<UUID> set = new HashSet<>(List.of(memory.banished_planes));
+        return set.contains(world.getUID());
+    }
+    
     public void wear(ItemArchetype archetype) {
         if (!archetype.isOutfit()) return;
         final Clothing slot = archetype.asOutfit().slot;
@@ -267,5 +289,6 @@ public class PlayerData extends CasterData {
         public WarlockDeity deity;
         public LearnedSpell[] spells = new LearnedSpell[0];
         public Position.Static[] locations = new Position.Static[0];
+        public UUID[] banished_planes = new UUID[0];
     }
 }
