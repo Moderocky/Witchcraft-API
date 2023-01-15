@@ -36,7 +36,8 @@ public class WitherAuraSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
-        final LivingEntity entity = this.summonWard(caster);
+        final int lifetime = 20 * 30;
+        final LivingEntity entity = this.summonWard(caster, lifetime);
         final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
         final ParticleBuilder ticker = new ParticleBuilder(Particle.SPELL_MOB)
             .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)

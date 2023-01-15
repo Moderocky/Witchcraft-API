@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,13 +14,10 @@ import java.util.Map;
 
 public class TemporalDuplicateSpell extends AbstractSummonSpell {
     
-    transient final ParticleCreator creator;
+    transient final ParticleCreator creator = ParticleCreator.of(Particle.SOUL.builder().count(0));
     
     public TemporalDuplicateSpell(Map<String, Object> map) {
         super(map);
-        if (!WitchcraftAPI.isTest)
-            creator = WitchcraftAPI.client.particles(Particle.SOUL.builder().count(0));
-        else creator = null;
     }
     
     @Override
@@ -43,6 +41,6 @@ public class TemporalDuplicateSpell extends AbstractSummonSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
-        return super.canCast(caster) && caster instanceof Player;
+        return super.canCast(caster) && caster instanceof Player && WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.MIRROR_IMAGE) < 2;
     }
 }

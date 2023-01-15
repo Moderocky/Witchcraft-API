@@ -28,8 +28,8 @@ public class HeavensEyeSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
-        final Location spawn = caster.getLocation().getBlock().getLocation().add(0.5, 3, 0.5);
-        final LivingEntity entity = WitchcraftAPI.minecraft.summonWardCube(caster, spawn);
+        final int lifetime = 20 * 30;
+        final LivingEntity entity = this.summonWard(caster, lifetime);
         final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
         final ParticleBuilder ticker = new ParticleBuilder(Particle.ELECTRIC_SPARK)
             .count(0)
@@ -45,7 +45,7 @@ public class HeavensEyeSpell extends AbstractWardSpell {
             creator.drawLightning(thing.getEyeLocation(), target.getEyeLocation(), 0.15);
             WitchcraftAPI.minecraft.damageEntitySafely(target, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
     }
     
 }

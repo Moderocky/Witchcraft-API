@@ -1,9 +1,11 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.VectorShape;
+import mx.kenzie.witchcraft.ward.SimpleWardInstance;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -30,9 +32,11 @@ abstract class AbstractWardSpell extends StandardSpell {
         return true;
     }
     
-    protected LivingEntity summonWard(LivingEntity caster) {
+    protected LivingEntity summonWard(LivingEntity caster, int lifetime) {
         final Location spawn = target.getLocation().add(0.5, 0.1, 0.5);
-        return WitchcraftAPI.minecraft.summonWardCube(caster, spawn);
+        final LivingEntity ward = WitchcraftAPI.minecraft.summonWardCube(caster, spawn);
+        Protection.getInstance().registerWard(new SimpleWardInstance(caster, ward, lifetime));
+        return ward;
     }
     
     protected void drawCircle(ParticleCreator creator, Location centre) {

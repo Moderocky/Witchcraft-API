@@ -30,9 +30,10 @@ public class ShallowGravesSpell extends AbstractWardSpell {
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final LivingEntity entity = this.summonWard(caster);
+        final int lifetime = 20 * 30;
+        final LivingEntity entity = this.summonWard(caster, lifetime);
 //        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
         // todo add functionality
     }
     
