@@ -22,11 +22,11 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class WonderworkSpell extends StandardSpell {
+    protected transient final ParticleCreator creator = ParticleCreator.of(Particle.TOTEM);
+    
     public WonderworkSpell(Map<String, Object> map) {
         super(map);
     }
-    
-    protected transient final ParticleCreator creator = ParticleCreator.of(Particle.TOTEM);
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {

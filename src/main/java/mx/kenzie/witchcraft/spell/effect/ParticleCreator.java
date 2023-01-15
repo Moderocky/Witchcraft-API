@@ -5,6 +5,7 @@ import mx.kenzie.witchcraft.WitchcraftAPI;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,8 +17,8 @@ public interface ParticleCreator {
         return WitchcraftAPI.client.particles(particle);
     }
     
-    static ParticleCreator of(ParticleBuilder builder) {
-        if (WitchcraftAPI.isTest) return null;
+    static @NotNull ParticleCreator of(ParticleBuilder builder) {
+        if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
         return WitchcraftAPI.client.particles(builder);
     }
     
