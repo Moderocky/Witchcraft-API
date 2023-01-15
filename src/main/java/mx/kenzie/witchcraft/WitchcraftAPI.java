@@ -49,6 +49,10 @@ public class WitchcraftAPI {
      */
     public static RecipeManager recipes;
     /**
+     * Access to the realm system.
+     */
+    public static RealmManager realms;
+    /**
      * Access to the plugin instance and some core resources.
      */
     public static IPlugin plugin;
