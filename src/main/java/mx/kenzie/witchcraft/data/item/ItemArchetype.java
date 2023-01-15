@@ -144,7 +144,7 @@ public interface ItemArchetype {
         return true;
     }
     
-    default void giveSafely(Player player) {
+    default boolean giveSafely(Player player) {
         final HashMap<Integer, ItemStack> rest = player.getInventory().addItem(this.create());
         if (rest.size() > 0) {
             final Location location = player.getLocation();
@@ -157,6 +157,7 @@ public interface ItemArchetype {
                 });
             }
         }
+        return rest.isEmpty();
     }
     
     default MutableArchetype mutate() {

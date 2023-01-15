@@ -52,8 +52,14 @@ public class WitchcraftAPI {
      * Access to the plugin instance and some core resources.
      */
     public static IPlugin plugin;
-    
+    /**
+     * Access to the Discord bridge.
+     */
     public static Discord discord;
+    /**
+     * Access to world rules and domain protection.
+     */
+    public static Protection protection;
     /**
      * If this is running in test mode: server/minecraft features are unavailable.
      */
@@ -65,5 +71,9 @@ public class WitchcraftAPI {
      */
     public static void sleep(long millis) {
         LockSupport.parkNanos(millis * 1000000L);
+    }
+    
+    public static ColorProfile colors() {
+        return plugin.getColors();
     }
 }
