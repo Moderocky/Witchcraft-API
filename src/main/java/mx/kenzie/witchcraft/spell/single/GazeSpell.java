@@ -27,7 +27,7 @@ public class GazeSpell extends AbstractTargetedSpell {
         if (trace == null) return;
         final Location target = trace.target();
         final Entity found = trace.entity();
-        this.explode(caster, target, scale);
+        this.explode(target);
         WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 2.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
     }
     
@@ -36,7 +36,7 @@ public class GazeSpell extends AbstractTargetedSpell {
         return true;
     }
     
-    private void explode(Entity caster, final Location target, float scale) {
+    private void explode(final Location target) {
         final PotionEffect effect = new PotionEffect(PotionEffectType.CONFUSION, 40, 1, false, false, false);
         for (LivingEntity entity : target.getNearbyLivingEntities(3)) entity.addPotionEffect(effect);
         final Sound sound = sound().type(ENTITY_SKELETON_HORSE_DEATH)

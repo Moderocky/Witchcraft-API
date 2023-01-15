@@ -38,9 +38,9 @@ public class RainstormSpell extends AbstractTargetedSpell {
             WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, 1.8 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         cloud.getWorld().playSound(cloud, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.6F, 0.6F);
         WitchcraftAPI.executor.submit(() -> {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 8; i++) {
                 creator.createPoof(3, 0.5, 10).draw(cloud);
-                WitchcraftAPI.sleep(50);
+                WitchcraftAPI.sleep(50 * 14);
             }
         });
     }

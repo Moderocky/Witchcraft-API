@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
@@ -42,6 +43,7 @@ public class TunnelSpell extends StandardSpell {
         if (!this.isAllowed(centre)) return false;
         final Protection protection = Protection.getInstance();
         if (!protection.canBreak(caster, location)) return false;
+        final Minecraft minecraft = Minecraft.getInstance();
         for (int x = -1; x < 2; x++)
             for (int y = -1; y < 2; y++)
                 for (int z = -1; z < 2; z++) {
@@ -49,7 +51,7 @@ public class TunnelSpell extends StandardSpell {
                     final Block block = point.getBlock();
                     if (!this.isAllowed(block)) repel.drawPoof(point, 0.8, 10);
                     else if (!protection.canBreak(caster, point)) repel.drawPoof(point, 0.8, 10);
-                    else block.breakNaturally(true, true);
+                    else minecraft.breakBlock(block);
                 }
         return true;
     }

@@ -12,11 +12,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * These methods access the world, the custom entity registry or other minecraft data.
@@ -219,4 +221,13 @@ public interface Minecraft {
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
     
     void updateEnchanter(Block block, Coven coven);
+    
+    <Type> Type ensureMain(Supplier<Type> runnable);
+    
+    void ensureMain(Runnable runnable);
+    
+    void breakBlock(Block block);
+    
+    void breakBlock(Block block, ItemStack tool);
+    
 }
