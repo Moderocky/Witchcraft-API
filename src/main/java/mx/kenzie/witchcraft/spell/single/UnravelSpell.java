@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class UnravelSpell extends StandardSpell {
-    private transient final ParticleCreator creator = ParticleCreator.of(Particle.SOUL_FIRE_FLAME);
+    protected transient ParticleCreator creator = ParticleCreator.of(Particle.SOUL_FIRE_FLAME.builder().count(0));
     
     public UnravelSpell(Map<String, Object> map) {
         super(map);
@@ -34,7 +34,7 @@ public class UnravelSpell extends StandardSpell {
         for (Entity entity : set) {
             final Handle handle = minecraft.getHandle(entity);
             if (!(handle instanceof MalleablePortal)) continue;
-            this.creator.drawPoof(entity.getLocation().add(0, 1, 0), 1.2, 5);
+            this.creator.drawPoof(entity.getLocation().add(0, 1, 0), 1.5, 10);
             entity.remove();
             break;
         }

@@ -4,8 +4,8 @@ import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
+import mx.kenzie.witchcraft.spell.effect.LocatedShape;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
 import mx.kenzie.witchcraft.ward.WardInstance;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -38,18 +38,16 @@ public class MassDispelSpell extends StandardSpell {
         }
         final Protection protection = Protection.getInstance();
         for (WardInstance instance : protection.getWardsAt(caster.getLocation())) instance.discard();
-        final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 1.5, 100);
         WitchcraftAPI.executor.submit(() -> {
             final Location location = caster.getLocation();
+            final LocatedShape shape = creator.createSpiral(location, new Vector(0, 1, 0), 1.2, 2.5, 170);
             final ParticleBuilder builder = creator.getBuilder();
-            for (int i = 0; i < 6; i++) {
-                location.add(0, 0.8, 0);
-                for (Vector vector : circle) {
-                    final Location point = location.clone().add(vector);
-                    builder.location(point).spawn();
-                    WitchcraftAPI.sleep(20);
-                }
-                for (Vector vector : circle) vector.multiply(1.2);
+            double y = 0;
+            for (Vector vector : shape) {
+                y += 0.01;
+                final Location point = location.clone().add(vector).add(0, y, 0);
+                builder.location(point).spawn();
+                WitchcraftAPI.sleep(3);
             }
         });
         WitchcraftAPI.executor.submit(() -> {
@@ -59,7 +57,7 @@ public class MassDispelSpell extends StandardSpell {
             for (int i = 0; i < 4; i++) {
                 WitchcraftAPI.sleep(600);
                 final Location start = location.clone();
-                start.add((random.nextDouble() - 0.5) * 8, -1, (random.nextDouble() - 0.5) * 8);
+                start.add((random.nextDouble() - 0.5) * 14, -1, (random.nextDouble() - 0.5) * 14);
                 creator.drawLightning(start, start.clone().add(0, 7, 0), 0.2);
                 start.getWorld().playSound(start, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.5F, 2.0F);
             }
