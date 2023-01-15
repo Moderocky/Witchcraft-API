@@ -1,7 +1,6 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.Polygon;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;

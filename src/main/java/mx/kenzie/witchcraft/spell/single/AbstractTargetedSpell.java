@@ -31,9 +31,13 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         else if (result == null) return null;
         final Entity found = result.getHitEntity();
         final Location target = result.getHitPosition().toLocation(world);
-        return new Target(target, found);
+        return new Target(target, found, result);
     }
     
-    protected record Target(Location target, @Nullable Entity entity) {}
+    protected record Target(Location target, @Nullable Entity entity, RayTraceResult result) {
+        private Target(Location target, @Nullable Entity entity) {
+            this(target, entity, null);
+        }
+    }
     
 }

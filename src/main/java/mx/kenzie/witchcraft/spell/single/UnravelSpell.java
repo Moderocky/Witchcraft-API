@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.Minecraft;
+import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.Handle;
 import mx.kenzie.witchcraft.entity.MalleablePortal;
@@ -27,6 +28,7 @@ public class UnravelSpell extends StandardSpell {
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Minecraft minecraft = WitchcraftAPI.minecraft;
         final Block block = caster.getTargetBlockExact(Math.max(5, Math.min(20, range)));
+        if (block != null && !Protection.getInstance().canBreak(caster, block.getLocation())) return;
         if (this.destroyConnected(block)) return; // cheaper to attempt this before entities due to square rooting
         final Set<Entity> set = WitchcraftAPI.minecraft.getTargetEntities(caster.getEyeLocation(), range, 0.82);
         for (Entity entity : set) {
@@ -40,7 +42,7 @@ public class UnravelSpell extends StandardSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
-        return true;
+        return Protection.getInstance().canBreak(caster, caster.getLocation());
     }
     
     protected boolean destroyConnected(Block block) {

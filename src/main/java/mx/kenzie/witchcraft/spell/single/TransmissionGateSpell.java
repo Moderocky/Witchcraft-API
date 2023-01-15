@@ -1,33 +1,40 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import com.moderocky.mask.gui.PaginatedGUI;
+import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.Position;
 import mx.kenzie.witchcraft.data.recipe.StorageGUI;
-import mx.kenzie.witchcraft.spell.effect.VectorShape;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.EndGateway;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import org.bukkit.util.RayTraceResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 
-public class TeleportationCircleSpell extends TeleportSpell {
-    
-    public TeleportationCircleSpell(Map<String, Object> map) {
+public class ThassalurgySpell extends AbstractTargetedSpell {
+    public ThassalurgySpell(Map<String, Object> map) {
         super(map);
     }
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
+        final RayTraceResult result = target.result();
+        final Block beneath = result.getHitBlock();
+        final BlockFace face = result.getHitBlockFace();
+        assert beneath != null && face != null;
+        final Block first = beneath.getRelative(result.getHitBlockFace()), second = first.getRelative(BlockFace.UP);
         if (!(caster instanceof Player player)) return;
         final PlayerData data = PlayerData.getData(player);
         final List<Position> list = new ArrayList<>(data.getKnownLocations());
@@ -50,31 +57,39 @@ public class TeleportationCircleSpell extends TeleportSpell {
             if (slot >= positions.length) return;
             final Position position = positions[slot];
             clicker.closeInventory();
-            this.doTeleport(clicker, position, range);
+            this.doGateway(position, first, second);
             
         };
         assembleMenu(player, buttons, gui, consumer);
     }
     
-    protected void doTeleport(LivingEntity caster, Position target, int range) {
-        final Location start = caster.getLocation();
-        final Location location = target.getLocation();
-        final List<LivingEntity> list = new ArrayList<>(start.getNearbyLivingEntities(range, 10));
-        final List<Block> blocks = getValidTeleportSpacesNoSight(location, 12);
-        for (LivingEntity entity : list) {
-            final Location result = blocks.isEmpty() ? location : blocks
-                .remove(ThreadLocalRandom.current().nextInt(blocks.size())).getLocation().add(0.5, 0.1, 0.5);
-            final VectorShape spiral = WitchcraftAPI.client.particles(soul)
-                .createSpiral(new Vector(0, 1, 0), 2, 0.65, 2, 16);
-            final VectorShape poof = WitchcraftAPI.client.particles(builder).createPoof(0.8, 12);
-            entity.teleportAsync(result).thenAccept(thing -> {
-                if (!thing) return;
-                poof.draw(result.add(0, 1, 0));
-                this.drawShape(spiral, result);
-            });
-            poof.draw(start.add(0, 1, 0));
-            this.drawShape(spiral, start);
+    protected void doGateway(Position position, Block first, Block second) {
+        final BlockData data = Material.END_GATEWAY.createBlockData();
+        first.setBlockData(data);
+        second.setBlockData(data);
+        final Location location = position.getLocation();
+        assert location.getWorld() == first.getWorld();
+        if (first.getState() instanceof EndGateway gateway) {
+            gateway.setAge(Integer.MIN_VALUE);
+            gateway.setExitLocation(location);
+            gateway.setExactTeleport(true);
+            gateway.update(true, false);
+        }
+        if (second.getState() instanceof EndGateway gateway) {
+            gateway.setAge(Integer.MIN_VALUE);
+            gateway.setExitLocation(location);
+            gateway.setExactTeleport(true);
+            gateway.update(true, false);
         }
     }
     
+    protected transient Target target;
+    
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        if (!(caster instanceof Player)) return false;
+        if (!Protection.getInstance().canTeleport(caster, caster.getLocation())) return false;
+        this.target = this.getTarget(caster, 10, false);
+        return target.target() != null && target.result() != null;
+    }
 }

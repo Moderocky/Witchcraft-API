@@ -1,11 +1,14 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -94,4 +97,10 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
+    
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player && Protection.getInstance().canTeleport(caster, caster.getLocation());
+    }
+    
 }

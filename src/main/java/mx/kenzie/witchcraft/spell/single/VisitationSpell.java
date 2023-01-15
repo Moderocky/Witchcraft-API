@@ -60,6 +60,15 @@ public class VisitationSpell extends TeleportationCircleSpell {
         this.target = null;
     }
     
+    protected void doPortal(Position position, Location location) {
+        final MalleablePortal portal = WitchcraftAPI.minecraft.tangPortal(location);
+        portal.setCollideConsumer(entity -> {
+            if (!(entity instanceof LivingEntity living)) return;
+            this.doTeleport(living, position, 5);
+            portal.getBukkitEntity().remove();
+        });
+    }
+    
     @Override
     public boolean canCast(LivingEntity caster) {
         Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
@@ -78,14 +87,5 @@ public class VisitationSpell extends TeleportationCircleSpell {
         if (blocks.size() == 1) this.target = blocks.get(0);
         else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
         return true;
-    }
-    
-    protected void doPortal(Position position, Location location) {
-        final MalleablePortal portal = WitchcraftAPI.minecraft.tangPortal(location);
-        portal.setCollideConsumer(entity -> {
-            if (!(entity instanceof LivingEntity living)) return;
-            this.doTeleport(living, position, 5);
-            portal.getBukkitEntity().remove();
-        });
     }
 }

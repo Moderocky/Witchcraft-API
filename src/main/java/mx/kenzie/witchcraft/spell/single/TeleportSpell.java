@@ -60,11 +60,6 @@ public class TeleportSpell extends AbstractTeleportSpell {
         assembleMenu(player, buttons, gui, consumer);
     }
     
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player; // todo check if caster can teleport ?
-    }
-    
     protected void doTeleport(LivingEntity caster, Position target) {
         final Location start = caster.getLocation();
         final Location location = target.getLocation();
@@ -83,7 +78,7 @@ public class TeleportSpell extends AbstractTeleportSpell {
         this.drawShape(spiral, start);
     }
     
-    private void drawShape(VectorShape shape, Location location) {
+    protected void drawShape(VectorShape shape, Location location) {
         WitchcraftAPI.executor.submit(() -> {
             final ParticleBuilder builder = shape.builder();
             for (Vector vector : shape) {
