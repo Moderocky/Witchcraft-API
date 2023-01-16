@@ -37,13 +37,15 @@ public class StrikeDownSpell extends AbstractTargetedSpell {
         final Location target = trace.target();
         final Location start = caster.getEyeLocation(), step = start.clone();
         final Vector direction = start.getDirection();
-        final Polygon polygon = creator.createPolygon(direction, 0.8, 6).fillInLines(true, 0.16);
+        final Polygon polygon = creator.createPolygon(direction, 0.6, 4).fillInLines(false, 0.16);
         final VectorShape lightning = ParticleCreator.of(Particle.SPELL_WITCH.builder().count(0))
             .createLightning(start, target, 0.2, 0.5);
-        for (int i = 2; i < 5; i++) {
-            step.add(direction.clone());
+        step.add(direction);
+        for (int i = 0; i < 7; i++) {
+            step.add(direction);
             polygon.rotate(direction, 16);
             polygon.draw(step);
+            for (Vector vector : polygon) vector.multiply(1.3);
         }
         target.getWorld().playSound(SHOOT, step.getX(), step.getY(), step.getZ());
         target.getWorld().playSound(DIE, target.getX(), target.getY(), target.getZ());
