@@ -10,7 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-abstract class AbstractWarhammerSpell extends StandardSpell {
+public abstract class AbstractWarhammerSpell extends StandardSpell {
     protected static final Cache<LivingEntity, LivingEntity> HAMMERS = Cache.weak(WeakHashMap::new);
     protected transient Block target;
     

@@ -6,6 +6,7 @@ public enum SpellResult {
     NO_INGREDIENT(false),
     WRONG_WORLD(false),
     MISSING_CIRCUMSTANCE(false),
+    CANCELLED(false),
     NOT_IN_HOME(false),
     OTHER(false);
     
