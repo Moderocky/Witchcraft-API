@@ -184,13 +184,19 @@ public class Item implements ItemArchetype {
     }
     
     @Override
+    public int bonusEnergy() {
+        if (magic != null) return magic.energy;
+        return ItemArchetype.super.bonusEnergy();
+    }
+    
+    @Override
     public boolean isEmpty() {
         return false;
     }
     
     public static class MagicData {
         public boolean can_cast;
-        public int range = 5;
+        public int range = 5, energy;
         public double amplitude;
         public String[] spells = new String[0];
         public transient NamespacedKey[] spellKeys;
