@@ -23,16 +23,20 @@ public class SimpleWardInstance extends WardInstance {
     @Override
     public int hashCode() {
         return ward.hashCode();
-    }    @Override
-    public boolean isOwner(LivingEntity entity) {
-        if (owner == null) return false;
-        return (owner.equals(entity));
     }
     
     @Override
     public boolean equals(Object obj) {
         return obj == this || (obj instanceof SimpleWardInstance instance && instance.ward == this.ward);
     }    @Override
+    public boolean isOwner(LivingEntity entity) {
+        if (owner == null) return false;
+        return (owner.equals(entity));
+    }
+    
+
+    
+    @Override
     public boolean permits(LivingEntity entity) {
         if (this.isOwner(entity)) return true;
         final Summon summon = WitchcraftAPI.minecraft.getAsSummon(entity);
@@ -62,7 +66,5 @@ public class SimpleWardInstance extends WardInstance {
         return ward.getWorld().getUID();
     }
     
-
     
-
 }

@@ -6,11 +6,13 @@ import mx.kenzie.witchcraft.SpellManager;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.MagicClass;
 import mx.kenzie.witchcraft.data.SpellType;
-import mx.kenzie.witchcraft.data.achievement.Achievement;
 import mx.kenzie.witchcraft.data.recipe.Ingredient;
+import mx.kenzie.witchcraft.event.SpellCastEvent;
+import mx.kenzie.witchcraft.event.SpellPreCastEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -64,18 +66,13 @@ public abstract class StandardSpell implements Spell {
     }
     
     @Override
-    public String getPatternPicture() {
-        return patternChar;
+    public MagicClass getStyle() {
+        return style;
     }
     
     @Override
     public SpellType getType() {
         return type;
-    }
-    
-    @Override
-    public MagicClass getStyle() {
-        return style;
     }
     
     @Override
@@ -86,6 +83,11 @@ public abstract class StandardSpell implements Spell {
     @Override
     public String getName() {
         return name;
+    }
+    
+    @Override
+    public String getPatternPicture() {
+        return patternChar;
     }
     
     @Override
@@ -126,19 +128,10 @@ public abstract class StandardSpell implements Spell {
     @Override
     public void cast(LivingEntity caster, int range, float scale, double amplitude) {
         if (!this.canCast(caster)) return; // update any requirements
-        if (caster instanceof Player player) { // achievements
-            Achievement.CAST_SPELL.give(player);
-            if (this.getStyle() == MagicClass.PURE) Achievement.CAST_PURE_SPELL.give(player);
-            if (this.type == SpellType.EDICT) Achievement.CAST_EDICT_SPELL.give(player);
-            else if (this.type == SpellType.ENCHANTMENT) Achievement.CAST_ENCHANT_SPELL.give(player);
-            if (this.getEnergy() >= 10) Achievement.CAST_BIG_SPELL.give(player);
-            if (this.getPoints() == 9) Achievement.CAST_NINE_SPELL.give(player);
-        }
+        final SpellCastEvent event = new SpellCastEvent(caster, this);
+        Bukkit.getPluginManager().callEvent(event);
         this.run(caster, range, scale, amplitude);
     }
-    
-    
-    protected abstract void run(LivingEntity caster, int range, float scale, double amplitude);
     
     @Override
     public SpellResult checkCast(LivingEntity caster, int range, float scale, double amplitude) {
@@ -150,6 +143,9 @@ public abstract class StandardSpell implements Spell {
             for (Ingredient material : this.getMaterials())
                 if (!material.canComplete(player))
                     return SpellResult.NO_INGREDIENT;
+            final SpellPreCastEvent event = new SpellPreCastEvent(caster, this);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) return SpellResult.CANCELLED;
             this.takeIngredients(caster);
             this.takeEnergy(caster);
         }
@@ -174,6 +170,8 @@ public abstract class StandardSpell implements Spell {
         final int energy = this.getEnergy();
         player.setFoodLevel(player.getFoodLevel() - ((energy - bonus) * 2));
     }
+    
+    protected abstract void run(LivingEntity caster, int range, float scale, double amplitude);
     
 }
 

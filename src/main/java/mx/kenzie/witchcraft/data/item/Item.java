@@ -109,11 +109,11 @@ public class Item implements ItemArchetype {
                 .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
         if (magic != null) {
             if (magic.amplitude > 0)
-                list.add(Component.text(" ☽ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
+                list.add(Component.text(" ☀ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
                     .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
             if (magic.spells.length > 0) for (LearnedSpell spell : this.getSpells())
-                list.add(Component.textOfChildren(
-                    Component.text(" ✶ ").decoration(TextDecoration.ITALIC, false)
+                list.add(Component.textOfChildren(//☽✶
+                    Component.text(" ☽ ").decoration(TextDecoration.ITALIC, false)
                         .color(TextColor.color(139, 166, 199)),
                     spell.itemName().color(TextColor.color(139, 166, 199))
                 ));
@@ -184,13 +184,19 @@ public class Item implements ItemArchetype {
     }
     
     @Override
+    public int bonusEnergy() {
+        if (magic != null) return magic.energy;
+        return ItemArchetype.super.bonusEnergy();
+    }
+    
+    @Override
     public boolean isEmpty() {
         return false;
     }
     
     public static class MagicData {
         public boolean can_cast;
-        public int range = 5;
+        public int range = 5, energy;
         public double amplitude;
         public String[] spells = new String[0];
         public transient NamespacedKey[] spellKeys;

@@ -35,7 +35,7 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
         final RayTraceResult result = target.result();
         final Block beneath = result.getHitBlock();
         final BlockFace face = result.getHitBlockFace();
-        assert beneath != null && face != null;
+        if (beneath == null || face == null) return;
         final Block first = beneath.getRelative(result.getHitBlockFace()), second = first.getRelative(BlockFace.UP);
         if (!(caster instanceof Player player)) return;
         final PlayerData data = PlayerData.getData(player);
@@ -90,6 +90,6 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
         if (!(caster instanceof Player)) return false;
         if (!Protection.getInstance().canTeleport(caster, caster.getLocation())) return false;
         this.target = this.getTarget(caster, 10, false);
-        return target.target() != null && target.result() != null;
+        return target.target() != null && target.result() != null && target.result().getHitBlock() != null;
     }
 }

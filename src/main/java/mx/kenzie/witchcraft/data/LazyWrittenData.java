@@ -9,9 +9,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class LazyWrittenData extends Lazy<Void> {
+public class LazyWrittenData<Type> extends Lazy<Type> {
     
     protected transient File file;
+    
+    @SuppressWarnings("unchecked")
+    protected LazyWrittenData() {
+        target = (Type) this;
+    }
     
     public void scheduleSave() {
         WitchcraftAPI.executor.submit(this::save);
@@ -43,5 +48,9 @@ public class LazyWrittenData extends Lazy<Void> {
             throw new RuntimeException(ex);
         }
         this.finish();
+    }
+    
+    public boolean exists() {
+        return file != null && file.exists() && file.isFile();
     }
 }

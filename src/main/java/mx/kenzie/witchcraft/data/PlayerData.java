@@ -21,14 +21,15 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.*;
 
-public class PlayerData extends CasterData {
+public class PlayerData extends CasterData<PlayerData> {
     public transient final Temporary temporary = new Temporary();
-    public final Memory memory = new Memory();
+    public Memory memory = new Memory();
     public @Optional String[] clothes = new String[0];
     public MagicClass style = MagicClass.PURE;
     public UUID coven;
     public String nickname, name;
     public long joined, seen, discord_id;
+    public Memory[] history = new Memory[0];
     public Title[] titles = new Title[] {Title.NOVICE};
     public Achievement[] achievements = new Achievement[0];
     public Title current_title = Title.NOVICE;
@@ -54,6 +55,20 @@ public class PlayerData extends CasterData {
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
+    }
+    
+    public void regenerate() {
+        this.generation++;
+        this.style = MagicClass.PURE;
+        this.current_title = Title.NOVICE;
+        final Coven coven = Coven.getCoven(this.coven);
+        if (coven != null) coven.removeMember(uuid);
+        this.coven = null;
+        final Memory[] memories = new Memory[history.length + 1];
+        memories[memories.length - 1] = memory;
+        this.memory = new Memory();
+        this.history = memories;
+        this.scheduleSave();
     }
     
     public long getDiscordId() {

@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.data.Coven;
-import mx.kenzie.witchcraft.data.entity.CustomEntityType;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
@@ -201,6 +200,9 @@ public interface Minecraft {
     NPC spawnNPC(Location loc, PlayerProfile profile, Consumer<Player> o);
     
     LivingEntity spawnMirrorImage(Location location, Player player);
+    
+    @SuppressWarnings("unchecked")
+    LivingEntity spawnDeadSoldier(Location location, LivingEntity owner);
     
     Entity getTargetEntity(Location location, double maxDist, double accuracy);
     

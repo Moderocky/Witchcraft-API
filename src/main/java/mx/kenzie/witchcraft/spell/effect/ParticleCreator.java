@@ -12,8 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface ParticleCreator {
     
-    static ParticleCreator of(Particle particle) {
-        if (WitchcraftAPI.isTest) return null;
+    static @NotNull ParticleCreator of(Particle particle) {
+        if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
         return WitchcraftAPI.client.particles(particle);
     }
     

@@ -37,7 +37,9 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
     
     public static ParticleBuilder setRandom(ParticleBuilder builder) {
         final Color color = COLORS[ThreadLocalRandom.current().nextInt(COLORS.length)];
-        builder.offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+        if (builder.particle() == Particle.SPELL_MOB)
+            builder.offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+        else builder.color(color.getRed(), color.getGreen(), color.getBlue());
         return builder;
     }
     

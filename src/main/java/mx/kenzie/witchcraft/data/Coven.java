@@ -15,7 +15,7 @@ import org.bukkit.scoreboard.Team;
 import java.io.File;
 import java.util.*;
 
-public class Coven extends LazyWrittenData {
+public class Coven extends LazyWrittenData<Coven> {
     
     private static final Cache<UUID, Coven> COVEN_CACHE = Cache.soft(WeakHashMap::new);
     private static final Cache<Entity, Coven> ENTITY_COVEN_CACHE = Cache.soft(WeakHashMap::new);
@@ -171,17 +171,6 @@ public class Coven extends LazyWrittenData {
         WitchcraftAPI.discord.sendMessage(this, message);
     }
     
-    public void delete() {
-        if (file != null) file.delete();
-        COVEN_CACHE.remove(this.uuid);
-        this.file = null;
-        this.home = null;
-        this.members = new UUID[0];
-        if (team != null) team.unregister();
-        final Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(this.uuid.toString());
-        if (team != null) team.unregister();
-    }
-    
     public int size() {
         return _members.size();
     }
@@ -213,8 +202,26 @@ public class Coven extends LazyWrittenData {
     
     public boolean removeMember(UUID id) {
         final boolean remove = _members.remove(id);
+        if (this.creator == id) {
+            if (_members.size() > 0) creator = _members.iterator().next();
+            else {
+                this.delete();
+                return remove;
+            }
+        }
         this.scheduleSave();
         return remove;
+    }
+    
+    public void delete() {
+        if (file != null) file.delete();
+        COVEN_CACHE.remove(this.uuid);
+        this.file = null;
+        this.home = null;
+        this.members = new UUID[0];
+        if (team != null) team.unregister();
+        final Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(this.uuid.toString());
+        if (team != null) team.unregister();
     }
     
     public List<OfflinePlayer> getMembers() {
