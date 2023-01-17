@@ -53,6 +53,8 @@ public interface Minecraft {
      */
     void damageEntitySafely(Entity target, Entity source, double amount, EntityDamageEvent.DamageCause reason);
     
+    boolean isValidToDamage(Entity target);
+    
     /**
      * If the target is an enemy of the source.
      * Enemies include:
