@@ -39,7 +39,7 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
             entities.add(WitchcraftAPI.minecraft.spawnMirrorImage(location, player));
         }
         final AbstractTargetedSpell.Target target = this.getTarget(caster, range, false);
-        if (target.entity() instanceof LivingEntity living)
+        if (target != null && target.entity() instanceof LivingEntity living)
             for (LivingEntity entity : entities) WitchcraftAPI.minecraft.getAsSummon(entity).setTarget(living);
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, () -> {
             for (LivingEntity entity : entities) {

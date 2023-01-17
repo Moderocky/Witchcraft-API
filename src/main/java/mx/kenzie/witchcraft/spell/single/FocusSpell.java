@@ -17,6 +17,7 @@ public class FocusSpell extends AbstractTargetedSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range, false);
+        if (target == null) return;
         if (!(target.entity() instanceof LivingEntity thing)) return;
         final Set<Entity> entities = new HashSet<>(caster.getLocation().getNearbyEntities(12, 6, 12));
         entities.removeIf(entity -> {
@@ -24,7 +25,7 @@ public class FocusSpell extends AbstractTargetedSpell {
             return !WitchcraftAPI.minecraft.isPet(caster, living);
         });
         for (Entity entity : entities) {
-            if (!(entity instanceof LivingEntity living)) continue;
+            if (!(entity instanceof LivingEntity)) continue;
             final Summon summon = WitchcraftAPI.minecraft.getAsSummon(entity);
             if (summon == null) continue;
             if (summon.getOwnerID() != caster.getUniqueId()) continue;
