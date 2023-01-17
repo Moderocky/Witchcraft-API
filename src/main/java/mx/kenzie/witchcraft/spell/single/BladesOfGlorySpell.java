@@ -24,6 +24,7 @@ public class BladesOfGlorySpell extends AbstractSummonSpell {
         .data(new Particle.DustOptions(Color.fromRGB(253, 58, 9), 3))
         .count(0)
         .extra(0));
+    protected transient List<Block> blocks;
     
     public BladesOfGlorySpell(Map<String, Object> map) {
         super(map);
@@ -42,8 +43,6 @@ public class BladesOfGlorySpell extends AbstractSummonSpell {
             );
         }
     }
-    
-    protected transient List<Block> blocks;
     
     protected CustomEntityType getEntityType() {
         return CustomEntityType.BLADE_OF_GLORY;

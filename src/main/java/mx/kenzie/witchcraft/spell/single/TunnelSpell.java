@@ -24,6 +24,13 @@ public class TunnelSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        this.start = caster.getTargetBlockExact(5);
+        if (start == null) return false;
+        return this.isAllowed(start);
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location point = start.getLocation();
         final Vector direction = caster.getEyeLocation().getDirection();
@@ -65,13 +72,6 @@ public class TunnelSpell extends StandardSpell {
                 SNOW, SNOW_BLOCK, POWDER_SNOW -> true;
             default -> false;
         };
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        this.start = caster.getTargetBlockExact(5);
-        if (start == null) return false;
-        return this.isAllowed(start);
     }
     
 }

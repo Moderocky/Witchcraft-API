@@ -22,6 +22,11 @@ public class ThunderboltSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range);
         if (trace == null) return;
@@ -45,10 +50,5 @@ public class ThunderboltSpell extends AbstractTargetedSpell {
             WitchcraftAPI.sleep(800);
             creator.createLightning(cloud, target, 0.15).draw(cloud);
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

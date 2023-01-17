@@ -34,6 +34,11 @@ public class HexSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range, true);
         final Location target = trace.target();
@@ -64,11 +69,6 @@ public class HexSpell extends AbstractTargetedSpell {
             target.getWorld().playSound(target, Sound.BLOCK_GLASS_BREAK, 0.6F, 0.2F);
             creator.drawPoof(target, 1.1, 16);
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
 }

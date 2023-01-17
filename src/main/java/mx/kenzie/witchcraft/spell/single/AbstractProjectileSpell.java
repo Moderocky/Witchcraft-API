@@ -14,6 +14,11 @@ abstract class AbstractProjectileSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractProjectile projectile = this.createProjectile(caster, scale, amplitude);
         if (projectile.getMotion().lengthSquared() == 0) {
@@ -23,11 +28,6 @@ abstract class AbstractProjectileSpell extends StandardSpell {
         projectile.setMaxRange(range);
         WitchcraftAPI.plugin.projectiles().add(projectile);
         projectile.onLaunch();
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     public abstract AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude);

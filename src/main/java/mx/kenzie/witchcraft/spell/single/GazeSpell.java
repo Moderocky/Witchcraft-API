@@ -22,6 +22,11 @@ public class GazeSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range);
         if (trace == null) return;
@@ -29,11 +34,6 @@ public class GazeSpell extends AbstractTargetedSpell {
         final Entity found = trace.entity();
         this.explode(target);
         WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 2.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     private void explode(final Location target) {

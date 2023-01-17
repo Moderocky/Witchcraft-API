@@ -14,15 +14,15 @@ public class LivingForgeSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         // todo play a pretty effect first
         final PaginatedGUI gui = WitchcraftAPI.resources.showRecipeList(player);
         gui.open(player);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

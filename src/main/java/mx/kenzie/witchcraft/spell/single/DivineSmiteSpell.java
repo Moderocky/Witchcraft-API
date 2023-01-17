@@ -24,6 +24,11 @@ public class DivineSmiteSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final EntityEquipment equipment = caster.getEquipment();
         if (equipment == null) return;
@@ -37,11 +42,6 @@ public class DivineSmiteSpell extends StandardSpell {
         }
         if (this.enchant(off)) return; // we try to enchant the offhand
         this.enchant(main); // if this doesn't work we enchant the player's magic item
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     protected boolean enchant(ItemStack item) {

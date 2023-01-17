@@ -25,6 +25,11 @@ public class UnravelSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return Protection.getInstance().canBreak(caster, caster.getLocation());
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Minecraft minecraft = WitchcraftAPI.minecraft;
         final Block block = caster.getTargetBlockExact(Math.max(5, Math.min(20, range)));
@@ -38,11 +43,6 @@ public class UnravelSpell extends StandardSpell {
             entity.remove();
             break;
         }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return Protection.getInstance().canBreak(caster, caster.getLocation());
     }
     
     protected boolean destroyConnected(Block block) {

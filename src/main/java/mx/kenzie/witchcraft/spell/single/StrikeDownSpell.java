@@ -31,6 +31,11 @@ public class StrikeDownSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range, true);
         if (trace == null) return;
@@ -55,10 +60,5 @@ public class StrikeDownSpell extends AbstractTargetedSpell {
             WitchcraftAPI.minecraft.damageEntity(found, caster, 6 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         else if (found != null)
             WitchcraftAPI.minecraft.damageEntity(found, caster, 200, EntityDamageEvent.DamageCause.VOID);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

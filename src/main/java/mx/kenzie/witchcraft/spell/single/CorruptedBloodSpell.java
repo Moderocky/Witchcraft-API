@@ -29,6 +29,11 @@ public class CorruptedBloodSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range, true);
         final Location location = caster.getEyeLocation();
@@ -45,11 +50,6 @@ public class CorruptedBloodSpell extends AbstractTargetedSpell {
         location.getWorld().playSound(end, Sound.BLOCK_LAVA_POP, 0.9F, 0.8F);
         for (Entity entity : list)
             WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, damage, EntityDamageEvent.DamageCause.MAGIC);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
 }

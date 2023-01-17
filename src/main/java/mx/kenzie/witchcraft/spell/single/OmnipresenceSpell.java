@@ -25,6 +25,15 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        final Location location = caster.getEyeLocation();
+        if (!(caster instanceof Player)) return false;
+        this.blocks = AbstractTeleportSpell.getValidTeleportSpaces(location, 5.6);
+        this.blocks.removeIf(block -> !WitchcraftAPI.minecraft.hasLineOfSight(block.getLocation(), location));
+        return blocks.size() > 6;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Player player = ((Player) caster);
         final int count = Math.min(blocks.size(), 2 + (int) amplitude);
@@ -48,15 +57,6 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
                 entity.remove();
             }
         }, Math.min(Math.max(((long) scale * 8), 8), 20) * 20);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        final Location location = caster.getEyeLocation();
-        if (!(caster instanceof Player)) return false;
-        this.blocks = AbstractTeleportSpell.getValidTeleportSpaces(location, 5.6);
-        this.blocks.removeIf(block -> !WitchcraftAPI.minecraft.hasLineOfSight(block.getLocation(), location));
-        return blocks.size() > 6;
     }
     
     private void splash(Location location) {
