@@ -31,6 +31,14 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        if (!(caster instanceof Player)) return false;
+        if (!Protection.getInstance().canTeleport(caster, caster.getLocation())) return false;
+        this.target = this.getTarget(caster, 10, false);
+        return target.target() != null && target.result() != null && target.result().getHitBlock() != null;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final RayTraceResult result = target.result();
         final Block beneath = result.getHitBlock();
@@ -83,13 +91,5 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
             gateway.setExactTeleport(true);
             gateway.update(true, false);
         }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        if (!(caster instanceof Player)) return false;
-        if (!Protection.getInstance().canTeleport(caster, caster.getLocation())) return false;
-        this.target = this.getTarget(caster, 10, false);
-        return target.target() != null && target.result() != null && target.result().getHitBlock() != null;
     }
 }

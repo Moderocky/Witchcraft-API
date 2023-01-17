@@ -23,6 +23,11 @@ public class CircleOfPuritySpell extends AbstractWarhammerSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final LivingEntity entity = this.summonHammer(caster, range);
         final Hammer hammer = WitchcraftAPI.minecraft.getHandle(entity);
@@ -40,11 +45,6 @@ public class CircleOfPuritySpell extends AbstractWarhammerSpell {
             }
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     public static Location getRandom(Location centre) {

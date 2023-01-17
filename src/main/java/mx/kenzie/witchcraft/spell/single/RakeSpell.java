@@ -23,6 +23,11 @@ public class RakeSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range);
         if (trace == null) return;
@@ -37,11 +42,6 @@ public class RakeSpell extends AbstractTargetedSpell {
             final Vector second = ParticleCreator.random().multiply(1.8);
             creator.createLine(first, second, 0.2).draw(effect.clone().add(first), 30);
         }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
 }

@@ -24,14 +24,6 @@ public class RememberSpell extends StandardSpell {
     }
     
     @Override
-    public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        if (!(caster instanceof Player player)) return;
-        final PlayerData data = PlayerData.getData(player);
-        data.learnLocation(caster.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5));
-        this.creator.createPoof(0.9, 16).draw(caster.getEyeLocation());
-    }
-    
-    @Override
     public boolean canCast(LivingEntity caster) {
         if (!(caster instanceof Player player)) return false;
         final PlayerData data = PlayerData.getData(player);
@@ -40,5 +32,13 @@ public class RememberSpell extends StandardSpell {
             if (location.getLocation().distanceSquared(caster.getLocation()) < 100) return false;
         }
         return true;
+    }
+    
+    @Override
+    public void run(LivingEntity caster, int range, float scale, double amplitude) {
+        if (!(caster instanceof Player player)) return;
+        final PlayerData data = PlayerData.getData(player);
+        data.learnLocation(caster.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5));
+        this.creator.createPoof(0.9, 16).draw(caster.getEyeLocation());
     }
 }

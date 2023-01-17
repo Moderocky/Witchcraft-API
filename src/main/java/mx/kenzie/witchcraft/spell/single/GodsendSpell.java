@@ -26,6 +26,11 @@ public class GodsendSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final Location location = caster.getEyeLocation();
@@ -50,10 +55,5 @@ public class GodsendSpell extends StandardSpell {
         player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 3, false, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 50, 0, false, false, false));
         caster.sendMessage(Component.text("A gift for you, my chosen one...", WitchcraftAPI.colors().lowlight()));
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
     }
 }

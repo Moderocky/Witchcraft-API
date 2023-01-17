@@ -15,6 +15,11 @@ public class FocusSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range, false);
         if (target == null) return;
@@ -31,10 +36,5 @@ public class FocusSpell extends AbstractTargetedSpell {
             if (summon.getOwnerID() != caster.getUniqueId()) continue;
             summon.setTarget(thing);
         }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

@@ -23,6 +23,11 @@ public class LevitationSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Color color = new Color(124, 253, 253);
         final Location location = caster.getEyeLocation();
@@ -41,10 +46,5 @@ public class LevitationSpell extends StandardSpell {
                 WitchcraftAPI.sleep(30);
             }
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

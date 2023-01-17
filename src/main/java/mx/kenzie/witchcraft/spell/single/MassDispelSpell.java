@@ -30,6 +30,11 @@ public class MassDispelSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         for (PotionEffectType value : PotionEffectType.values()) {
             if (value.isInstant()) continue;
@@ -62,10 +67,5 @@ public class MassDispelSpell extends StandardSpell {
                 start.getWorld().playSound(start, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.5F, 2.0F);
             }
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

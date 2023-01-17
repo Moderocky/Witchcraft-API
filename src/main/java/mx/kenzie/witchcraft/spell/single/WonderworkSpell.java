@@ -29,6 +29,11 @@ public class WonderworkSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final PaginatedGUI gui = new PaginatedGUI(WitchcraftAPI.plugin, InventoryType.DISPENSER, "Wonderwork");
@@ -97,10 +102,5 @@ public class WonderworkSpell extends StandardSpell {
             archetype.giveSafely(clicker);
         };
         assembleMenu(player, materials, gui, consumer);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
     }
 }

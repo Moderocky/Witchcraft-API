@@ -24,6 +24,11 @@ public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
         final LivingEntity entity = this.summonHammer(caster, range);
@@ -48,11 +53,6 @@ public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
             }
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     public static Location getRandom(Location centre) {

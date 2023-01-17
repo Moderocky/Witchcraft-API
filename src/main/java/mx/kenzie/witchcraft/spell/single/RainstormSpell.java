@@ -22,6 +22,11 @@ public class RainstormSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range);
         if (trace == null) return;
@@ -43,10 +48,5 @@ public class RainstormSpell extends AbstractTargetedSpell {
                 WitchcraftAPI.sleep(50 * 14);
             }
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

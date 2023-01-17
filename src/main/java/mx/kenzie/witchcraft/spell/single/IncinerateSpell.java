@@ -26,6 +26,11 @@ public class IncinerateSpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range);
         if (trace == null) return;
@@ -33,11 +38,6 @@ public class IncinerateSpell extends AbstractTargetedSpell {
         final Entity found = trace.entity();
         this.explode(caster, target, scale);
         if (found != null) found.setFireTicks((int) (found.getFireTicks() + 60 * scale));
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     private void explode(Entity caster, final Location target, float scale) {

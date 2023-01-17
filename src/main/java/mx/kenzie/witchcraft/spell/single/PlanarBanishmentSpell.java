@@ -25,6 +25,11 @@ public class PlanarBanishmentSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final World world = caster.getWorld();
         final WorldData data = WorldData.getData(world);
@@ -57,11 +62,6 @@ public class PlanarBanishmentSpell extends StandardSpell {
             world.playSound(clicker.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.6F, 1.0F);
         };
         assembleMenu(player, buttons, gui, consumer);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
     }
     
     protected void doBanish(Player player, World world) {

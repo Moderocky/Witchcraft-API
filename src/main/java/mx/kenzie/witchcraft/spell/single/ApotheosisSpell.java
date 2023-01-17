@@ -11,12 +11,12 @@ public class ApotheosisSpell extends StandardSpell {
     }
     
     @Override
-    public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        // todo spell functionality
+    public boolean canCast(LivingEntity caster) {
+        return true;
     }
     
     @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
+    public void run(LivingEntity caster, int range, float scale, double amplitude) {
+        // todo spell functionality
     }
 }

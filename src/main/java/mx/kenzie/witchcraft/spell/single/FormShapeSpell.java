@@ -24,6 +24,11 @@ public class FormShapeSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player thing)) return;
         final List<ItemStack> materials = new ArrayList<>(380);
@@ -54,10 +59,5 @@ public class FormShapeSpell extends StandardSpell {
             item.setInvulnerable(true);
         };
         assembleMenu(thing, materials, gui, consumer);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
     }
 }

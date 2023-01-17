@@ -44,6 +44,11 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range, true);
         final Location target = trace.target();
@@ -70,11 +75,6 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         if (found != null) set.add(found);
         for (Entity entity : set)
             WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, damage, EntityDamageEvent.DamageCause.MAGIC);
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
 }

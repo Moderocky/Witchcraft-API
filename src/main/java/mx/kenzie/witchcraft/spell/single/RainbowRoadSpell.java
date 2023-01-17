@@ -18,6 +18,11 @@ public class RainbowRoadSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location point = caster.getLocation().add(0, -1, 0);
         final Vector direction = point.getDirection().multiply(2);
@@ -29,11 +34,6 @@ public class RainbowRoadSpell extends StandardSpell {
                 caster.getWorld().playSound(point, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1F, 1F);
             }
         });
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
 }

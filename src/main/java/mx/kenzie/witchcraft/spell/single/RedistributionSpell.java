@@ -25,6 +25,11 @@ public class RedistributionSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location centre = caster.getEyeLocation();
         final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(range / 2.0, range / 2.0));
@@ -38,11 +43,6 @@ public class RedistributionSpell extends StandardSpell {
             if (entity == caster) continue;
             this.playLine(caster, entity);
         }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
     
     protected void playLine(LivingEntity caster, LivingEntity target) {
