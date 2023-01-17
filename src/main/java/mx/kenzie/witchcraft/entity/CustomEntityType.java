@@ -5,6 +5,7 @@ import mx.kenzie.witchcraft.data.Coven;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 public enum CustomEntityType {
     SKELETON_SUMMON(true),
@@ -29,7 +30,12 @@ public enum CustomEntityType {
     WIZARD_HUMAN,
     OGDEN_MARR_HUMAN,
     RAINBOW_BRIDGE,
-    MIRROR_IMAGE(true),
+    MIRROR_IMAGE(true) {
+        @Override
+        public Entity summon(LivingEntity owner, Location location) {
+            return WitchcraftAPI.minecraft.spawnMirrorImage(location, ((Player) owner));
+        }
+    },
     ENCHANTING_TABLE {
         @Override
         public LivingEntity spawn(Location location, Coven coven) {
@@ -37,7 +43,14 @@ public enum CustomEntityType {
         }
     },
     BROOMSTICK,
-    GRAVESTONE;
+    GRAVESTONE,
+    BLADE_OF_GLORY(true),
+    DEAD_SOLDIER_SUMMON(true) {
+        @Override
+        public LivingEntity summon(LivingEntity owner, Location location) {
+            return WitchcraftAPI.minecraft.spawnDeadSoldier(location, owner);
+        }
+    };
     
     public final String key;
     public final boolean summon;

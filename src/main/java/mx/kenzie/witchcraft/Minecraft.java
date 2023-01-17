@@ -201,6 +201,9 @@ public interface Minecraft {
     
     LivingEntity spawnMirrorImage(Location location, Player player);
     
+    @SuppressWarnings("unchecked")
+    LivingEntity spawnDeadSoldier(Location location, LivingEntity owner);
+    
     Entity getTargetEntity(Location location, double maxDist, double accuracy);
     
     Set<Entity> getTargetEntities(Location location, double maxDist, double accuracy);
