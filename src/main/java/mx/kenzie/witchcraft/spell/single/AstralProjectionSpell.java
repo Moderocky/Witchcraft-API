@@ -26,7 +26,7 @@ public class AstralProjectionSpell extends StandardSpell {
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
-        final int lifetime = (int) Math.floor(10 + (amplitude * 4));
+        final int lifetime = (int) Math.floor(10 + (amplitude * 2));
         final Location start = player.getLocation();
         final Minecraft minecraft = Minecraft.getInstance();
         final LivingEntity mirror = Minecraft.getInstance().spawnMirrorImageNoAI(start, player);
@@ -35,23 +35,24 @@ public class AstralProjectionSpell extends StandardSpell {
         final AtomicBoolean running = new AtomicBoolean(true);
         final Runnable end = () -> {
             if (!running.get()) return;
-            running.set(false);
+            player.setGameMode(GameMode.ADVENTURE);
             if (mirror.isDead()) {
                 player.damage(50);
                 return;
             }
             player.setHealth(Math.min(minecraft.getMaxHealth(player), mirror.getHealth()));
             player.teleport(mirror);
-            player.setGameMode(GameMode.ADVENTURE);
             mirror.remove();
+            running.set(false);
         };
         WitchcraftAPI.scheduler.scheduleAtFixedRate(() -> {
             if (!player.isOnline()) throw new RuntimeException();
             if (player.getGameMode() != GameMode.SPECTATOR) throw new RuntimeException();
-            if (player.getWorld() != start.getWorld()) end.run();
-            else if (player.getLocation().distanceSquared(start) > (50 * 50)) end.run();
-            else return;
-            throw new RuntimeException();
+            if (mirror.isDead() || player.getWorld() != start.getWorld() || player.getLocation()
+                .distanceSquared(start) > (30 * 30)) {
+                Bukkit.getScheduler().runTask(WitchcraftAPI.plugin, end);
+                throw new RuntimeException();
+            }
         }, 300, 100, TimeUnit.MILLISECONDS);
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, end, lifetime * 20L);
     }
