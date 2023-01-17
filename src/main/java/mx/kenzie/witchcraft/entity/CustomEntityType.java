@@ -1,4 +1,4 @@
-package mx.kenzie.witchcraft.data.entity;
+package mx.kenzie.witchcraft.entity;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.Coven;
