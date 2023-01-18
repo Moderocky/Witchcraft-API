@@ -107,6 +107,7 @@ public class MenuGUI implements InventoryGUI, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
+        if (event.getInventory() != inventory) return;
         if (players.isEmpty()) return;
         Player player = (Player) event.getWhoClicked();
         if (!players.contains(player)) return;

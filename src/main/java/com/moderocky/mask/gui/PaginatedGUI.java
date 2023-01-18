@@ -136,6 +136,7 @@ public class PaginatedGUI extends VisualGUI {
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
+        if (event.getInventory() != inventory) return;
         if (players.isEmpty()) return;
         final Player player = (Player) event.getWhoClicked();
         if (!players.contains(player)) return;
@@ -155,6 +156,7 @@ public class PaginatedGUI extends VisualGUI {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         super.onClose(event);
+        if (event.getInventory() != inventory) return;
         this.reset();
     }
     
