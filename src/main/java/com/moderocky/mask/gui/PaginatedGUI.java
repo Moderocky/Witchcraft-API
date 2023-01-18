@@ -155,9 +155,13 @@ public class PaginatedGUI extends VisualGUI {
     @Override
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        super.onClose(event);
         if (event.getInventory() != inventory) return;
-        this.reset();
+        if (this.players.isEmpty()) return;
+        if (!(event.getPlayer() instanceof Player player)) return;
+        if (!this.players.contains(player)) return;
+
+        super.onClose(event);
+        if (this.players.isEmpty()) this.reset();
     }
     
     public void reset() {
