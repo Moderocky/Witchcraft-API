@@ -43,8 +43,6 @@ public interface SpellManager {
     
     boolean cast(LivingEntity caster, Spell spell, float scale);
     
-    boolean cast(LivingEntity caster, String id, float scale);
-    
     int getRange(LivingEntity caster, EntityEquipment equipment);
     
     void handle(LivingEntity entity, Spell spell, SpellResult result);
@@ -139,15 +137,21 @@ public interface SpellManager {
         });
     }
     
-    LearnedSpell getSpell(long code);
-    
-    long getCode(LearnedSpell spell);
-    
     Spell getSpell(String id);
     
     void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
     
     Set<Spell> getSpells();
+    
+    default LearnedSpell makeKnown(Spell spell, LivingEntity caster, EntityEquipment equipment) {
+        final Set<LearnedSpell> set = this.knownSpells(caster, equipment);
+        for (LearnedSpell learned : set) if (learned.getSpell().equals(spell)) return learned;
+        return new LearnedSpell(spell, 1);
+    }
+    
+    LearnedSpell getSpell(long code);
+    
+    long getCode(LearnedSpell spell);
     
     default PaginatedGUI spellsListAdmin() {
         final Set<LearnedSpell> set = new HashSet<>();
@@ -159,6 +163,14 @@ public interface SpellManager {
     }
     
     LearnResult attemptLearnSpell(Player player, Value value);
+    
+    void castStoredSpell(LivingEntity entity, ItemStack item);
+    
+    default void cast(Player player, String id, float scale, ItemStack item) {
+        if (this.cast(player, id, scale)) item.damage(1, player);
+    }
+    
+    boolean cast(LivingEntity caster, String id, float scale);
     
     interface Value {
         boolean worth();
