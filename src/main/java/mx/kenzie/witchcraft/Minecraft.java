@@ -6,9 +6,11 @@ import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -236,6 +238,10 @@ public interface Minecraft {
     void breakBlock(Block block);
     
     void breakBlock(Block block, ItemStack tool);
+    
+    void setBlock(Block block, Material material);
+    
+    void setBlock(Block block, BlockData data);
     
     default double getMaxHealth(Entity entity) {
         if (!(entity instanceof LivingEntity living)) return 0;
