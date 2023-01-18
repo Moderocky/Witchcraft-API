@@ -50,7 +50,8 @@ public enum CustomEntityType {
         public LivingEntity summon(LivingEntity owner, Location location) {
             return WitchcraftAPI.minecraft.spawnDeadSoldier(location, owner);
         }
-    };
+    },
+    SHADOW(true);
     
     public final String key;
     public final boolean summon;
