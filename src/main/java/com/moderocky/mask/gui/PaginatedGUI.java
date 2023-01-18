@@ -158,6 +158,7 @@ public class PaginatedGUI extends VisualGUI {
         if (event.getInventory() != inventory) return;
         if (this.players.isEmpty()) return;
         if (!(event.getPlayer() instanceof Player player)) return;
+        if (event.getInventory() != inventory) return;
         if (!this.players.contains(player)) return;
 
         super.onClose(event);
