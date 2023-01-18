@@ -137,6 +137,7 @@ public class PaginatedGUI extends VisualGUI {
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
         if (event.getInventory() != inventory) return;
+        event.setCancelled(true);
         if (players.isEmpty()) return;
         final Player player = (Player) event.getWhoClicked();
         if (!players.contains(player)) return;
@@ -160,7 +161,6 @@ public class PaginatedGUI extends VisualGUI {
         if (!(event.getPlayer() instanceof Player player)) return;
         if (event.getInventory() != inventory) return;
         if (!this.players.contains(player)) return;
-        
         super.onClose(event);
         if (this.players.isEmpty()) this.reset();
     }

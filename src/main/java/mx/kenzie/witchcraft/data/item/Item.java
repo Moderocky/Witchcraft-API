@@ -214,6 +214,7 @@ public class Item implements ItemArchetype {
         final List<LearnedSpell> collection = new ArrayList<>(stored);
         final int slots = known.size() + this.getSpellSlots();
         if (slots < 1) return false;
+        if (stored.size() >= slots) return false;
         int count = 0;
         for (LearnedSpell learned : known) {
             if (count == slots) break;
@@ -221,19 +222,21 @@ public class Item implements ItemArchetype {
             else {
                 collection.add(spell);
                 this.storeSpells(meta, collection);
+                meta.lore(this.itemLore(meta));
                 return true;
             }
         }
         if (count >= slots) return false;
         collection.add(spell);
         this.storeSpells(meta, collection);
+        meta.lore(this.itemLore(meta));
         return true;
     }
     
     protected List<LearnedSpell> storedSpells(ItemMeta meta) {
         if (meta == null) return Collections.emptyList();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
-        final long[] codes = container.get(new NamespacedKey("witchcraft", "stored_spells"), PersistentDataType.LONG_ARRAY);
+        final long[] codes = container.get(SPELL_KEY, PersistentDataType.LONG_ARRAY);
         if (codes == null) return Collections.emptyList();
         final List<LearnedSpell> list = new ArrayList<>(codes.length);
         final SpellManager manager = WitchcraftAPI.spells;
@@ -249,8 +252,14 @@ public class Item implements ItemArchetype {
         return magic.spell_slots;
     }
     
+    private static final NamespacedKey SPELL_KEY = new NamespacedKey("witchcraft", "stored_spells");
+    
     protected void storeSpells(ItemMeta meta, List<LearnedSpell> list) {
         final PersistentDataContainer container = meta.getPersistentDataContainer();
+        if (list == null || list.isEmpty()) {
+            container.set(SPELL_KEY, PersistentDataType.LONG_ARRAY, new long[0]);
+            return;
+        }
         final SpellManager manager = WitchcraftAPI.spells;
         final long[] codes = new long[list.size()];
         int index = 0;
@@ -258,7 +267,7 @@ public class Item implements ItemArchetype {
             codes[index] = manager.getCode(spell);
             index++;
         }
-        container.set(new NamespacedKey("witchcraft", "stored_spells"), PersistentDataType.LONG_ARRAY, codes);
+        container.set(SPELL_KEY, PersistentDataType.LONG_ARRAY, codes);
     }
     
     protected void writeSpellSlots(ItemMeta meta, List<Component> list) {
@@ -295,6 +304,7 @@ public class Item implements ItemArchetype {
         if (spells == null || spells.isEmpty()) return null;
         final LearnedSpell spell = spells.remove(0);
         this.storeSpells(meta, spells);
+        meta.lore(this.itemLore(meta));
         return spell;
     }
     
