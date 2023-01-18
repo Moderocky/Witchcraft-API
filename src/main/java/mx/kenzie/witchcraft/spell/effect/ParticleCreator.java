@@ -4,6 +4,7 @@ import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +42,12 @@ public interface ParticleCreator {
     VectorShape createArc(Vector direction, double roll, double length, double height, int step);
     
     VectorShape createArc(Vector direction, double length, double height, int step);
+    
+    void drawCuboid(Location start, Location end, double spread);
+    
+    VectorShape createCuboid(Vector start, Vector end, double spread);
+    
+    VectorShape createCuboid(BoundingBox box, double spread);
     
     VectorShape createArc(double length, double height, int step);
     
