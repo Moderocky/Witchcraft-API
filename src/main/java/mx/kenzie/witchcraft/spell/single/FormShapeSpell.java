@@ -37,14 +37,7 @@ public class FormShapeSpell extends StandardSpell {
             if (material.rarity != Rarity.COMMON && material.rarity != Rarity.UNCOMMON) continue;
             materials.add(material.create());
         }
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Form Shape") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
+        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Form Shape");
         final BiConsumer<Player, InventoryClickEvent> consumer = (clicker, event) -> {
             final ItemStack stack = event.getCurrentItem();
             final ItemArchetype archetype = ItemArchetype.of(stack);

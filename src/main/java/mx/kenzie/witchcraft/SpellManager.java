@@ -13,7 +13,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -68,14 +67,7 @@ public interface SpellManager {
             .thenComparing(spell -> spell.getSpell().getEnergy()));
         final List<ItemStack> list = new ArrayList<>(spells.size());
         for (LearnedSpell spell : spells) list.add(spell.create());
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Known Spells") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
+        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Known Spells");
         SpellManager.makeMenu(gui);
         gui.setEntryChar('#');
         gui.setEntries(list);

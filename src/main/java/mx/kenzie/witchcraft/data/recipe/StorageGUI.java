@@ -16,6 +16,7 @@ public class StorageGUI extends PaginatedGUI {
     
     public StorageGUI(Plugin plugin, int size, String title) {
         super(plugin, size, title);
+        this.inventory.setMaxStackSize(127);
     }
     
     @Override
@@ -23,10 +24,10 @@ public class StorageGUI extends PaginatedGUI {
     public void onClick(InventoryClickEvent event) {
         super.onClick(event);
         if (players.isEmpty()) return;
-        Player player = (Player) event.getWhoClicked();
+        final Player player = (Player) event.getWhoClicked();
         if (!players.contains(player)) return;
         event.setCancelled(true);
-        onInventoryClick(event);
+        this.onInventoryClick(event);
     }
     
     public void onInventoryClick(InventoryClickEvent event) {
