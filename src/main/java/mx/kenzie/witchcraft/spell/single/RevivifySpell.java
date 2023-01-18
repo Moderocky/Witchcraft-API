@@ -17,9 +17,7 @@ import java.util.Map;
 public class RevivifySpell extends AbstractTargetedSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.REDSTONE)
         .data(new Particle.DustOptions(Color.fromRGB(55, 250, 94), 2))
-        .color(Color.fromRGB(35, 173, 252))
         .count(0).force(true));
-    protected final ParticleBuilder soul = new ParticleBuilder(Particle.SOUL_FIRE_FLAME).count(0).extra(0);
     
     public RevivifySpell(Map<String, Object> map) {
         super(map);

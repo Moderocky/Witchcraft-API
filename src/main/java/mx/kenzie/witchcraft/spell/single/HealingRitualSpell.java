@@ -37,7 +37,7 @@ public class HealingRitualSpell extends StandardSpell {
             WitchcraftAPI.scheduler.schedule(() -> {
                 for (LivingEntity entity : entities) {
                     if (entity.isDead()) continue;
-                    final Vibration vibration = new Vibration(new Vibration.Destination.EntityDestination(entity), 40);
+                    final Vibration vibration = new Vibration(new Vibration.Destination.EntityDestination(entity), 20);
                     world.spawnParticle(Particle.VIBRATION, centre, 1, vibration);
                 }
             }, i * 380, TimeUnit.MILLISECONDS);

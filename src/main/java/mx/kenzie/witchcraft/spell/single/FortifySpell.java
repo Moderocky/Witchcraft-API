@@ -38,7 +38,7 @@ public class FortifySpell extends TunnelSpell {
     
     public void fortify(Location location, LivingEntity caster) {
         final Block centre = location.getBlock();
-        if (!this.isAllowed(centre)) return;
+        if (!this.isSoft(centre)) return;
         final Protection protection = Protection.getInstance();
         if (!protection.canPlace(caster, location)) return;
         final Minecraft minecraft = Minecraft.getInstance();
@@ -47,7 +47,8 @@ public class FortifySpell extends TunnelSpell {
                 for (int z = -2; z < 3; z++) {
                     final Location point = location.clone().add(x, y, z);
                     final Block block = point.getBlock();
-                    if (!this.isAllowed(block)) repel.drawPoof(point, 0.8, 10);
+                    if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR) continue;
+                    if (!this.isSoft(block)) repel.drawPoof(point, 0.8, 10);
                     else if (!protection.canPlace(caster, point)) repel.drawPoof(point, 0.8, 10);
                     else minecraft.setBlock(block, this.getSolid());
                 }
