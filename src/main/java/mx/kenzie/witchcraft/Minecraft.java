@@ -16,6 +16,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -242,6 +243,8 @@ public interface Minecraft {
     void setBlock(Block block, Material material);
     
     void setBlock(Block block, BlockData data);
+    
+    void merge(PersistentDataContainer from, PersistentDataContainer to);
     
     default double getMaxHealth(Entity entity) {
         if (!(entity instanceof LivingEntity living)) return 0;

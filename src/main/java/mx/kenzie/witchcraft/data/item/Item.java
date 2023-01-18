@@ -4,6 +4,8 @@ import com.destroystokyo.paper.Namespaced;
 import mx.kenzie.fern.Fern;
 import mx.kenzie.fern.meta.Name;
 import mx.kenzie.fern.meta.Optional;
+import mx.kenzie.witchcraft.Minecraft;
+import mx.kenzie.witchcraft.SpellManager;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.LearnedSpell;
 import mx.kenzie.witchcraft.data.outfit.OutfitData;
@@ -98,32 +100,26 @@ public class Item implements ItemArchetype {
     
     @Override
     public List<Component> itemLore() {
-        final List<Component> list = ItemArchetype.super.itemLore();
-        if (fragile) list.add(Component.text("Fragile").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (soulbound)
-            list.add(Component.text("Soulbound").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (galvanised)
-            list.add(Component.text("Galvanised").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (this.bonusEnergy() > 0)
-            list.add(Component.text(" ⚡ " + this.bonusEnergy() + " Energy")
-                .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
-        if (magic != null) {
-            if (magic.amplitude > 0)
-                list.add(Component.text(" ☀ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
-                    .color(TextColor.color(255, 225, 28)).decoration(TextDecoration.ITALIC, false));
-            if (magic.spells.length > 0) for (LearnedSpell spell : this.getSpells())
-                list.add(Component.textOfChildren(//☽✶
-                    Component.text(" ☽ ").decoration(TextDecoration.ITALIC, false)
-                        .color(TextColor.color(139, 166, 199)),
-                    spell.itemName().color(TextColor.color(139, 166, 199))
-                ));
-        }
-        return list;
+        return this.itemLore(null);
     }
     
     @Override
     public String description() {
         return description;
+    }
+    
+    @Override
+    public void update(ItemStack item) {
+        if (item == null) return;
+        final ItemStack template = this.create();
+        if (template == null) return;
+        final ItemMeta meta = item.getItemMeta();
+        if (item.getType() != template.getType()) item.setType(template.getType());
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        final PersistentDataContainer archetype = template.getItemMeta().getPersistentDataContainer();
+        Minecraft.getInstance().merge(archetype, container);
+        meta.lore(this.itemLore(meta));
+        meta.displayName(this.itemName());
     }
     
     @Override
@@ -194,10 +190,80 @@ public class Item implements ItemArchetype {
         return false;
     }
     
+    public List<Component> itemLore(ItemMeta meta) {
+        final TextColor pop = WitchcraftAPI.colors().pop();
+        final List<Component> list = ItemArchetype.super.itemLore();
+        if (fragile) list.add(Component.text("Fragile").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (soulbound)
+            list.add(Component.text("Soulbound").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (galvanised)
+            list.add(Component.text("Galvanised").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (this.bonusEnergy() > 0)
+            list.add(Component.text(" ⚡ " + this.bonusEnergy() + " Energy")
+                .color(pop).decoration(TextDecoration.ITALIC, false));
+        if (this.bonusAmplitude() > 0)
+            list.add(Component.text(" ☀ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
+                .color(pop).decoration(TextDecoration.ITALIC, false));
+        this.writeSpellSlots(meta, list);
+        return list;
+    }
+    
+    public int getSpellSlots() {
+        if (magic == null) return 0;
+        return magic.spell_slots;
+    }
+    
+    protected void writeSpellSlots(ItemMeta meta, List<Component> list) {
+        final Set<LearnedSpell> known = this.getSpells();
+        final List<LearnedSpell> stored = this.storedSpells(meta);
+        final ItemSpell[] spells = new ItemSpell[known.size() + this.getSpellSlots()];
+        if (spells.length < 1) return;
+        int index = 0;
+        for (LearnedSpell spell : known) {
+            if (index == spells.length) break;
+            spells[index] = new ItemSpell(spell, stored.remove(spell));
+            index++;
+        }
+        for (LearnedSpell spell : stored) {
+            if (index == spells.length) break;
+            spells[index] = new ItemSpell(spell, true);
+            index++;
+        }
+        final TextColor pop = WitchcraftAPI.colors().pop();
+        for (ItemSpell spell : spells) {
+            final TextColor color = spell != null && spell.stored ? pop : TextColor.color(139, 166, 199);
+            if (spell == null)
+                list.add(Component.text(" ☄ Spell Slot").decoration(TextDecoration.ITALIC, false).color(color));
+            else list.add(Component.textOfChildren(
+                Component.text(" ☽ ").decoration(TextDecoration.ITALIC, false)
+                    .color(color),
+                spell.spell.itemName().color(color)
+            ));
+        }
+    }
+    
+    protected List<LearnedSpell> storedSpells(ItemMeta meta) {
+        if (meta == null) return Collections.emptyList();
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        final long[] codes = container.get(new NamespacedKey("witchcraft", "stored_spells"), PersistentDataType.LONG_ARRAY);
+        if (codes == null) return Collections.emptyList();
+        final List<LearnedSpell> list = new ArrayList<>(codes.length);
+        final SpellManager manager = WitchcraftAPI.spells;
+        for (long code : codes) {
+            final LearnedSpell spell = manager.getSpell(code);
+            if (spell != null) list.add(spell);
+        }
+        return list;
+    }
+    
+    private record ItemSpell(LearnedSpell spell, boolean stored) {
+    }
+    
     public static class MagicData {
         public boolean can_cast;
         public int range = 5, energy;
         public double amplitude;
+        public int spell_slots;
         public String[] spells = new String[0];
         public transient NamespacedKey[] spellKeys;
     }

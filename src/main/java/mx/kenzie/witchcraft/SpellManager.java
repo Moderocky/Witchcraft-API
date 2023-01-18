@@ -139,6 +139,10 @@ public interface SpellManager {
         });
     }
     
+    LearnedSpell getSpell(long code);
+    
+    long getCode(LearnedSpell spell);
+    
     Spell getSpell(String id);
     
     void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
