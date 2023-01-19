@@ -1,17 +1,17 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
-import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
+import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.Projectile;
+import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class StrikeSpell extends AbstractProjectileSpell {
     private transient final ParticleBuilder builder = new ParticleBuilder(Particle.WHITE_ASH)
@@ -22,31 +22,21 @@ public class StrikeSpell extends AbstractProjectileSpell {
     }
     
     @Override
-    public AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude) {
+    public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 1 + amplitude;
-        return new MagicProjectile(caster, location, damage) {
-            @Override
-            public void onTick() {
-                builder.location(this.getLocation()).spawn();
-            }
-            
-            @Override
-            public void onLaunch() {
-                world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.2F);
-            }
-            
-            @Override
-            public void explode(Location location) {
-                Random random = ThreadLocalRandom.current();
-                world.playSound(location, Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
-                for (int i = 0; i < 6; i++) {
-                    Location loc = location.clone()
-                        .add(random.nextDouble() - 0.5, random.nextDouble() - 0.5, random.nextDouble() - 0.5);
-                    builder.location(loc).spawn();
-                }
-            }
-        }.setDiameter(0.8);
+        final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
+        final Vector direction = location.getDirection().multiply(0.5);
+        final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
+        world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.2F);
+        projectile.setDamage(damage);
+        projectile.onTick(() -> builder.location(projectile.getLocation()).spawn());
+        projectile.onCollide(() -> {
+            world.playSound(projectile.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
+            creator.drawPoof(projectile.getLocation(), 0.5, 6);
+        });
+        world.playSound(caster.getEyeLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.8F, 1.2F);
+        return projectile;
     }
 }
