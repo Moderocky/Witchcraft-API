@@ -2,14 +2,14 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.Projectile;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
-import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 import java.awt.*;
 import java.util.Map;
@@ -27,29 +27,24 @@ public class DarkBlastSpell extends AbstractProjectileSpell {
     }
     
     @Override
-    public AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude) {
+    public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         final double damage = 3 + amplitude;
-        return new MagicProjectile(caster, location, damage) {
-            @Override
-            public void onTick() {
-                final Location point = location.clone();
-                point.setPitch(point.getPitch() + 90);
-                creator.drawPlate(point, 0.5, 3);
-            }
-            
-            @Override
-            public void onLaunch() {
-                world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.4F);
-            }
-            
-            @Override
-            public void explode(Location location) {
-                world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4F, 0.4F);
-                creator.drawPoof(location, 1, 12);
-            }
-        }.setDiameter(1.1);
+        final Vector direction = location.getDirection().multiply(0.8);
+        final Projectile projectile = this.spawnProjectile(caster, direction, 1.1F, range);
+        projectile.setDamage(damage);
+        projectile.onTick(() -> {
+            final Location point = projectile.getLocation().clone();
+            point.setPitch(point.getPitch() + 90);
+            creator.drawPlate(point, 0.5, 3);
+        });
+        projectile.onCollide(() -> {
+            world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4F, 0.4F);
+            creator.drawPoof(location, 1, 12);
+        });
+        world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.4F);
+        return projectile;
     }
 }
