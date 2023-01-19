@@ -33,12 +33,12 @@ public class AfflictionSpell extends AbstractProjectileSpell {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final Vector direction = location.getDirection().multiply(0.8);
+        final Vector direction = location.getDirection().multiply(0.9);
         final PotionEffect effect = new PotionEffect(PotionEffectType.POISON, 20 * 6, (int) Math.ceil(amplitude), false, true, true);
         final Projectile projectile = this.spawnProjectile(caster, direction, 1.2F, range);
-        projectile.onTick(() -> creator.drawPoof(location, 0.5, 3));
+        projectile.onTick(() -> creator.drawPoof(projectile.getLocation(), 0.5, 3));
         projectile.onCollideWithEntity(entity -> {
-            world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
+            world.playSound(projectile.getLocation(), Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
             if (entity instanceof LivingEntity living)
                 living.addPotionEffect(effect);
             return true;

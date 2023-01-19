@@ -27,7 +27,7 @@ public class StrikeSpell extends AbstractProjectileSpell {
         final World world = location.getWorld();
         final double damage = 1 + amplitude;
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final Vector direction = location.getDirection().multiply(0.5);
+        final Vector direction = location.getDirection().multiply(0.9);
         final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
         world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.2F);
         projectile.setDamage(damage);
@@ -36,7 +36,6 @@ public class StrikeSpell extends AbstractProjectileSpell {
             world.playSound(projectile.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
             creator.drawPoof(projectile.getLocation(), 0.5, 6);
         });
-        world.playSound(caster.getEyeLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.8F, 1.2F);
         return projectile;
     }
 }

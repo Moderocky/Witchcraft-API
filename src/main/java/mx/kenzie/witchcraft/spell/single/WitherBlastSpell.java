@@ -55,7 +55,7 @@ public class WitherBlastSpell extends AbstractProjectileSpell {
         });
         world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.75F, 0.9F);
         Location loc = WitchcraftAPI.minecraft.getRelative(projectile.getPotentialNext(), 90, 0, 0.36);
-        skull.setLocation(loc.add(0, -1.2, 0));
+        skull.setLocation(loc.add(0, -1.2, 0).setDirection(direction));
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getLocation().distanceSquared(location) < 50 * 50)
                 skull.show(player);

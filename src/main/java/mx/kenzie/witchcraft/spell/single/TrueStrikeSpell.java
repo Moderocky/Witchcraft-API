@@ -19,7 +19,7 @@ public class TrueStrikeSpell extends AbstractProjectileSpell {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 1 + amplitude;
-        final Vector direction = location.getDirection().multiply(0.5);
+        final Vector direction = location.getDirection().multiply(0.8);
         final ParticleBuilder builder = Particle.BLOCK_CRACK.builder().data(Material.ICE.createBlockData()).count(0);
         final Projectile projectile = this.spawnProjectile(caster, direction, 0.5F, range);
         world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.6F, 0.8F);
@@ -29,7 +29,6 @@ public class TrueStrikeSpell extends AbstractProjectileSpell {
             world.playSound(projectile.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
             ParticleCreator.of(builder).drawPoof(projectile.getLocation(), 0.5, 6);
         });
-        world.playSound(caster.getEyeLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.8F, 1.2F);
         return projectile;
     }
 }
