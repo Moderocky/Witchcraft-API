@@ -187,6 +187,29 @@ public enum Rarity {
         public String[] description() {
             return new String[] {"A limited number exists in the universe.", "Possibly unobtainable by natural means."};
         }
+    },
+    MASTERWORK {
+        final TextColor color = TextColor.color(255, 138, 20);
+        
+        @Override
+        public String qualifiedName() {
+            return "Masterwork";
+        }
+        
+        @Override
+        public int weight() {
+            return 110;
+        }
+        
+        @Override
+        public TextColor color() {
+            return color;
+        }
+        
+        @Override
+        public String[] description() {
+            return new String[] {"The only one in the whole universe.", "Impossible to recreate."};
+        }
     };
     
     public static Rarity of(int index) {

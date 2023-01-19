@@ -26,6 +26,7 @@ import java.util.*;
 
 public class Item implements ItemArchetype {
     
+    private static final NamespacedKey SPELL_KEY = new NamespacedKey("witchcraft", "stored_spells");
     private transient final Set<Tag> _tags = new HashSet<>();
     private final transient Collection<Namespaced> canBreak = Collections.emptySet();
     public transient String id;
@@ -115,11 +116,13 @@ public class Item implements ItemArchetype {
         if (template == null) return;
         final ItemMeta meta = item.getItemMeta();
         if (item.getType() != template.getType()) item.setType(template.getType());
+        meta.setCustomModelData(template.getItemMeta().getCustomModelData());
         final PersistentDataContainer container = meta.getPersistentDataContainer();
         final PersistentDataContainer archetype = template.getItemMeta().getPersistentDataContainer();
         Minecraft.getInstance().merge(archetype, container);
         meta.lore(this.itemLore(meta));
         meta.displayName(this.itemName());
+        item.setItemMeta(meta);
     }
     
     @Override
@@ -132,6 +135,7 @@ public class Item implements ItemArchetype {
         meta.setPlaceableKeys(placedOn);
         container.set(WitchcraftAPI.plugin.getKey("custom_item"), PersistentDataType.BYTE, (byte) 1);
         container.set(WitchcraftAPI.plugin.getKey("custom_id"), PersistentDataType.STRING, id);
+        container.set(WitchcraftAPI.plugin.getKey("unique"), PersistentDataType.INTEGER, System.identityHashCode(this));
         if (restricted) container.set(WitchcraftAPI.plugin.getKey("protected"), PersistentDataType.BYTE, (byte) 1);
         meta.setCustomModelData(data);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE);
@@ -190,24 +194,6 @@ public class Item implements ItemArchetype {
         return false;
     }
     
-    public List<Component> itemLore(ItemMeta meta) {
-        final TextColor pop = WitchcraftAPI.colors().pop();
-        final List<Component> list = ItemArchetype.super.itemLore();
-        if (fragile) list.add(Component.text("Fragile").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (soulbound)
-            list.add(Component.text("Soulbound").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (galvanised)
-            list.add(Component.text("Galvanised").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
-        if (this.bonusEnergy() > 0)
-            list.add(Component.text(" ⚡ " + this.bonusEnergy() + " Energy")
-                .color(pop).decoration(TextDecoration.ITALIC, false));
-        if (this.bonusAmplitude() > 0)
-            list.add(Component.text(" ☀ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
-                .color(pop).decoration(TextDecoration.ITALIC, false));
-        this.writeSpellSlots(meta, list);
-        return list;
-    }
-    
     public boolean storeSpell(ItemMeta meta, LearnedSpell spell) {
         final Set<LearnedSpell> known = this.getSpells();
         final List<LearnedSpell> stored = this.storedSpells(meta);
@@ -252,8 +238,6 @@ public class Item implements ItemArchetype {
         return magic.spell_slots;
     }
     
-    private static final NamespacedKey SPELL_KEY = new NamespacedKey("witchcraft", "stored_spells");
-    
     protected void storeSpells(ItemMeta meta, List<LearnedSpell> list) {
         final PersistentDataContainer container = meta.getPersistentDataContainer();
         if (list == null || list.isEmpty()) {
@@ -268,6 +252,24 @@ public class Item implements ItemArchetype {
             index++;
         }
         container.set(SPELL_KEY, PersistentDataType.LONG_ARRAY, codes);
+    }
+    
+    public List<Component> itemLore(ItemMeta meta) {
+        final TextColor pop = WitchcraftAPI.colors().pop();
+        final List<Component> list = ItemArchetype.super.itemLore();
+        if (fragile) list.add(Component.text("Fragile").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (soulbound)
+            list.add(Component.text("Soulbound").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (galvanised)
+            list.add(Component.text("Galvanised").decoration(TextDecoration.ITALIC, false).color(rarity.color()));
+        if (this.bonusEnergy() > 0)
+            list.add(Component.text(" ⚡ " + this.bonusEnergy() + " Energy")
+                .color(pop).decoration(TextDecoration.ITALIC, false));
+        if (this.bonusAmplitude() > 0)
+            list.add(Component.text(" ☀ " + (int) Math.round(magic.amplitude * 10) + " Amplitude")
+                .color(pop).decoration(TextDecoration.ITALIC, false));
+        this.writeSpellSlots(meta, list);
+        return list;
     }
     
     protected void writeSpellSlots(ItemMeta meta, List<Component> list) {
