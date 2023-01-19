@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.entity;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.function.Function;
@@ -12,6 +13,8 @@ public interface Projectile extends Handle {
     void setDamage(double damage);
     
     void onCollide(Runnable collide);
+    
+    boolean shouldCollide(Entity entity);
     
     boolean launch();
     

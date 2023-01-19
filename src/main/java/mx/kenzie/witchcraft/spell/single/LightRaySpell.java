@@ -33,12 +33,13 @@ public class LightRaySpell extends AbstractProjectileSpell {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 2 + amplitude;
-        final Vector direction = location.getDirection().multiply(1.8);
+        final Vector direction = location.getDirection().multiply(1.4);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final int radius = 8;
-        final int radiusSq = radius * radius;
+        final int radius = 8, radiusSq = radius * radius;
+        final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
+        projectile.setDamage(damage);
         final CompletableFuture<Map<Location, BlockData>> updateFuture;
-        final RayTraceResult result = world.rayTrace(location, direction, 60, FluidCollisionMode.NEVER, true, 0.1, entity -> !entity.equals(caster));
+        final RayTraceResult result = world.rayTrace(location, direction, 60, FluidCollisionMode.NEVER, true, 0.1, projectile::shouldCollide);
         if (result != null) {
             final Block block = result.getHitPosition().toLocation(world).getBlock();
             updateFuture = CompletableFuture.supplyAsync(() -> {
@@ -64,38 +65,32 @@ public class LightRaySpell extends AbstractProjectileSpell {
                 t.printStackTrace();
                 return Map.of();
             });
-        } else {
-            updateFuture = CompletableFuture.completedFuture(Map.of());
-        }
-        final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
-        projectile.setDamage(damage);
+        } else updateFuture = CompletableFuture.completedFuture(Map.of());
         projectile.onTick(() -> {
             world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
             double distance = projectile.getPrevious().distance(projectile.getLocation());
             creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
         });
-        projectile.onCollide(() -> {
-            updateFuture.thenAcceptAsync(fake -> {
-                final List<Player> players = world.getPlayers();
-                for (final Player player : players) player.sendMultiBlockChange(fake);
-                final ParticleBuilder ballBuilder = Particle.END_ROD.builder().count(radius / 3).force(true)
-                    .allPlayers()
-                    .location(projectile.getLocation()).offset(radius / 2.0, radius / 2.0, radius / 2.0).extra(0.01);
-                final Instant end = Instant.now().plus(Duration.ofSeconds(15));
-                Instant lastSound = Instant.EPOCH;
-                while (Instant.now().isBefore(end)) {
-                    ballBuilder.spawn();
-                    if (!Duration.between(lastSound, Instant.now()).minus(Duration.ofSeconds(3)).isNegative()) {
-                        world.playSound(projectile.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.AMBIENT, radius, (float) Math.random());
-                        lastSound = Instant.now();
-                    }
-                    LockSupport.parkNanos(Duration.ofMillis(50).toNanos());
+        projectile.onCollide(() -> updateFuture.thenAcceptAsync(fake -> {
+            final List<Player> players = world.getPlayers();
+            for (final Player player : players) player.sendMultiBlockChange(fake);
+            final ParticleBuilder ballBuilder = Particle.END_ROD.builder().count(radius / 3).force(true)
+                .allPlayers()
+                .location(projectile.getLocation()).offset(radius / 2.0, radius / 2.0, radius / 2.0).extra(0.01);
+            final Instant end = Instant.now().plus(Duration.ofSeconds(15));
+            Instant lastSound = Instant.EPOCH;
+            while (Instant.now().isBefore(end)) {
+                ballBuilder.spawn();
+                if (!Duration.between(lastSound, Instant.now()).minus(Duration.ofSeconds(3)).isNegative()) {
+                    world.playSound(projectile.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.AMBIENT, radius, (float) Math.random());
+                    lastSound = Instant.now();
                 }
-                final Map<Location, BlockData> real = new HashMap<>(fake.size());
-                for (final Location key : fake.keySet()) real.put(key, world.getBlockData(key));
-                for (final Player player : players) player.sendMultiBlockChange(real);
-            });
-        });
+                LockSupport.parkNanos(Duration.ofMillis(50).toNanos());
+            }
+            final Map<Location, BlockData> real = new HashMap<>(fake.size());
+            for (final Location key : fake.keySet()) real.put(key, world.getBlockData(key));
+            for (final Player player : players) player.sendMultiBlockChange(real);
+        }));
         world.playSound(location, Sound.BLOCK_BEACON_ACTIVATE, 1.1F, 1.3F);
         return projectile;
     }
