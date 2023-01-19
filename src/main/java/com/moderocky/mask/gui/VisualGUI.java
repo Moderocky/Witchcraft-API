@@ -165,7 +165,7 @@ public class VisualGUI implements InventoryGUI, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
-        if (event.getInventory() != inventory) return;
+        if (!event.getInventory().equals(inventory)) return;
         event.setCancelled(true);
         if (players.isEmpty()) return;
         Player player = (Player) event.getWhoClicked();
@@ -182,10 +182,10 @@ public class VisualGUI implements InventoryGUI, Listener {
     
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (event.getInventory() != inventory) return;
+        if (!event.getInventory().equals(inventory)) return;
         if (players.isEmpty()) return;
         final Player player = (Player) event.getPlayer();
-        if (event.getInventory() != inventory) return;
+        if (!event.getInventory().equals(inventory)) return;
         if (!players.contains(player)) return;
         this.players.remove(player);
         if (closeConsumer != null) closeConsumer.accept(player, event);
