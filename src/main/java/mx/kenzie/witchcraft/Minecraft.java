@@ -4,7 +4,6 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.data.Coven;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -34,6 +33,8 @@ public interface Minecraft {
     static Minecraft getInstance() {
         return WitchcraftAPI.minecraft;
     }
+    
+    Projectile spawnProjectile(LivingEntity shooter, Location location, Vector velocity, float diameter, double range);
     
     /**
      * If the target is an ally of the source.
@@ -79,8 +80,6 @@ public interface Minecraft {
      * If entity responds to collisions, etc.
      */
     boolean isInteractible(Entity entity);
-    
-    CollisionTraceResult collisionCheck(AbstractProjectile projectile);
     
     CollisionTraceResult collisionCheck(Location location, Vector motion, @Nullable Entity source);
     
