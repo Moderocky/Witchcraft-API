@@ -66,11 +66,7 @@ public class LightRaySpell extends AbstractProjectileSpell {
                 return Map.of();
             });
         } else updateFuture = CompletableFuture.completedFuture(Map.of());
-        projectile.onTick(() -> {
-            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
-            double distance = projectile.getPrevious().distance(projectile.getLocation());
-            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
-        });
+        drawSpiralPart(world, creator, projectile);
         projectile.onCollide(() -> updateFuture.thenAcceptAsync(fake -> {
             final List<Player> players = world.getPlayers();
             for (final Player player : players) player.sendMultiBlockChange(fake);
@@ -93,5 +89,14 @@ public class LightRaySpell extends AbstractProjectileSpell {
         }));
         world.playSound(location, Sound.BLOCK_BEACON_ACTIVATE, 1.1F, 1.3F);
         return projectile;
+    }
+    
+    static void drawSpiralPart(World world, ParticleCreator creator, Projectile projectile) {
+        projectile.onTick(() -> {
+            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
+            double distance = projectile.getPrevious().distance(projectile.getLocation());
+            if (distance > 5) return;
+            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
+        });
     }
 }

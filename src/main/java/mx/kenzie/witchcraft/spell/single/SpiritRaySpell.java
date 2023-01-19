@@ -31,11 +31,7 @@ public class SpiritRaySpell extends AbstractProjectileSpell {
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
         projectile.setDamage(damage);
-        projectile.onTick(() -> {
-            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
-            double distance = projectile.getPrevious().distance(projectile.getLocation());
-            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
-        });
+        LightRaySpell.drawSpiralPart(world, creator, projectile);
         world.playSound(caster.getEyeLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.8F, 1.2F);
         return projectile;
     }
