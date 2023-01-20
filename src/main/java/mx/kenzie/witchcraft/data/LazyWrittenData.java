@@ -12,6 +12,20 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class LazyWrittenData<Type> extends Lazy<Type> {
+    public static final LazyWrittenData<Void> FLAG = new LazyWrittenData<>() {
+        @Override
+        public void save() {
+        }
+        
+        @Override
+        public void load() {
+        }
+        
+        @Override
+        public boolean exists() {
+            return false;
+        }
+    };
     private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new LinkedBlockingQueue<>();
     private static volatile boolean closing;
     
