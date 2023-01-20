@@ -43,14 +43,7 @@ public class PlanarExpulsionSpell extends StandardSpell {
         final Player[] players = set.toArray(new Player[0]);
         final List<ItemStack> buttons = new ArrayList<>(players.length);
         for (Player online : players) buttons.add(new PlayerIcon(online).create());
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Target") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
+        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Target");
         final BiConsumer<Player, InventoryClickEvent> consumer = (clicker, event) -> {
             final int slot = event.getSlot();
             if (slot < 0) return;

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LevitationSpell extends AbstractPotionSpell {
-    public LevitationSpell(Map<String, Object> map) {
+public class DarknessSpell extends AbstractPotionSpell {
+    public DarknessSpell(Map<String, Object> map) {
         super(map);
     }
     
@@ -44,11 +44,11 @@ public class LevitationSpell extends AbstractPotionSpell {
     
     @Override
     public PotionEffectType getPotion() {
-        return PotionEffectType.LEVITATION;
+        return PotionEffectType.DARKNESS;
     }
     
     @Override
     public Color getColor() {
-        return new Color(67, 255, 162);
+        return new Color(20, 18, 21);
     }
 }

@@ -65,7 +65,7 @@ public class Coven extends LazyWrittenData<Coven> {
     }
     
     public static Team getTeam(Player player) {
-        final PlayerData data = PlayerData.getData(player.getUniqueId());
+        final PlayerData data = PlayerData.getData(player);
         if (data.coven == null) return null;
         final Coven coven = getCoven(data.coven);
         return coven.getTeam();

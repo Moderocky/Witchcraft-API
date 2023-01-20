@@ -14,8 +14,8 @@ public class MirrorImageSpell extends TemporalDuplicateSpell {
     }
     
     @Override
-    protected int maxLifeTime() {
-        return 36;
+    public ParticleCreator getCreator() {
+        return creator;
     }
     
     @Override
@@ -24,7 +24,7 @@ public class MirrorImageSpell extends TemporalDuplicateSpell {
     }
     
     @Override
-    public ParticleCreator getCreator() {
-        return creator;
+    protected int maxLifeTime() {
+        return 36;
     }
 }

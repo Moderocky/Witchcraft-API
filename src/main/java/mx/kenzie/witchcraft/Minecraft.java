@@ -4,19 +4,22 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import mx.kenzie.witchcraft.data.Coven;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -31,6 +34,8 @@ public interface Minecraft {
     static Minecraft getInstance() {
         return WitchcraftAPI.minecraft;
     }
+    
+    Projectile spawnProjectile(LivingEntity shooter, Location location, Vector velocity, float diameter, double range);
     
     /**
      * If the target is an ally of the source.
@@ -76,8 +81,6 @@ public interface Minecraft {
      * If entity responds to collisions, etc.
      */
     boolean isInteractible(Entity entity);
-    
-    CollisionTraceResult collisionCheck(AbstractProjectile projectile);
     
     CollisionTraceResult collisionCheck(Location location, Vector motion, @Nullable Entity source);
     
@@ -186,16 +189,6 @@ public interface Minecraft {
      */
     LivingEntity summonWarhammerTotem(LivingEntity owner, Location location);
     
-    /**
-     * minecraft:human
-     */
-    LivingEntity summonHuman(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:knight_human
-     */
-    LivingEntity summonKnight(LivingEntity owner, Location location);
-    
     String getID(Entity entity);
     
     /**
@@ -225,6 +218,10 @@ public interface Minecraft {
      */
     int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType type);
     
+    List<Entity> getSummons(LivingEntity caster);
+    
+    List<Grave> nearbyGraves(Location location, double rangeX, double rangeY);
+    
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
     
     void updateEnchanter(Block block, Coven coven);
@@ -236,6 +233,12 @@ public interface Minecraft {
     void breakBlock(Block block);
     
     void breakBlock(Block block, ItemStack tool);
+    
+    void setBlock(Block block, Material material);
+    
+    void setBlock(Block block, BlockData data);
+    
+    void merge(PersistentDataContainer from, PersistentDataContainer to);
     
     default double getMaxHealth(Entity entity) {
         if (!(entity instanceof LivingEntity living)) return 0;

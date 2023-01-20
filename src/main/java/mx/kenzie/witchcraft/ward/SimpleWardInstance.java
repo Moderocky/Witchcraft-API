@@ -28,13 +28,14 @@ public class SimpleWardInstance extends WardInstance {
     @Override
     public boolean equals(Object obj) {
         return obj == this || (obj instanceof SimpleWardInstance instance && instance.ward == this.ward);
-    }    @Override
+    }
+    
+    @Override
     public boolean isOwner(LivingEntity entity) {
         if (owner == null) return false;
         return (owner.equals(entity));
     }
     
-
     
     @Override
     public boolean permits(LivingEntity entity) {

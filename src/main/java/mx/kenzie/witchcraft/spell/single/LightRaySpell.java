@@ -2,15 +2,13 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.Projectile;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -31,16 +29,17 @@ public class LightRaySpell extends AbstractProjectileSpell {
     }
     
     @Override
-    public AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude) {
+    public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 2 + amplitude;
-        final Vector direction = location.getDirection().multiply(1.8);
+        final Vector direction = location.getDirection().multiply(1.4);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final int radius = 8;
-        final int radiusSq = radius * radius;
+        final int radius = 8, radiusSq = radius * radius;
+        final Projectile projectile = this.spawnProjectile(caster, direction, 0.8F, range);
+        projectile.setDamage(damage);
         final CompletableFuture<Map<Location, BlockData>> updateFuture;
-        final RayTraceResult result = world.rayTrace(location, direction, 60, FluidCollisionMode.NEVER, true, 0.1, entity -> !entity.equals(caster));
+        final RayTraceResult result = world.rayTrace(location, direction, 60, FluidCollisionMode.NEVER, true, 0.1, projectile::shouldCollide);
         if (result != null) {
             final Block block = result.getHitPosition().toLocation(world).getBlock();
             updateFuture = CompletableFuture.supplyAsync(() -> {
@@ -66,69 +65,38 @@ public class LightRaySpell extends AbstractProjectileSpell {
                 t.printStackTrace();
                 return Map.of();
             });
-        } else {
-            updateFuture = CompletableFuture.completedFuture(Map.of());
-        }
-        
-        return new AbstractProjectile(caster, location) {
-            boolean isLit = false;
-            
-            @Override
-            public void onTick() {
-                world.playSound(getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
-                double distance = getPrevious().distance(getLocation());
-                creator.playSpiral(getPrevious(), 0.2, distance, 12, 1);
+        } else updateFuture = CompletableFuture.completedFuture(Map.of());
+        drawSpiralPart(world, creator, projectile);
+        projectile.onCollide(() -> updateFuture.thenAcceptAsync(fake -> {
+            final List<Player> players = world.getPlayers();
+            for (final Player player : players) player.sendMultiBlockChange(fake);
+            final ParticleBuilder ballBuilder = Particle.END_ROD.builder().count(radius / 3).force(true)
+                .allPlayers()
+                .location(projectile.getLocation()).offset(radius / 2.0, radius / 2.0, radius / 2.0).extra(0.01);
+            final Instant end = Instant.now().plus(Duration.ofSeconds(15));
+            Instant lastSound = Instant.EPOCH;
+            while (Instant.now().isBefore(end)) {
+                ballBuilder.spawn();
+                if (!Duration.between(lastSound, Instant.now()).minus(Duration.ofSeconds(3)).isNegative()) {
+                    world.playSound(projectile.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.AMBIENT, radius, (float) Math.random());
+                    lastSound = Instant.now();
+                }
+                LockSupport.parkNanos(Duration.ofMillis(50).toNanos());
             }
-            
-            @Override
-            public void onCollide(Entity entity) {
-                if (!(entity instanceof final LivingEntity living)) return;
-                if (hasCollided()) return;
-                sync(() -> {
-                    WitchcraftAPI.minecraft.damageEntity(living, getSource(), damage, EntityDamageEvent.DamageCause.MAGIC);
-                    return true;
-                });
-            }
-            
-            @Override
-            public void onCollide(Block block) {
-                if (isLit) return;
-                isLit = true;
-                updateFuture.thenAcceptAsync(fake -> {
-                    final List<Player> players = world.getPlayers();
-                    for (final Player player : players) {
-                        player.sendMultiBlockChange(fake);
-                    }
-                    
-                    final ParticleBuilder ballBuilder = Particle.END_ROD.builder().count(radius / 3).force(true)
-                        .allPlayers()
-                        .location(block.getLocation()).offset(radius / 2.0, radius / 2.0, radius / 2.0).extra(0.01);
-                    
-                    final Instant end = Instant.now().plus(Duration.ofSeconds(15));
-                    Instant lastSound = Instant.EPOCH;
-                    while (Instant.now().isBefore(end)) {
-                        ballBuilder.spawn();
-                        if (!Duration.between(lastSound, Instant.now()).minus(Duration.ofSeconds(3)).isNegative()) {
-                            world.playSound(block.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.AMBIENT, radius, (float) Math.random());
-                            lastSound = Instant.now();
-                        }
-                        LockSupport.parkNanos(Duration.ofMillis(50).toNanos());
-                    }
-                    final Map<Location, BlockData> real = new HashMap<>(fake.size());
-                    for (final Location key : fake.keySet()) {
-                        real.put(key, world.getBlockData(key));
-                    }
-                    
-                    for (final Player player : players) {
-                        player.sendMultiBlockChange(real);
-                    }
-                });
-            }
-            
-            @Override
-            public void onLaunch() {
-                world.playSound(getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.1F, 1.3F);
-            }
-        }.setMotion(direction).setDiameter(0.8);
+            final Map<Location, BlockData> real = new HashMap<>(fake.size());
+            for (final Location key : fake.keySet()) real.put(key, world.getBlockData(key));
+            for (final Player player : players) player.sendMultiBlockChange(real);
+        }));
+        world.playSound(location, Sound.BLOCK_BEACON_ACTIVATE, 1.1F, 1.3F);
+        return projectile;
+    }
+    
+    static void drawSpiralPart(World world, ParticleCreator creator, Projectile projectile) {
+        projectile.onTick(() -> {
+            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
+            double distance = projectile.getPrevious().distance(projectile.getLocation());
+            if (distance > 5) return;
+            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
+        });
     }
 }

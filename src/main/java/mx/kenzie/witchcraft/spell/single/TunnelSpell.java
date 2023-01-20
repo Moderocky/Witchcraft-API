@@ -6,6 +6,7 @@ import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -64,9 +65,13 @@ public class TunnelSpell extends StandardSpell {
     }
     
     public boolean isAllowed(Block block) {
+        if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR) return true;
+        return this.isSoft(block);
+    }
+    
+    public boolean isSoft(Block block) {
         return switch (block.getType()) {
-            case AIR, CAVE_AIR,
-                MUD, DIRT, ROOTED_DIRT, PODZOL, GRASS_BLOCK,
+            case MUD, DIRT, ROOTED_DIRT, PODZOL, GRASS_BLOCK,
                 MOSS_BLOCK, MOSS_CARPET,
                 SAND, GRAVEL, CLAY,
                 SNOW, SNOW_BLOCK, POWDER_SNOW -> true;

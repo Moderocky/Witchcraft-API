@@ -9,7 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import java.util.UUID;
 
 public abstract class WardInstance {
-    protected final long expiry;
+    protected long expiry;
     
     protected WardInstance(long expiry) {
         this.expiry = expiry;

@@ -1,10 +1,9 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
+import mx.kenzie.witchcraft.entity.Projectile;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.Polygon;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
-import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -30,30 +29,25 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
     }
     
     @Override
-    public AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude) {
+    public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 3 + amplitude;
         final Vector axis = location.getDirection();
         final Polygon polygon = purple.createPolygon(axis, 0.4, 5);
         polygon.fillInLines(false, 0.2);
-        return new MagicProjectile(caster, location, damage) {
-            @Override
-            public void onTick() {
-                purple.getBuilder().location(this.getLocation()).spawn();
-                builder.draw(this.getLocation(), polygon);
-            }
-            
-            @Override
-            public void onLaunch() {
-                world.playSound(location, Sound.ENTITY_BLAZE_SHOOT, 0.7F, 0.7F);
-            }
-            
-            @Override
-            public void explode(Location location) {
-                world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
-                purple.drawPoof(location, 0.8, 10);
-            }
-        }.setDiameter(1.2);
+        final Vector direction = location.getDirection().multiply(0.5);
+        final Projectile projectile = this.spawnProjectile(caster, direction, 1.2F, range);
+        world.playSound(location, Sound.ENTITY_BLAZE_SHOOT, 0.7F, 0.7F);
+        projectile.setDamage(damage);
+        projectile.onTick(() -> {
+            this.purple.getBuilder().location(projectile.getLocation()).spawn();
+            this.builder.draw(projectile.getLocation(), polygon);
+        });
+        projectile.onCollide(() -> {
+            world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
+            this.purple.drawPoof(location, 0.8, 10);
+        });
+        return projectile;
     }
 }

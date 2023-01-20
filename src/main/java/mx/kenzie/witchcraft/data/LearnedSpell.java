@@ -29,8 +29,13 @@ public class LearnedSpell implements ItemArchetype {
     }
     
     public LearnedSpell(Spell spell) {
+        this(spell, 1);
+    }
+    
+    public LearnedSpell(Spell spell, int level) {
         this.id = spell.getId();
         this.spell = spell;
+        this.level = level;
     }
     
     @Override

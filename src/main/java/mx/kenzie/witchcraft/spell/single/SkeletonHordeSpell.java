@@ -11,26 +11,28 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class RaiseFleshSpell extends AbstractGraveSpell {
+public class SkeletonHordeSpell extends AbstractGraveSpell {
     
     private transient final ParticleCreator creator = ParticleCreator.of(Material.REDSTONE_BLOCK);
     
-    public RaiseFleshSpell(Map<String, Object> map) {
+    public SkeletonHordeSpell(Map<String, Object> map) {
         super(map);
     }
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
+        int summons = summonCount(caster);
         for (Grave grave : graves) {
+            if (summons >= maxSummonCount(caster)) break;
             if (!grave.canGrow()) continue;
             final Location location = grave.getStart();
-            final Entity entity = CustomEntityType.ZOMBIE_SUMMON.summon(caster, location);
+            final Entity entity = CustomEntityType.SKELETON_SUMMON.summon(caster, location);
+            summons++;
             grave.attemptGrow(entity);
             this.creator.createSpiral(
                 location.setDirection(new Vector(0, 1, 0)),
                 0.8, 2, 10, 2
             ).draw(location, 50);
-            break;
         }
     }
 }

@@ -27,7 +27,7 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         VIOLET = new Color(183, 40, 255);
     public static final Color[] COLORS = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET};
     
-    protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
+    protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
         .count(0)
         .force(true);
     
@@ -58,15 +58,16 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         locked.setPitch(0);
         final Vector step = locked.getDirection().rotateAroundAxis(new Vector(0, 1, 0), Math.toRadians(-90));
         final double damage = 2.5 + amplitude;
-        eye.add(direction);
+        eye.add(0, -0.4, 0).add(direction);
         caster.getWorld().playSound(eye, Sound.BLOCK_BEACON_AMBIENT, 0.4F, 1.8F);
         WitchcraftAPI.executor.submit(() -> {
             final ParticleCreator creator = ParticleCreator.of(builder);
             for (int i = 0; i < COLORS.length; i++) {
                 final Color color = COLORS[i];
                 final Vector offset = step.clone().multiply((i - 3.5) / 5.5);
-                final Location start = eye.clone().add(offset), end = target.clone().add(offset);
-                this.builder.offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+                final Location start = eye.clone().add(offset.clone().multiply(0.5)), end = target.clone()
+                    .add(offset.multiply(1.1));
+                this.builder.color(color.getRed(), color.getGreen(), color.getBlue());
                 creator.drawLine(start, end, 0.3);
             }
             target.getWorld().playSound(target, Sound.BLOCK_GLASS_BREAK, 0.6F, 0.2F);

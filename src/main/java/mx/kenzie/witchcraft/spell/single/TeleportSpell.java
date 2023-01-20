@@ -47,14 +47,7 @@ public class TeleportSpell extends AbstractTeleportSpell {
         final Position[] positions = list.toArray(new Position[0]);
         final List<ItemStack> buttons = new ArrayList<>(positions.length);
         for (Position position : positions) buttons.add(position.create());
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Destination") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
+        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Destination");
         final BiConsumer<Player, InventoryClickEvent> consumer = (clicker, event) -> {
             final int slot = event.getSlot();
             if (slot < 0) return;

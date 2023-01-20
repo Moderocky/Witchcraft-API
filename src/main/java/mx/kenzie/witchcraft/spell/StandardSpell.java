@@ -182,6 +182,11 @@ class NoEffectSpell extends StandardSpell {
     }
     
     @Override
+    public boolean canCast(LivingEntity caster) {
+        return true;
+    }
+    
+    @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         caster.sendMessage(Component.textOfChildren(
             Component.text("You cast "),
@@ -189,10 +194,5 @@ class NoEffectSpell extends StandardSpell {
             Component.text("!")).color(NamedTextColor.WHITE)
         );
         caster.sendMessage(Component.text("It wasn't very effective...").color(NamedTextColor.WHITE));
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return true;
     }
 }

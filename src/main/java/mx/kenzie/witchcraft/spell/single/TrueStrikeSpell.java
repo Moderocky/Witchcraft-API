@@ -1,13 +1,13 @@
 package mx.kenzie.witchcraft.spell.single;
 
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
-import mx.kenzie.witchcraft.spell.projectile.MagicProjectile;
+import com.destroystokyo.paper.ParticleBuilder;
+import mx.kenzie.witchcraft.entity.Projectile;
+import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class TrueStrikeSpell extends AbstractProjectileSpell {
     public TrueStrikeSpell(Map<String, Object> map) {
@@ -15,31 +15,20 @@ public class TrueStrikeSpell extends AbstractProjectileSpell {
     }
     
     @Override
-    public AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude) {
+    public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
         final double damage = 1 + amplitude;
-        return new MagicProjectile(caster, location, damage) {
-            @Override
-            public void onTick() {
-                world.spawnParticle(Particle.BLOCK_CRACK, getLocation(), 0, Material.ICE.createBlockData());
-            }
-            
-            @Override
-            public void onLaunch() {
-                world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.6F, 0.8F);
-            }
-            
-            @Override
-            public void explode(Location location) {
-                Random random = ThreadLocalRandom.current();
-                world.playSound(location, Sound.BLOCK_GLASS_BREAK, 0.8F, 0.8F);
-                for (int i = 0; i < 6; i++) {
-                    Location loc = location.clone()
-                        .add(random.nextDouble() - 0.5, random.nextDouble() - 0.5, random.nextDouble() - 0.5);
-                    location.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 0, Material.ICE.createBlockData());
-                }
-            }
-        }.setDiameter(0.4);
+        final Vector direction = location.getDirection().multiply(0.8);
+        final ParticleBuilder builder = Particle.BLOCK_CRACK.builder().data(Material.ICE.createBlockData()).count(0);
+        final Projectile projectile = this.spawnProjectile(caster, direction, 0.5F, range);
+        world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.6F, 0.8F);
+        projectile.setDamage(damage);
+        projectile.onTick(() -> world.spawnParticle(Particle.BLOCK_CRACK, projectile.getLocation(), 0, Material.ICE.createBlockData()));
+        projectile.onCollide(() -> {
+            world.playSound(projectile.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.8F, 0.4F);
+            ParticleCreator.of(builder).drawPoof(projectile.getLocation(), 0.5, 6);
+        });
+        return projectile;
     }
 }

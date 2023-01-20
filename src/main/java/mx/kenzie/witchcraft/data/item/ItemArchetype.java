@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.data.item;
 
+import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.LearnedSpell;
 import mx.kenzie.witchcraft.data.outfit.OutfitData;
@@ -111,6 +112,9 @@ public interface ItemArchetype {
         final ItemStack template = this.create();
         if (template == null) return;
         if (item.getType() != template.getType()) item.setType(template.getType());
+        final PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        final PersistentDataContainer replacement = template.getItemMeta().getPersistentDataContainer();
+        Minecraft.getInstance().merge(container, replacement);
         item.setItemMeta(template.getItemMeta());
     }
     

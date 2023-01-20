@@ -85,14 +85,7 @@ public class WonderworkSpell extends StandardSpell {
             if (material.rarity().weight() > 40) continue;
             materials.add(material.create());
         }
-        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Wonderwork") {
-            {inventory.setMaxStackSize(127);}
-            
-            @Override
-            public void onInventoryClick(InventoryClickEvent event) {
-                event.setCancelled(true);
-            }
-        };
+        final PaginatedGUI gui = new StorageGUI(WitchcraftAPI.plugin, 54, "Wonderwork");
         final BiConsumer<Player, InventoryClickEvent> consumer = (clicker, event) -> {
             final ItemStack stack = event.getCurrentItem();
             final ItemArchetype archetype = ItemArchetype.of(stack);

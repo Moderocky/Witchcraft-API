@@ -1,8 +1,8 @@
 package mx.kenzie.witchcraft.spell.single;
 
-import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.Minecraft;
+import mx.kenzie.witchcraft.entity.Projectile;
 import mx.kenzie.witchcraft.spell.StandardSpell;
-import mx.kenzie.witchcraft.spell.projectile.AbstractProjectile;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
@@ -20,16 +20,14 @@ abstract class AbstractProjectileSpell extends StandardSpell {
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final AbstractProjectile projectile = this.createProjectile(caster, scale, amplitude);
-        if (projectile.getMotion().lengthSquared() == 0) {
-            final Vector direction = caster.getLocation().getDirection().normalize().multiply(0.8);
-            projectile.setMotion(direction);
-        }
-        projectile.setMaxRange(range);
-        WitchcraftAPI.plugin.projectiles().add(projectile);
-        projectile.onLaunch();
+        final Projectile projectile = this.createProjectile(caster, scale, amplitude, range);
+        projectile.launch();
     }
     
-    public abstract AbstractProjectile createProjectile(LivingEntity caster, float scale, double amplitude);
+    public abstract Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range);
+    
+    protected Projectile spawnProjectile(LivingEntity caster, Vector velocity, float diameter, double range) {
+        return Minecraft.getInstance().spawnProjectile(caster, caster.getEyeLocation(), velocity, diameter, range);
+    }
     
 }

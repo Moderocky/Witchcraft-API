@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LevitationSpell extends AbstractPotionSpell {
-    public LevitationSpell(Map<String, Object> map) {
+public class InvisibilitySpell extends AbstractPotionSpell {
+    public InvisibilitySpell(Map<String, Object> map) {
         super(map);
     }
     
@@ -27,15 +27,15 @@ public class LevitationSpell extends AbstractPotionSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getEyeLocation();
-        final List<LivingEntity> list = new ArrayList<>(location.getNearbyLivingEntities(10, 4));
-        list.removeIf(living -> !WitchcraftAPI.minecraft.isEnemy(living, caster));
-        final PotionEffect effect = new PotionEffect(this.getPotion(), (int) (20 * (4 + amplitude)), (int) amplitude, true, true, false);
+        final List<LivingEntity> list = new ArrayList<>(location.getNearbyLivingEntities(3));
+        list.removeIf(living -> !WitchcraftAPI.minecraft.isAlly(living, caster));
+        final PotionEffect effect = new PotionEffect(this.getPotion(), (int) (20 * (18 + (amplitude * 4))), 0, false, false, true);
         final ParticleCreator creator = this.getCreator();
         for (LivingEntity entity : list) entity.addPotionEffect(effect);
         final Vector axis = new Vector(0, 1, 0);
         WitchcraftAPI.executor.submit(() -> {
-            for (int i = 1; i < 7; i++) {
-                final VectorShape shape = creator.createCircle(axis, 1 + i, i * 4);
+            for (int i = 1; i < 3; i++) {
+                final VectorShape shape = creator.createCircle(axis, 1 + i, i * 7);
                 shape.draw(location);
                 WitchcraftAPI.sleep(30);
             }
@@ -44,11 +44,11 @@ public class LevitationSpell extends AbstractPotionSpell {
     
     @Override
     public PotionEffectType getPotion() {
-        return PotionEffectType.LEVITATION;
+        return PotionEffectType.INVISIBILITY;
     }
     
     @Override
     public Color getColor() {
-        return new Color(67, 255, 162);
+        return new Color(124, 253, 253);
     }
 }

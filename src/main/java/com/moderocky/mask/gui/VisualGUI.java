@@ -84,10 +84,10 @@ public class VisualGUI implements InventoryGUI, Listener {
     }
     
     public VisualGUI createButton(char ch, @NotNull ItemStack itemStack, @NotNull BiConsumer<Player, InventoryClickEvent> consumer) {
-        preActionConsumers.add(o -> {
+        this.preActionConsumers.add(o -> {
             for (int slot : this.getSlots(ch)) {
-                map.put(Math.max(0, Math.min(inventory.getSize(), slot)), consumer);
-                inventory.setItem(Math.max(0, Math.min(inventory.getSize(), slot)), itemStack);
+                this.map.put(Math.max(0, Math.min(inventory.getSize(), slot)), consumer);
+                this.inventory.setItem(Math.max(0, Math.min(inventory.getSize(), slot)), itemStack);
             }
         });
         return this;
@@ -165,6 +165,8 @@ public class VisualGUI implements InventoryGUI, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
+        if (!event.getInventory().equals(inventory)) return;
+        event.setCancelled(true);
         if (players.isEmpty()) return;
         Player player = (Player) event.getWhoClicked();
         if (!players.contains(player)) return;
@@ -180,9 +182,10 @@ public class VisualGUI implements InventoryGUI, Listener {
     
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
+        if (!event.getInventory().equals(inventory)) return;
         if (players.isEmpty()) return;
         final Player player = (Player) event.getPlayer();
-        if (event.getInventory() != inventory) return;
+        if (!event.getInventory().equals(inventory)) return;
         if (!players.contains(player)) return;
         this.players.remove(player);
         if (closeConsumer != null) closeConsumer.accept(player, event);
