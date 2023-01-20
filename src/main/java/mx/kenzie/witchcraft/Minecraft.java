@@ -218,6 +218,8 @@ public interface Minecraft {
      */
     int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType type);
     
+    List<Entity> getSummons(LivingEntity caster);
+    
     List<Grave> nearbyGraves(Location location, double rangeX, double rangeY);
     
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
