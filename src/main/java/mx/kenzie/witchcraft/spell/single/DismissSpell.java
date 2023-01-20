@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.Minecraft;
+import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
@@ -8,7 +9,7 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.Map;
 
-public class DismissSpell extends AbstractTargetedSpell {
+public class DismissSpell extends StandardSpell {
     protected final ParticleCreator creator = ParticleCreator.of(Particle.FIREWORKS_SPARK.builder().count(0));
     
     public DismissSpell(Map<String, Object> map) {
