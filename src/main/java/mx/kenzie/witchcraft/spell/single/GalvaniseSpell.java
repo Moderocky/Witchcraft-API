@@ -14,12 +14,12 @@ import org.bukkit.inventory.meta.Damageable;
 
 import java.util.Map;
 
-public class MinorMendingSpell extends StandardSpell {
-    public transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.COMPOSTER)
+public class GalvaniseSpell extends StandardSpell {
+    public transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.TOTEM)
         .count(0)
         .force(true));
     
-    public MinorMendingSpell(Map<String, Object> map) {
+    public GalvaniseSpell(Map<String, Object> map) {
         super(map);
     }
     
@@ -34,7 +34,7 @@ public class MinorMendingSpell extends StandardSpell {
         if (equipment == null) return;
         final ItemStack off = equipment.getItemInOffHand(), main = equipment.getItemInMainHand();
         this.creator.drawPoof(caster.getEyeLocation(), 1, 12);
-        caster.getWorld().playSound(caster.getEyeLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.7F, 0.7F);
+        caster.getWorld().playSound(caster.getEyeLocation(), Sound.BLOCK_ANVIL_USE, 0.7F, 0.7F);
         if (this.enchant(off)) return; // we try to enchant the offhand
         this.enchant(main); // if this doesn't work we enchant the player's magic item
     }
@@ -44,7 +44,8 @@ public class MinorMendingSpell extends StandardSpell {
         if (archetype.isEmpty()) return false;
         if (archetype instanceof Item thing && thing.fragile) return false;
         if (!(item.getItemMeta() instanceof Damageable damageable)) return false;
-        if (!damageable.hasDamage()) return false;
+        if (damageable.isUnbreakable()) return false;
+        damageable.setUnbreakable(true);
         damageable.setDamage(0);
         item.setItemMeta(damageable);
         return true;
