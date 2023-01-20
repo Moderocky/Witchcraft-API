@@ -9,10 +9,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LazyWrittenData<Type> extends Lazy<Type> {
-    private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new ConcurrentLinkedQueue<>();
+    private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new LinkedBlockingQueue<>();
     private static volatile boolean closing;
     
     protected transient File file;
@@ -20,11 +20,6 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     @SuppressWarnings("unchecked")
     protected LazyWrittenData() {
         target = (Type) this;
-    }
-    
-    public synchronized void scheduleSave() {
-        if (SAVE_QUEUE.contains(this)) return;
-        SAVE_QUEUE.add(this);
     }
     
     public static void setClosing(boolean closing) {
@@ -57,6 +52,11 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+    
+    public synchronized void scheduleSave() {
+        if (SAVE_QUEUE.contains(this)) return;
+        SAVE_QUEUE.add(this);
     }
     
     public void scheduleLoad() {

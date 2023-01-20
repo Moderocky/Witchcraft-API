@@ -45,14 +45,13 @@ public class ShallowGravesSpell extends AbstractWardSpell {
             if (summons >= AbstractGraveSpell.maxSummonCount(caster)) return;
             for (Grave grave : graves) {
                 if (!grave.canGrow()) continue;
-                final Location location = grave.getBukkitEntity().getLocation();
+                final Location location = grave.getStart();
                 final Entity skeleton = CustomEntityType.SKELETON_SUMMON.summon(caster, location);
                 grave.attemptGrow(skeleton);
                 break;
             }
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
-        // todo add functionality
     }
     
 }

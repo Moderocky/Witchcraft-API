@@ -25,7 +25,7 @@ public class SkeletonHordeSpell extends AbstractGraveSpell {
         for (Grave grave : graves) {
             if (summons >= maxSummonCount(caster)) break;
             if (!grave.canGrow()) continue;
-            final Location location = grave.getBukkitEntity().getLocation();
+            final Location location = grave.getStart();
             final Entity entity = CustomEntityType.SKELETON_SUMMON.summon(caster, location);
             summons++;
             grave.attemptGrow(entity);

@@ -23,7 +23,7 @@ public class RaiseFleshSpell extends AbstractGraveSpell {
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         for (Grave grave : graves) {
             if (!grave.canGrow()) continue;
-            final Location location = grave.getBukkitEntity().getLocation();
+            final Location location = grave.getStart();
             final Entity entity = CustomEntityType.ZOMBIE_SUMMON.summon(caster, location);
             grave.attemptGrow(entity);
             this.creator.createSpiral(

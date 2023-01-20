@@ -19,14 +19,14 @@ public interface ParticleCreator {
         return WitchcraftAPI.client.particles(particle);
     }
     
-    static @NotNull ParticleCreator of(ParticleBuilder builder) {
-        if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
-        return WitchcraftAPI.client.particles(builder);
-    }
-    
     static @NotNull ParticleCreator of(Material material) {
         if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
         return ParticleCreator.of(Particle.BLOCK_CRACK.builder().data(material.createBlockData()));
+    }
+    
+    static @NotNull ParticleCreator of(ParticleBuilder builder) {
+        if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
+        return WitchcraftAPI.client.particles(builder);
     }
     
     static Vector random() {

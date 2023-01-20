@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft.data;
 
 import mx.kenzie.sloth.Cache;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
