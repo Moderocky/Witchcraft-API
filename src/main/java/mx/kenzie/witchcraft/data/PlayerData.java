@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.*;
 
 public class PlayerData extends CasterData<PlayerData> {
+    public static final Map<Player, PlayerData> LOCAL_CACHE = new WeakHashMap<>();
     public transient final Temporary temporary = new Temporary();
     public Memory memory = new Memory();
     public @Optional String[] clothes = new String[0];
@@ -41,9 +42,11 @@ public class PlayerData extends CasterData<PlayerData> {
     }
     
     public static PlayerData getData(Player player) {
+        if (LOCAL_CACHE.containsKey(player)) return LOCAL_CACHE.get(player);
         final PlayerData data = getData(player.getUniqueId());
         data.player = player;
         data.name = player.getName();
+        LOCAL_CACHE.put(player, data);
         return data;
     }
     
@@ -51,7 +54,7 @@ public class PlayerData extends CasterData<PlayerData> {
         if (CasterData.DATA.get(uuid) instanceof PlayerData player) return player;
         final PlayerData data = new PlayerData();
         data.uuid = uuid;
-        data.file = new File("data/player/" + uuid + "/" + "data.fern");
+        data.file = new File("data/player/" + uuid + "/data.fern");
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
