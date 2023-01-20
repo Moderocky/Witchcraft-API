@@ -1,7 +1,9 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.CustomEntityType;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.VectorShape;
@@ -25,6 +27,7 @@ abstract class AbstractWardSpell extends StandardSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
+        if (Minecraft.getInstance().nearbyEntities(caster, CustomEntityType.WARD_CUBE_TOTEM) > 2) return false;
         final List<Block> blocks = AbstractSummonSpell.getValidSpawnSpaces(caster.getLocation(), 3);
         if (blocks.isEmpty()) return false;
         if (blocks.size() == 1) this.target = blocks.get(0);

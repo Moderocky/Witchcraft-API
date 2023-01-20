@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft.spell.effect;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -21,6 +22,11 @@ public interface ParticleCreator {
     static @NotNull ParticleCreator of(ParticleBuilder builder) {
         if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
         return WitchcraftAPI.client.particles(builder);
+    }
+    
+    static @NotNull ParticleCreator of(Material material) {
+        if (WitchcraftAPI.isTest) return null; // okay because it's never used in a test
+        return ParticleCreator.of(Particle.BLOCK_CRACK.builder().data(material.createBlockData()));
     }
     
     static Vector random() {

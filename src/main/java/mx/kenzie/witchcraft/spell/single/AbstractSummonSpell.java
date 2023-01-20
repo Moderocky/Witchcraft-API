@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import org.bukkit.FluidCollisionMode;
@@ -22,9 +23,13 @@ abstract class AbstractSummonSpell extends StandardSpell {
         super(map);
     }
     
+    protected static int summonCount(LivingEntity caster) {
+        return Minecraft.getInstance().nearbySummons(caster, null);
+    }
+    
     @Override
     public boolean canCast(LivingEntity caster) {
-        if (WitchcraftAPI.minecraft.nearbySummons(caster, null) >= 5) return false;
+        if (WitchcraftAPI.minecraft.nearbySummons(caster, null) >= maxSummonCount(caster)) return false;
         Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
         if (block == null) return false;
         block = block.getRelative(BlockFace.UP);
@@ -41,6 +46,10 @@ abstract class AbstractSummonSpell extends StandardSpell {
         if (blocks.size() == 1) this.target = blocks.get(0);
         else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
         return true;
+    }
+    
+    protected static int maxSummonCount(LivingEntity caster) {
+        return 5;
     }
     
     public static List<Block> getValidSpawnSpaces(Location centre, double radius) {

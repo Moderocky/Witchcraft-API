@@ -19,6 +19,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -216,6 +217,8 @@ public interface Minecraft {
      * Returns the number of nearby summons of the given ID.
      */
     int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType type);
+    
+    List<Grave> nearbyGraves(Location location, double rangeX, double rangeY);
     
     LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
     
