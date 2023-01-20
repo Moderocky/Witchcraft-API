@@ -28,7 +28,7 @@ public class RainstormSpell extends AbstractTargetedSpell {
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final Target trace = this.getTarget(caster, range);
+        final Target trace = this.getTarget(caster, range, true);
         if (trace == null) return;
         final Location target = trace.target();
         final Location cloud = target.clone().add(0, 5, 0).setDirection(new Vector(0, -1, 0));

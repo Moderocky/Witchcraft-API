@@ -108,6 +108,8 @@ public interface ParticleCreator {
     
     VectorShape createSphere(double radius, int density);
     
+    ParticleCreator clone();
+    
     default ParticleCreator color(Color color) {
         final ParticleBuilder builder = this.getBuilder();
         if (builder.particle() == Particle.REDSTONE) builder.color(color.getRed(), color.getGreen(), color.getBlue());
@@ -292,5 +294,10 @@ class TestParticleCreator implements ParticleCreator {
     @Override
     public VectorShape createSphere(double radius, int density) {
         return null;
+    }
+    
+    @Override
+    public ParticleCreator clone() {
+        return new TestParticleCreator();
     }
 }

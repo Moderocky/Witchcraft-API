@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -11,6 +12,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 public abstract class AbstractTargetedSpell extends StandardSpell {
     
@@ -23,15 +26,45 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
     }
     
     protected Target getTarget(LivingEntity caster, int range, boolean strikeAir) {
+        return this.getTarget(caster, range, strikeAir, Mode.SAFE_TO_TARGET);
+    }
+    
+    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir, Mode mode) {
         final World world = caster.getWorld();
         final Location start = caster.getEyeLocation();
         final Vector direction = caster.getLocation().getDirection();
-        final RayTraceResult result = world.rayTrace(start, direction, range, FluidCollisionMode.NEVER, true, 0.5, entity -> !entity.equals(caster));
+        final Predicate<Entity> predicate = entity -> mode.filter.apply(entity, caster);
+        final RayTraceResult result = world.rayTrace(start, direction, range, FluidCollisionMode.NEVER, true, 0.5, predicate);
         if (strikeAir && result == null) return new Target(start.clone().add(direction.clone().multiply(range)), null);
         else if (result == null) return null;
         final Entity found = result.getHitEntity();
         final Location target = result.getHitPosition().toLocation(world);
         return new Target(target, found, result);
+    }
+    
+    public enum Mode {
+        ALL((entity, caster) -> !entity.equals(caster)),
+        ALLIES_ONLY((entity, caster) -> !entity.equals(caster)
+            && !Minecraft.getInstance().isSameVehicle(entity, caster)
+            && Minecraft.getInstance().isAlly(entity, caster)),
+        ENEMIES_ONLY((entity, caster) -> !entity.equals(caster)
+            && !Minecraft.getInstance().isSameVehicle(entity, caster)
+            && Minecraft.getInstance().isEnemy(entity, caster)),
+        NOT_ALLIES((entity, caster) -> !entity.equals(caster)
+            && !Minecraft.getInstance().isSameVehicle(entity, caster)
+            && !Minecraft.getInstance().isAlly(entity, caster)),
+        NOT_ENEMIES((entity, caster) -> !entity.equals(caster)
+            && !Minecraft.getInstance().isSameVehicle(entity, caster)
+            && !Minecraft.getInstance().isEnemy(entity, caster)),
+        SAFE_TO_TARGET((entity, caster) -> !entity.equals(caster)
+            && !Minecraft.getInstance().isSameVehicle(entity, caster)
+            && Minecraft.getInstance().isValidToDamage(entity));
+        
+        public final BiFunction<Entity, LivingEntity, Boolean> filter;
+        
+        Mode(BiFunction<Entity, LivingEntity, Boolean> filter) {
+            this.filter = filter;
+        }
     }
     
     protected record Target(Location target, @Nullable Entity entity, RayTraceResult result) {

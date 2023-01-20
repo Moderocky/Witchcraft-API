@@ -29,7 +29,7 @@ public class RakeSpell extends AbstractTargetedSpell {
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final Target trace = this.getTarget(caster, range);
+        final Target trace = this.getTarget(caster, range, false, Mode.NOT_ALLIES);
         if (trace == null) return;
         final Location target = trace.target(), effect;
         final Entity found = trace.entity();

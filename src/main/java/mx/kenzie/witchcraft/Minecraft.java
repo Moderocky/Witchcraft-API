@@ -247,4 +247,6 @@ public interface Minecraft {
         return instance.getValue();
     }
     
+    void heal(Entity entity, double amount);
+    
 }
