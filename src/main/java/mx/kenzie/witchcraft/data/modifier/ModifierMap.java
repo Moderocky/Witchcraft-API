@@ -3,10 +3,20 @@ package mx.kenzie.witchcraft.data.modifier;
 import com.google.common.util.concurrent.AtomicDouble;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ModifierMap extends HashMap<String, Modifier> {
     
-    public static final ModifierMap DEFAULT = new ModifierMap(0);
+    public static final ModifierMap DEFAULT = new ModifierMap(0) {
+        @Override
+        public Modifier put(String reason, Modifier modifier) {
+            return null;
+        }
+        
+        @Override
+        public void putAll(Map<? extends String, ? extends Modifier> m) {
+        }
+    };
     
     public ModifierMap() {
     }

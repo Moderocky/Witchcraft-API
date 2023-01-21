@@ -53,7 +53,9 @@ public enum CustomEntityType {
     },
     SHADOW(true),
     PROJECTILE,
-    HELL_BAT_SUMMON(true),;
+    HELL_BAT_SUMMON(true),
+    DEMON_SPAWN_PORTAL,
+    SOLDIER_DEMON;
     
     public final String key;
     public final boolean summon;
