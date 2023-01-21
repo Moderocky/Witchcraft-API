@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LazyWrittenData<Type> extends Lazy<Type> {
     public static final LazyWrittenData<Void> FLAG = new LazyWrittenData<>() {
@@ -26,7 +26,7 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
             return false;
         }
     };
-    private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new LinkedBlockingQueue<>();
+    private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new ConcurrentLinkedQueue<>();
     private static volatile boolean closing;
     
     protected transient File file;
@@ -43,12 +43,18 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     public static Runnable processSaveTask() {
         return () -> {
             while (!closing || !SAVE_QUEUE.isEmpty()) {
-                final LazyWrittenData<?> data = SAVE_QUEUE.poll();
-                if (data == null) {
-                    WitchcraftAPI.sleep(100);
-                    continue;
+                try {
+                    final LazyWrittenData<?> data = SAVE_QUEUE.poll();
+                    if (data == null) {
+                        if (closing) break;
+                        WitchcraftAPI.sleep(100);
+                        continue;
+                    }
+                    data.save();
+                } catch (Throwable ex) {
+                    System.err.println("Error in saving process:");
+                    ex.printStackTrace();
                 }
-                data.save();
             }
         };
     }
