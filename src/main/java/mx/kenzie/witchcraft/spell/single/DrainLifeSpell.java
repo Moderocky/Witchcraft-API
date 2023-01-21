@@ -29,8 +29,8 @@ public class DrainLifeSpell extends AbstractEntitySpell {
         final double missing = minecraft.getMaxHealth(caster) - caster.getHealth();
         minecraft.heal(caster, Math.min(missing, target.getHealth()));
         minecraft.damageEntity(target, caster, missing, EntityDamageEvent.DamageCause.MAGIC);
-        centre.getWorld().playSound(centre, Sound.BLOCK_LAVA_AMBIENT, 1.2F, 1.0F);
         final World world = caster.getWorld();
+        world.playSound(centre, Sound.BLOCK_LAVA_AMBIENT, 1.2F, 1.0F);
         WitchcraftAPI.executor.submit(() -> {
             for (int i = 1; i < 8; i++) {
                 start.subtract(0, 0.2, 0);
