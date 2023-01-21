@@ -27,7 +27,7 @@ public class GodsendSpell extends StandardSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
+        return caster instanceof Player player && PlayerData.getData(player).isSworn();
     }
     
     @Override
@@ -35,7 +35,7 @@ public class GodsendSpell extends StandardSpell {
         if (!(caster instanceof Player player)) return;
         final Location location = caster.getEyeLocation();
         final PlayerData data = PlayerData.getData(player);
-        final WarlockDeity deity = data.memory.deity;
+        final WarlockDeity deity = data.getDeity();
         if (deity == null) {
             this.failure.drawPoof(location, 1, 8);
             caster.sendMessage(Component.text("You are not sworn to a deity...", WitchcraftAPI.colors().lowlight()));

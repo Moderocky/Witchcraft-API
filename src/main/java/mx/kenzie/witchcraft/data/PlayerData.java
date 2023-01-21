@@ -293,6 +293,14 @@ public class PlayerData extends CasterData<PlayerData> {
         this.scheduleSave();
     }
     
+    public boolean isSworn() {
+        return memory.deity != null && memory.deity != WarlockDeity.NONE;
+    }
+    
+    public WarlockDeity getDeity() {
+        return memory.deity;
+    }
+    
     public boolean canWear(ItemArchetype archetype) {
         return archetype.isOutfit();
     }
@@ -304,7 +312,7 @@ public class PlayerData extends CasterData<PlayerData> {
     
     public class Memory {
         public MagicClass style;
-        public WarlockDeity deity;
+        public WarlockDeity deity = WarlockDeity.NONE;
         public LearnedSpell[] spells = new LearnedSpell[0];
         public Position.Static[] locations = new Position.Static[0];
         public UUID[] banished_planes = new UUID[0];

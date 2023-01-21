@@ -123,7 +123,7 @@ public class ItemMaterial implements ItemArchetype {
         } catch (Throwable throwable) {
             uuid = UUID.randomUUID();
         }
-        final PlayerProfile profile = Bukkit.createProfile(uuid, texture.hashCode() + "");
+        final PlayerProfile profile = Bukkit.createProfile(uuid, String.valueOf(texture.hashCode()));
         profile.completeFromCache();
         profile.setProperty(new ProfileProperty("textures", texture));
 //        profile.setProperty(new ProfileProperty("textures", skinValue, skinSignature));
