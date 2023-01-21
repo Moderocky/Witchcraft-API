@@ -51,7 +51,9 @@ public enum CustomEntityType {
             return WitchcraftAPI.minecraft.spawnDeadSoldier(location, owner);
         }
     },
-    SHADOW(true), PROJECTILE;
+    SHADOW(true),
+    PROJECTILE,
+    HELL_BAT_SUMMON(true),;
     
     public final String key;
     public final boolean summon;
