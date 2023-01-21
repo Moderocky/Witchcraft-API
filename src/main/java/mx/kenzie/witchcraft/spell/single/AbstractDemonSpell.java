@@ -31,12 +31,11 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
         final Entity portal = CustomEntityType.DEMON_SPAWN_PORTAL.spawn(location);
         final Grave grave = minecraft.getHandle(portal);
         final WarlockDeity deity = caster instanceof Player player ? PlayerData.getData(player)
-            .getDeity() : WarlockDeity.ARCHANDER;
+            .getDeity() : WarlockDeity.NONE;
         final DemonMaker maker = this.getDemon();
         final LivingEntity demon = maker.make(grave.getStart(), deity);
         minecraft.<Demon>getHandle(demon).setOwner(caster);
         grave.attemptGrow(demon);
-        Modifier.get(caster).put("cooldown", Modifier.of(Modifier.Type.DEMON_COOLDOWN, 1, 100));
     }
     
     protected abstract DemonMaker getDemon();

@@ -10,13 +10,13 @@ public record Modifier(Type type, double amount, long timeout) {
         return new Modifier(type, amount, System.currentTimeMillis() + (50L * ticks));
     }
     
-    public enum Type {
-        AMPLITUDE, ARMOUR, BONUS_ENERGY, DEMON_COOLDOWN
-    }
-    
     public static ModifierMap get(Entity entity) {
         if (entity instanceof Player player) return PlayerData.getData(player).temporary.modifiers;
         return ModifierMap.DEFAULT;
+    }
+    
+    public enum Type {
+        AMPLITUDE, ARMOUR, BONUS_ENERGY, DEMON_COOLDOWN
     }
     
 }

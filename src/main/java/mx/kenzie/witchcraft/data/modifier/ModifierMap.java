@@ -1,20 +1,29 @@
 package mx.kenzie.witchcraft.data.modifier;
 
-import com.google.common.util.concurrent.AtomicDouble;
-
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ModifierMap extends HashMap<String, Modifier> {
     
     public static final ModifierMap DEFAULT = new ModifierMap(0) {
         @Override
+        public void putAll(Map<? extends String, ? extends Modifier> m) {
+        }
+        
+        @Override
+        public double get(Modifier.Type type) {
+            return 0;
+        }
+        
+        @Override
         public Modifier put(String reason, Modifier modifier) {
             return null;
         }
         
         @Override
-        public void putAll(Map<? extends String, ? extends Modifier> m) {
+        public boolean isPresent(Modifier.Type type) {
+            return false;
         }
     };
     
@@ -28,14 +37,18 @@ public class ModifierMap extends HashMap<String, Modifier> {
     public double get(Modifier.Type type) {
         if (this.isEmpty()) return 0;
         final long time = System.currentTimeMillis();
-        final AtomicDouble count = new AtomicDouble(0);
-        this.values().removeIf(value -> {
-            if (value.timeout() >= time) return true;
-            if (value.type() != type) return false;
-            count.addAndGet(value.amount());
-            return false;
-        });
-        return count.get();
+        double count = 0;
+        final Iterator<Modifier> iterator = this.values().iterator();
+        while (iterator.hasNext()) {
+            final Modifier modifier = iterator.next();
+            if (modifier.timeout() <= time) {
+                iterator.remove();
+                continue;
+            }
+            if (modifier.type() != type) continue;
+            count += modifier.amount();
+        }
+        return count;
     }
     
     @Override
@@ -59,10 +72,19 @@ public class ModifierMap extends HashMap<String, Modifier> {
     }
     
     public boolean isPresent(Modifier.Type type) {
-        for (Modifier value : this.values()) {
-            if (value.type() != type) continue;
-            if (value.amount() > 0) return true;
+        if (this.isEmpty()) return false;
+        final long time = System.currentTimeMillis();
+        final Iterator<Modifier> iterator = this.values().iterator();
+        while (iterator.hasNext()) {
+            final Modifier modifier = iterator.next();
+            if (modifier.timeout() <= time) {
+                iterator.remove();
+                continue;
+            }
+            if (modifier.type() != type) return true;
+            if (modifier.amount() > 0) return true;
         }
         return false;
     }
+    
 }
