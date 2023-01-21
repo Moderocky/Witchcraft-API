@@ -5,6 +5,7 @@ import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.WarlockDeity;
 import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.Demon;
 import mx.kenzie.witchcraft.entity.Grave;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -33,6 +34,7 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
             .getDeity() : WarlockDeity.ARCHANDER;
         final DemonMaker maker = this.getDemon();
         final LivingEntity demon = maker.make(grave.getStart(), deity);
+        minecraft.<Demon>getHandle(demon).setOwner(caster);
         grave.attemptGrow(demon);
         Modifier.get(caster).put("cooldown", Modifier.of(Modifier.Type.DEMON_COOLDOWN, 1, 100));
     }
