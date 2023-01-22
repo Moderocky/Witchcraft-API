@@ -27,7 +27,8 @@ abstract class AbstractProjectileSpell extends StandardSpell {
     public abstract Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range);
     
     protected Projectile spawnProjectile(LivingEntity caster, Vector velocity, float diameter, double range) {
-        return Minecraft.getInstance().spawnProjectile(caster, caster.getEyeLocation(), velocity, diameter, range);
+        return Minecraft.getInstance()
+            .spawnProjectile(caster, caster.getEyeLocation().add(0, -0.2, 0), velocity, diameter, range);
     }
     
 }

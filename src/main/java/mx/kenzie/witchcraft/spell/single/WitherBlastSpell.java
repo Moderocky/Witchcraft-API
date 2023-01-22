@@ -43,7 +43,7 @@ public class WitherBlastSpell extends AbstractProjectileSpell {
         projectile.setDamage(damage);
         projectile.onTick(() -> {
             skull.velocity(direction);
-            skull.move(projectile.getPotentialNext().add(0, -1.2, 0));
+            skull.move(projectile.getPotentialNext().add(0, -1.4, 0));
             final Location start = projectile.getPrevious();
             creator.drawPoof(start, 0.4, 4);
         });
@@ -57,7 +57,8 @@ public class WitherBlastSpell extends AbstractProjectileSpell {
         Location loc = WitchcraftAPI.minecraft.getRelative(projectile.getPotentialNext(), 90, 0, 0.36);
         skull.setLocation(loc.add(0, -1.2, 0).setDirection(direction));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getLocation().distanceSquared(location) < 50 * 50)
+            if (player.getWorld() != location.getWorld()) continue;
+            if (player.getLocation().distanceSquared(location) < 120 * 120)
                 skull.show(player);
         }
         skull.updateMetadata();

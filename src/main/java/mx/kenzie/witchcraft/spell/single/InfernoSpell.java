@@ -45,15 +45,19 @@ public class InfernoSpell extends AbstractTargetedSpell {
         
     }
     
+    protected Vector getEnd(LivingEntity caster, int range) {
+        return caster.getEyeLocation().add(caster.getEyeLocation().getDirection().multiply(range)).toVector();
+    }
+    
     protected static class Breaker {
         
         private final Block block;
         private final int health, id;
+        private final Player player;
+        private final List<Player> viewers;
         private int lifetime;
         private int stage;
-        private final Player player;
         private boolean done;
-        private final List<Player> viewers;
         
         protected Breaker(Block block, Player player) {
             this.block = block;
@@ -83,14 +87,14 @@ public class InfernoSpell extends AbstractTargetedSpell {
             WitchcraftAPI.client.sendBlockBreak(id, block, stage, viewers.toArray(new Player[0]));
         }
         
+        public void clear() {
+            WitchcraftAPI.client.sendBlockBreak(id, block, 10, viewers.toArray(new Player[0]));
+        }
+        
         public void destroy() {
             if (!Protection.getInstance().canBreak(player, block.getLocation())) return;
             this.block.breakNaturally(true, true);
             this.done = true;
-        }
-        
-        public void clear() {
-            WitchcraftAPI.client.sendBlockBreak(id, block, 10, viewers.toArray(new Player[0]));
         }
         
     }
@@ -102,13 +106,13 @@ public class InfernoSpell extends AbstractTargetedSpell {
         private final Location start;
         private final int range;
         private final double damage;
+        private final ParticleCreator flames = ParticleCreator.of(Particle.REDSTONE.builder()
+            .color(org.bukkit.Color.fromRGB(245, 50, 3), 1).count(0));
+        private final Map<Block, Breaker> blocks = new HashMap<>();
         private ScheduledFuture<?> task;
         private volatile Vector end, direction;
         private volatile boolean cancelled;
         private int lifetime;
-        private final ParticleCreator flames = ParticleCreator.of(Particle.REDSTONE.builder()
-            .color(org.bukkit.Color.fromRGB(245, 50, 3), 1).count(0));
-        private final Map<Block, Breaker> blocks = new HashMap<>();
         
         protected Inferno(LivingEntity caster, Location start, int range, double damage) {
             this.caster = caster;
@@ -133,6 +137,12 @@ public class InfernoSpell extends AbstractTargetedSpell {
             else if (caster.getWorld() != start.getWorld()) this.cancel();
             else if (caster.getLocation().distanceSquared(start) > 2.5) this.cancel();
             else this.tick();
+        }
+        
+        public void cancel() {
+            this.cancelled = true;
+            if (task == null) return;
+            this.task.cancel(true);
         }
         
         public void tick() {
@@ -171,16 +181,6 @@ public class InfernoSpell extends AbstractTargetedSpell {
             }
         }
         
-        public void cancel() {
-            this.cancelled = true;
-            if (task == null) return;
-            this.task.cancel(true);
-        }
-        
-    }
-    
-    protected Vector getEnd(LivingEntity caster, int range) {
-        return caster.getEyeLocation().add(caster.getEyeLocation().getDirection().multiply(range)).toVector();
     }
     
 }
