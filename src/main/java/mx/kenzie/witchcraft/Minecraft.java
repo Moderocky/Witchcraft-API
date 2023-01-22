@@ -254,5 +254,5 @@ public interface Minecraft {
     
     void spawnFangs(LivingEntity caster, Location target, int range, float scale, double damage);
     
-    void createDemonFangs(LivingEntity caster, double damage, double x, double z, double maxY, double y, float yaw, int warmup);
+    void createDemonFangs(LivingEntity caster, double damage, double x, double z, double maxY, double y, double yaw, int warmup);
 }
