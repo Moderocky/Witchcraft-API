@@ -1,4 +1,4 @@
-package mx.kenzie.witchcraft.entity;
+package mx.kenzie.witchcraft;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.entity.client.AbstractClientArmorStand;

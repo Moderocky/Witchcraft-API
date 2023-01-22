@@ -35,6 +35,6 @@ public class FreeTheBeastSpell extends AbstractSummonSpell {
             location.setDirection(new Vector(0, 1, 0)),
             1.1, 3, 20, 3
         );
-        WitchcraftAPI.minecraft.summonWitherBeast(caster, location);
+        CustomEntityType.WITHER_BEAST_SUMMON.summon(caster, location);
     }
 }

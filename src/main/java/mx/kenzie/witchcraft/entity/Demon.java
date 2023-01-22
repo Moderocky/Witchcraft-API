@@ -4,8 +4,7 @@ import mx.kenzie.witchcraft.data.WarlockDeity;
 
 import java.util.UUID;
 
-public interface Demon extends Handle {
-    
+public interface Demon extends Human, Owned {
     
     WarlockDeity getDeity();
     
@@ -14,4 +13,5 @@ public interface Demon extends Handle {
     UUID getOwnerID();
     
     void setOwner(org.bukkit.entity.Entity entity);
+    
 }

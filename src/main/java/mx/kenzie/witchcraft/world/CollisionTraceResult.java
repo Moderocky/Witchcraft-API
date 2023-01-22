@@ -1,4 +1,4 @@
-package mx.kenzie.witchcraft.entity;
+package mx.kenzie.witchcraft.world;
 
 public enum CollisionTraceResult {
     NONE,

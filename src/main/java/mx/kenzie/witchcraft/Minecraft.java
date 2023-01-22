@@ -5,6 +5,10 @@ import mx.kenzie.witchcraft.data.Coven;
 import mx.kenzie.witchcraft.data.WarlockDeity;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import mx.kenzie.witchcraft.entity.*;
+import mx.kenzie.witchcraft.entity.handle.Grave;
+import mx.kenzie.witchcraft.entity.handle.Handle;
+import mx.kenzie.witchcraft.entity.handle.NPC;
+import mx.kenzie.witchcraft.world.CollisionTraceResult;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -98,9 +102,9 @@ public interface Minecraft {
      */
     Entity spawn(String id, Location location, boolean natural);
     
-    BroomstickEntity spawnBroomstick(ItemArchetype archetype, Location location);
+    Broomstick spawnBroomstick(ItemArchetype archetype, Location location);
     
-    Entity spawn(CustomEntityType type, Location location, boolean natural);
+    <Type extends CustomEntity> Type spawn(CustomEntityType<Type> type, Location location, boolean natural);
     
     /**
      * Returns the Summon handle of an entity.
@@ -108,87 +112,11 @@ public interface Minecraft {
     Summon getAsSummon(Entity entity);
     
     /**
-     * Summons a new ward cube.
-     * This will rotate, but has no behaviour.
-     */
-    LivingEntity summonWardCube(LivingEntity owner, Location location);
-    
-    /**
      * Summons a 'summon' entity by its Minecraft ID.
      */
     Summon summon(LivingEntity owner, String id, Location location);
     
-    Summon summon(LivingEntity owner, CustomEntityType type, Location location);
-    
-    /**
-     * minecraft:marr_armour
-     */
-    LivingEntity summonMarrArmour(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:arcana_summon
-     */
-    LivingEntity summonArcana(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:armour_summon
-     */
-    LivingEntity summonArmour(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:tang_portal
-     */
-    MalleablePortal tangPortal(Location location);
-    
-    /**
-     * minecraft:nether_portal
-     */
-    MalleablePortal netherPortal(Location location);
-    
-    /**
-     * minecraft:plant_guardian_summon
-     */
-    LivingEntity summonPlantGuardian(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:grotesque_summon
-     */
-    LivingEntity summonGrotesque(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:skeleton_summon
-     */
-    LivingEntity summonSkeleton(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:zombie_summon
-     */
-    LivingEntity summonZombie(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:bat_summon
-     */
-    LivingEntity summonBat(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:pumpkin_summon
-     */
-    LivingEntity summonPumpkin(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:warp_warden_summon
-     */
-    LivingEntity summonWarpWarden(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:wither_beast_summon
-     */
-    LivingEntity summonWitherBeast(LivingEntity owner, Location location);
-    
-    /**
-     * minecraft:warhammer_totem
-     */
-    LivingEntity summonWarhammerTotem(LivingEntity owner, Location location);
+    <Type extends Owned> Type summon(LivingEntity owner, CustomEntityType<Type> type, Location location);
     
     String getID(Entity entity);
     
@@ -197,13 +125,13 @@ public interface Minecraft {
      */
     NPC spawnNPC(Location loc, PlayerProfile profile, Consumer<Player> o);
     
-    LivingEntity spawnMirrorImage(Location location, Player player);
+    MirrorImage spawnMirrorImage(Location location, Player player);
     
-    LivingEntity spawnSoldierDemon(Location location, WarlockDeity deity);
+    Demon spawnSoldierDemon(Location location, WarlockDeity deity);
     
-    LivingEntity spawnMirrorImageNoAI(Location location, Player player);
+    MirrorImage spawnMirrorImageNoAI(Location location, Player player);
     
-    LivingEntity spawnDeadSoldier(Location location, LivingEntity owner);
+    DeadSoldier spawnDeadSoldier(Location location, LivingEntity owner);
     
     Entity getTargetEntity(Location location, double maxDist, double accuracy);
     
@@ -214,18 +142,18 @@ public interface Minecraft {
     /**
      * Returns the number of nearby summons of the given ID.
      */
-    int nearbySummons(LivingEntity owner, @Nullable CustomEntityType type);
+    int nearbySummons(LivingEntity owner, @Nullable CustomEntityType<?> type);
     
     /**
      * Returns the number of nearby summons of the given ID.
      */
-    int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType type);
+    int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType<?> type);
     
     List<Entity> getSummons(LivingEntity caster);
     
     List<Grave> nearbyGraves(Location location, double rangeX, double rangeY);
     
-    LivingEntity spawnEnchantingTable(CustomEntityType type, Location location, Coven coven);
+    LivingEntity spawnEnchantingTable(CustomEntityType<?> type, Location location, Coven coven);
     
     void updateEnchanter(Block block, Coven coven);
     

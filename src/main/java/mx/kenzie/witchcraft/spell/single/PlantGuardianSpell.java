@@ -30,6 +30,6 @@ public class PlantGuardianSpell extends AbstractSummonSpell {
             location.setDirection(new Vector(0, 1, 0)),
             0.8, 2, 10, 2
         ).draw(50);
-        WitchcraftAPI.minecraft.summonPlantGuardian(caster, location);
+        CustomEntityType.PLANT_GUARDIAN_SUMMON.summon(caster, location);
     }
 }

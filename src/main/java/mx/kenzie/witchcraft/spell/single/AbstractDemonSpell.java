@@ -6,7 +6,7 @@ import mx.kenzie.witchcraft.data.WarlockDeity;
 import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
 import mx.kenzie.witchcraft.entity.Demon;
-import mx.kenzie.witchcraft.entity.Grave;
+import mx.kenzie.witchcraft.entity.handle.Grave;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -33,8 +33,8 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
         final WarlockDeity deity = caster instanceof Player player ? PlayerData.getData(player)
             .getDeity() : WarlockDeity.NONE;
         final DemonMaker maker = this.getDemon();
-        final LivingEntity demon = maker.make(grave.getStart(), deity);
-        minecraft.<Demon>getHandle(demon).setOwner(caster);
+        final Demon demon = maker.make(grave.getStart(), deity);
+        demon.setOwner(caster);
         grave.attemptGrow(demon);
     }
     
@@ -42,7 +42,7 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
     
     @FunctionalInterface
     protected interface DemonMaker {
-        LivingEntity make(Location location, WarlockDeity deity);
+        Demon make(Location location, WarlockDeity deity);
     }
     
 }

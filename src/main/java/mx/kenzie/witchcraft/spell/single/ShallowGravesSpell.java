@@ -3,7 +3,7 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
-import mx.kenzie.witchcraft.entity.Grave;
+import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.entity.Totem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

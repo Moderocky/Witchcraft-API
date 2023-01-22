@@ -4,6 +4,7 @@ import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.VectorShape;
@@ -37,7 +38,7 @@ abstract class AbstractWardSpell extends StandardSpell {
     
     protected LivingEntity summonWard(LivingEntity caster, int lifetime) {
         final Location spawn = target.getLocation().add(0.5, 0.1, 0.5);
-        final LivingEntity ward = WitchcraftAPI.minecraft.summonWardCube(caster, spawn);
+        final WardCube ward = CustomEntityType.WARD_CUBE_TOTEM.summon(caster, spawn);
         Protection.getInstance().registerWard(new SimpleWardInstance(caster, ward, lifetime));
         return ward;
     }

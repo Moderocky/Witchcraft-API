@@ -41,7 +41,7 @@ public class SimpleWardInstance extends WardInstance {
     public boolean permits(LivingEntity entity) {
         if (this.isOwner(entity)) return true;
         final Summon summon = WitchcraftAPI.minecraft.getAsSummon(entity);
-        if (summon != null && summon.getBukkitOwner() == owner) return true;
+        if (summon != null && summon.getOwningEntity() == owner) return true;
         final Coven coven = Coven.getCoven(owner);
         if (coven == null) return false;
         if (coven.isMember(entity)) return true;

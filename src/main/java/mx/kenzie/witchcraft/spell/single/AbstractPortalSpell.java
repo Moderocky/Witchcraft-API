@@ -1,9 +1,9 @@
 package mx.kenzie.witchcraft.spell.single;
 
-import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.Coven;
 import mx.kenzie.witchcraft.data.Position;
-import mx.kenzie.witchcraft.entity.MalleablePortal;
+import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.Portal;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -43,11 +43,12 @@ public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
     }
     
     protected void doPortal(Position position, Location location) {
-        final MalleablePortal portal = WitchcraftAPI.minecraft.tangPortal(location);
+        final Portal portal = CustomEntityType.TANG_PORTAL.spawn(location);
+        portal.setOrientation(location.getDirection());
         portal.setCollideConsumer(entity -> {
             if (!(entity instanceof LivingEntity living)) return;
             this.doTeleport(living, position);
-            portal.getBukkitEntity().remove();
+            portal.remove();
         });
     }
 }

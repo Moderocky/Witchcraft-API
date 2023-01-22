@@ -27,6 +27,6 @@ public class CommandArcanaSpell extends AbstractSummonSpell {
             location.setDirection(new Vector(0, 1, 0)),
             0.6, 2, 10, 1
         );
-        WitchcraftAPI.minecraft.summonArcana(caster, location);
+        CustomEntityType.ARCANA_SUMMON.summon(caster, location);
     }
 }

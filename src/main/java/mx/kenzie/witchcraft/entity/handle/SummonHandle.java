@@ -1,13 +1,10 @@
-package mx.kenzie.witchcraft.entity;
+package mx.kenzie.witchcraft.entity.handle;
 
 import org.bukkit.entity.LivingEntity;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
-public interface Totem extends Owned, NoSpawnGrave {
-    
-    void setMajorTickConsumer(Consumer<LivingEntity> consumer);
+public interface SummonHandle extends Handle {
     
     UUID getOwnerID();
     

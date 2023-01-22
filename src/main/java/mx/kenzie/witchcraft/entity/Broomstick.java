@@ -2,11 +2,9 @@ package mx.kenzie.witchcraft.entity;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.ArmorStand;
 
-public interface BroomstickEntity extends Handle {
-    
-    LivingEntity getBukkitLivingEntity();
+public interface Broomstick extends CustomEntity, ArmorStand, NoSpawnGrave {
     
     float getMaxVerticalSpeed();
     

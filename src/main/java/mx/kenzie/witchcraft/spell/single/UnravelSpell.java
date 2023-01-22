@@ -3,8 +3,8 @@ package mx.kenzie.witchcraft.spell.single;
 import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.Protection;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.Handle;
-import mx.kenzie.witchcraft.entity.MalleablePortal;
+import mx.kenzie.witchcraft.entity.handle.Handle;
+import mx.kenzie.witchcraft.entity.Portal;
 import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Material;
@@ -38,7 +38,7 @@ public class UnravelSpell extends StandardSpell {
         final Set<Entity> set = WitchcraftAPI.minecraft.getTargetEntities(caster.getEyeLocation(), range, 0.82);
         for (Entity entity : set) {
             final Handle handle = minecraft.getHandle(entity);
-            if (!(handle instanceof MalleablePortal)) continue;
+            if (!(handle instanceof Portal)) continue;
             this.creator.drawPoof(entity.getLocation().add(0, 1, 0), 1.5, 10);
             entity.remove();
             break;

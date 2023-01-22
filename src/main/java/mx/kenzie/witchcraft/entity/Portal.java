@@ -5,11 +5,11 @@ import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
-public interface MalleablePortal extends Handle {
+public interface Portal extends CustomEntity {
     
-    Vector getFacing();
+    Vector getOrientation();
     
-    void setFacing(Vector vector);
+    void setOrientation(Vector vector);
     
     void setCollideConsumer(Consumer<Entity> collideConsumer);
     

@@ -27,6 +27,6 @@ public class MalignantGrowthSpell extends AbstractSummonSpell {
             location.setDirection(new Vector(0, 1, 0)),
             0.8, 2, 10, 2
         );
-        WitchcraftAPI.minecraft.summonGrotesque(caster, location);
+        CustomEntityType.GROTESQUE_SUMMON.summon(caster, location);
     }
 }

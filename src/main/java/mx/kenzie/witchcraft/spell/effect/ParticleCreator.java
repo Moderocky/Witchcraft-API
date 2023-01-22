@@ -122,11 +122,6 @@ public interface ParticleCreator {
 class TestParticleCreator implements ParticleCreator {
     
     @Override
-    public ParticleBuilder getBuilder() {
-        return new ParticleBuilder(Particle.FIREWORKS_SPARK);
-    }
-    
-    @Override
     public double drawLine(Location start, Location end, double spread) {
         return 0;
     }
@@ -294,6 +289,11 @@ class TestParticleCreator implements ParticleCreator {
     @Override
     public ParticleCreator color(Color color) {
         return this;
+    }
+    
+    @Override
+    public ParticleBuilder getBuilder() {
+        return new ParticleBuilder(Particle.FIREWORKS_SPARK);
     }
     
     @Override

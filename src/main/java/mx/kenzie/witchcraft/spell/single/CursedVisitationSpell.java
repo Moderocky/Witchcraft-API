@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.CustomEntityType;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
@@ -19,6 +20,6 @@ public class CursedVisitationSpell extends AbstractSummonSpell {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);
         WitchcraftAPI.client.particles(Particle.ASH)
             .playSpiral(location.setDirection(new Vector(0, 1, 0)), 0.6, 1.6, 12, 2);
-        WitchcraftAPI.minecraft.summonPumpkin(caster, location);
+        CustomEntityType.PUMPKIN_SUMMON.summon(caster, location);
     }
 }

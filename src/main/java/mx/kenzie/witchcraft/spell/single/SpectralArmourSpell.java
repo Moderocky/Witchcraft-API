@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.WitchcraftAPI;
+import mx.kenzie.witchcraft.entity.CustomEntityType;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
@@ -21,6 +22,6 @@ public class SpectralArmourSpell extends AbstractSummonSpell {
             location.setDirection(new Vector(0, 1, 0)),
             0.8, 2, 10, 10
         );
-        WitchcraftAPI.minecraft.summonArmour(caster, location);
+        CustomEntityType.ARMOUR_SUMMON.summon(caster, location);
     }
 }

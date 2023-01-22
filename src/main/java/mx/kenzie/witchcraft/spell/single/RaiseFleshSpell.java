@@ -1,7 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.entity.CustomEntityType;
-import mx.kenzie.witchcraft.entity.Grave;
+import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;

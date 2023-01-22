@@ -1,4 +1,4 @@
-package mx.kenzie.witchcraft.entity;
+package mx.kenzie.witchcraft.entity.handle;
 
 import org.bukkit.Location;
 

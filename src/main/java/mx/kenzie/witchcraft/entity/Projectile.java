@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.entity;
 
+import mx.kenzie.witchcraft.entity.handle.Handle;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;

@@ -1,7 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.Minecraft;
-import mx.kenzie.witchcraft.entity.Grave;
+import mx.kenzie.witchcraft.entity.handle.Grave;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.List;

@@ -4,7 +4,8 @@ import com.moderocky.mask.gui.PaginatedGUI;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.Position;
 import mx.kenzie.witchcraft.data.recipe.StorageGUI;
-import mx.kenzie.witchcraft.entity.MalleablePortal;
+import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.Portal;
 import org.bukkit.Bukkit;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -54,11 +55,12 @@ public class VisitationSpell extends TeleportationCircleSpell {
     }
     
     protected void doPortal(Position position, Location location) {
-        final MalleablePortal portal = WitchcraftAPI.minecraft.tangPortal(location);
+        final Portal portal = CustomEntityType.TANG_PORTAL.spawn(location);
+        portal.setOrientation(location.getDirection());
         portal.setCollideConsumer(entity -> {
             if (!(entity instanceof LivingEntity living)) return;
             this.doTeleport(living, position, 5);
-            portal.getBukkitEntity().remove();
+            portal.remove();
         });
     }
     
