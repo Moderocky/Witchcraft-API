@@ -80,7 +80,6 @@ public class InfernoSpell extends AbstractTargetedSpell {
         private void calculateTarget() {
             final Target target = getTarget(caster, direction, range, true, Mode.NOT_ALLIES);
             final Location end = target.target(), start = caster.getEyeLocation().add(0, 0.45, 0);
-            // todo hello `end` is always pointing straight left, but direction/this.end are right
             final VectorShape shape = flames.createCircle(direction, 0.15, 6);
             for (Vector vector : flames.createLine(start, end, 0.2)) {
                 final Location point = start.clone().add(vector);
@@ -106,7 +105,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
     }
     
     protected Vector getEnd(LivingEntity caster, int range) {
-        return caster.getEyeLocation().getDirection().multiply(range);
+        return caster.getEyeLocation().add(caster.getEyeLocation().getDirection().multiply(range)).toVector();
     }
     
 }
