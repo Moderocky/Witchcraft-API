@@ -7,6 +7,7 @@ import mx.kenzie.witchcraft.entity.client.IClientsideEntity;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -21,6 +22,8 @@ public interface Client {
     void spawnEntity(IClientsideEntity entity, Player target);
     
     void sendPacket(Player player, Object packet);
+    
+    void sendBlockBreak(int entity, Block block, int stage, Player... receivers);
     
     int spawnClientsideEntity(Location location, String type, Player[] target);
     
