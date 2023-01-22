@@ -21,7 +21,7 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
         .force(true));
-    final ParticleCreator purple = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
+    static final ParticleCreator PURPLE = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
         .force(true));
     
     public UnholyBlastSpell(Map<String, Object> map) {
@@ -34,19 +34,19 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         final World world = location.getWorld();
         final double damage = 3 + amplitude;
         final Vector axis = location.getDirection();
-        final Polygon polygon = purple.createPolygon(axis, 0.4, 5);
+        final Polygon polygon = PURPLE.createPolygon(axis, 0.4, 5);
         polygon.fillInLines(false, 0.2);
         final Vector direction = location.getDirection().multiply(0.5);
         final Projectile projectile = this.spawnProjectile(caster, direction, 1.2F, range);
         world.playSound(location, Sound.ENTITY_BLAZE_SHOOT, 0.7F, 0.7F);
         projectile.setDamage(damage);
         projectile.onTick(() -> {
-            this.purple.getBuilder().location(projectile.getLocation()).spawn();
+            this.PURPLE.getBuilder().location(projectile.getLocation()).spawn();
             this.builder.draw(projectile.getLocation(), polygon);
         });
         projectile.onCollide(() -> {
             world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
-            this.purple.drawPoof(location, 0.8, 10);
+            this.PURPLE.drawPoof(location, 0.8, 10);
         });
         return projectile;
     }
