@@ -52,8 +52,8 @@ public class FireballSpell extends AbstractProjectileSpell {
         });
         projectile.onCollide(() -> {
             skull.remove();
-            if (projectile.getShooter() != null)
-                projectile.getLocation().createExplosion(projectile.getShooter(), 1.5F * scale, false, false);
+            if (projectile.getSource() != null)
+                projectile.getLocation().createExplosion(projectile.getSource(), 1.5F * scale, false, false);
             projectile.getLocation().createExplosion(1.5F * scale, false, false);
         });
         world.playSound(projectile.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.75F, 0.9F);

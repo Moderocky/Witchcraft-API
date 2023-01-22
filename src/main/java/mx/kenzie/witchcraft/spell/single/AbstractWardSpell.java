@@ -17,7 +17,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 abstract class AbstractWardSpell extends StandardSpell {
     protected transient Block target;
@@ -31,14 +30,14 @@ abstract class AbstractWardSpell extends StandardSpell {
         if (Minecraft.getInstance().nearbyEntities(caster, CustomEntityType.WARD_CUBE_TOTEM) > 2) return false;
         final List<Block> blocks = AbstractSummonSpell.getValidSpawnSpaces(caster.getLocation(), 3);
         if (blocks.isEmpty()) return false;
-        if (blocks.size() == 1) this.target = blocks.get(0);
-        else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
+        this.target = blocks.get(0);
         return true;
     }
     
-    protected LivingEntity summonWard(LivingEntity caster, int lifetime) {
-        final Location spawn = target.getLocation().add(0.5, 0.1, 0.5);
+    protected WardCube summonWard(LivingEntity caster, int lifetime) {
+        final Location spawn = target.getLocation().add(0.5, 3, 0.5);
         final WardCube ward = CustomEntityType.WARD_CUBE_TOTEM.summon(caster, spawn);
+        assert ward != null;
         Protection.getInstance().registerWard(new SimpleWardInstance(caster, ward, lifetime));
         return ward;
     }
@@ -49,18 +48,18 @@ abstract class AbstractWardSpell extends StandardSpell {
         for (Vector vector : circle) {
             final Location point = centre.clone().add(vector);
             creator.getBuilder().location(point).spawn();
-            try {
-                Thread.sleep(4000 / particles); // 4 rings drawing at a time
-            } catch (InterruptedException ignored) {}
+            WitchcraftAPI.sleep(4000 / particles);
         }
     }
     
     protected List<LivingEntity> getAffected(LivingEntity caster, LivingEntity totem, boolean includeAllies) {
         final Location centre = totem.getLocation();
         final List<LivingEntity> list = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
+        final Minecraft minecraft = Minecraft.getInstance();
         list.removeIf(found -> {
             if (totem == found) return true;
-            return !includeAllies && WitchcraftAPI.minecraft.isAlly(found, caster);
+            if (!minecraft.isValidToDamage(found)) return true;
+            return !includeAllies && minecraft.isAlly(found, caster);
         });
         return list;
     }

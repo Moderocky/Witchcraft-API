@@ -140,14 +140,14 @@ public interface Minecraft {
     <Type extends Handle> Type getHandle(Entity entity);
     
     /**
-     * Returns the number of nearby summons of the given ID.
+     * Returns the number of nearby summons of the given type.
      */
-    int nearbySummons(LivingEntity owner, @Nullable CustomEntityType<?> type);
+    int nearbySummons(LivingEntity owner, @Nullable CustomEntityType<? extends Owned> type);
     
     /**
-     * Returns the number of nearby summons of the given ID.
+     * Returns the number of nearby entities of the given type.
      */
-    int nearbyEntities(LivingEntity owner, @Nullable CustomEntityType<?> type);
+    int nearbyEntities(LivingEntity centre, @Nullable CustomEntityType<?> type);
     
     List<Entity> getSummons(LivingEntity caster);
     

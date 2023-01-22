@@ -3,8 +3,9 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
-import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.entity.Totem;
+import mx.kenzie.witchcraft.entity.WardCube;
+import mx.kenzie.witchcraft.entity.handle.Grave;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -36,7 +37,7 @@ public class ShallowGravesSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
-        final LivingEntity entity = this.summonWard(caster, lifetime);
+        final WardCube entity = this.summonWard(caster, lifetime);
         final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
         cube.setMajorTickConsumer(thing -> {
             final List<Grave> graves = AbstractGraveSpell.getGraves(thing, range);

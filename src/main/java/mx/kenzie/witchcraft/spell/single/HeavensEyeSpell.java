@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.Totem;
+import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,7 +30,7 @@ public class HeavensEyeSpell extends AbstractWardSpell {
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
         final int lifetime = 20 * 30;
-        final LivingEntity entity = this.summonWard(caster, lifetime);
+        final WardCube entity = this.summonWard(caster, lifetime);
         final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
         final ParticleBuilder ticker = new ParticleBuilder(Particle.ELECTRIC_SPARK)
             .count(0)

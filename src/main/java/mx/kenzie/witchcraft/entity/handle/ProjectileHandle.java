@@ -1,14 +1,13 @@
-package mx.kenzie.witchcraft.entity;
+package mx.kenzie.witchcraft.entity.handle;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.function.Function;
 
-public interface Projectile extends CustomEntity, AbstractArrow {
+public interface ProjectileHandle extends Handle {
     double getDamage();
     
     void setDamage(double damage);
@@ -27,15 +26,17 @@ public interface Projectile extends CustomEntity, AbstractArrow {
     
     Location getPrevious();
     
+    Location getLocation();
+    
     Location getPotentialNext();
     
-    org.bukkit.entity.LivingEntity getSource();
+    org.bukkit.entity.LivingEntity getShooter();
     
-    void setCanCollideWith(Function<org.bukkit.entity.Entity, Boolean> function);
+    void setCanCollideWith(Function<Entity, Boolean> function);
     
     void onCollideWithBlock(Function<Block, Boolean> function);
     
-    void onCollideWithEntity(Function<org.bukkit.entity.Entity, Boolean> function);
+    void onCollideWithEntity(Function<Entity, Boolean> function);
     
     void onTick(Runnable tick);
 }
