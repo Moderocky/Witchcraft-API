@@ -252,7 +252,7 @@ public interface Minecraft {
     
     void heal(Entity entity, double amount);
     
-    void spawnFangs(LivingEntity caster, LivingEntity target, int range, float scale, double damage);
+    void spawnFangs(LivingEntity caster, Location target, int range, float scale, double damage);
     
-    void createDemonFangs(LivingEntity caster, double x, double z, double maxY, double y, float yaw, int warmup);
+    void createDemonFangs(LivingEntity caster, double damage, double x, double z, double maxY, double y, float yaw, int warmup);
 }

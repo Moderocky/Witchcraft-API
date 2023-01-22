@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class UnholyBlastSpell extends AbstractProjectileSpell {
     
+    static final ParticleCreator PURPLE = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
+        .force(true));
     protected transient final Color color = new Color(194, 21, 44);
     protected transient final ParticleCreator builder = ParticleCreator.of(new ParticleBuilder(Particle.REDSTONE)
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
-        .force(true));
-    static final ParticleCreator PURPLE = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
         .force(true));
     
     public UnholyBlastSpell(Map<String, Object> map) {
@@ -41,12 +41,12 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         world.playSound(location, Sound.ENTITY_BLAZE_SHOOT, 0.7F, 0.7F);
         projectile.setDamage(damage);
         projectile.onTick(() -> {
-            this.PURPLE.getBuilder().location(projectile.getLocation()).spawn();
+            PURPLE.getBuilder().location(projectile.getLocation()).spawn();
             this.builder.draw(projectile.getLocation(), polygon);
         });
         projectile.onCollide(() -> {
             world.playSound(location, Sound.ENTITY_SILVERFISH_HURT, 0.8F, 0.4F);
-            this.PURPLE.drawPoof(location, 0.8, 10);
+            PURPLE.drawPoof(location, 0.8, 10);
         });
         return projectile;
     }
