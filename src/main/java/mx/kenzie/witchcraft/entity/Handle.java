@@ -8,17 +8,17 @@ public interface Handle {
     
     Entity getBukkitEntity();
     
-    boolean isTicking();
-    
     default String getTypeId() {
         return this.getKind().key;
     }
     
     CustomEntityType getKind();
     
-    UUID getUUID();
+    default UUID getUniqueId() {
+        return this.getBukkitEntity().getUniqueId();
+    }
     
-    default boolean spawnGrave() {
+    default boolean shouldSpawnGrave() {
         return !(this instanceof Summon || this instanceof MalleablePortal || this instanceof NoSpawnGrave);
     }
     

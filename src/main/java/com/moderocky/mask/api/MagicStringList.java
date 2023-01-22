@@ -106,7 +106,7 @@ public class MagicStringList extends ArrayList<String> {
     }
     
     public String join(char delimiter) {
-        return String.join(delimiter + "", this);
+        return String.join(String.valueOf(delimiter), this);
     }
     
     public MagicStringList withoutEmpty() {

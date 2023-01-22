@@ -7,9 +7,9 @@ import java.util.UUID;
 public interface Demon extends Handle {
     
     
-    void setDeity(WarlockDeity deity);
-    
     WarlockDeity getDeity();
+    
+    void setDeity(WarlockDeity deity);
     
     UUID getOwnerID();
     

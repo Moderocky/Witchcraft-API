@@ -40,8 +40,6 @@ public interface ParticleCreator {
         return new Vector((random.nextDouble() - 0.5), 0, (random.nextDouble() - 0.5));
     }
     
-    ParticleBuilder getBuilder();
-    
     double drawLine(Location start, Location end, double spread);
     
     Vector drawCurve(Location start, Location end, Vector curve, double spread);
@@ -117,14 +115,11 @@ public interface ParticleCreator {
             builder.offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
         return this;
     }
+    
+    ParticleBuilder getBuilder();
 }
 
 class TestParticleCreator implements ParticleCreator {
-    
-    @Override
-    public ParticleCreator color(Color color) {
-        return this;
-    }
     
     @Override
     public ParticleBuilder getBuilder() {
@@ -294,6 +289,11 @@ class TestParticleCreator implements ParticleCreator {
     @Override
     public VectorShape createSphere(double radius, int density) {
         return null;
+    }
+    
+    @Override
+    public ParticleCreator color(Color color) {
+        return this;
     }
     
     @Override

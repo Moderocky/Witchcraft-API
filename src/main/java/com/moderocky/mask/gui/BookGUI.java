@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class BookGUI implements TextGUI, Listener {
     
     private final BookMeta meta;
-    private final String bookCode = UUID.randomUUID().getMostSignificantBits() + "";
+    private final String bookCode = String.valueOf(UUID.randomUUID().getMostSignificantBits());
     private final List<Player> players = new ArrayList<>();
     private final TreeMap<String, Consumer<Player>> map = new TreeMap<>();
     private final TreeMap<String, Boolean> reopenMap = new TreeMap<>();
@@ -94,7 +94,7 @@ public class BookGUI implements TextGUI, Listener {
     }
     
     public ClickEvent createButton(int page) {
-        return new ClickEvent(ClickEvent.Action.CHANGE_PAGE, page + "");
+        return new ClickEvent(ClickEvent.Action.CHANGE_PAGE, String.valueOf(page));
     }
     
     @EventHandler
