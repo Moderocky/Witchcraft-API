@@ -67,6 +67,11 @@ public class WitchcraftAPI {
      */
     public static boolean isTest;
     
+    static volatile boolean closing;
+    
+    public static boolean isClosing() {
+        return closing;
+    }
     
     /**
      * This can be used on EXECUTOR threads, e.g. during animations.

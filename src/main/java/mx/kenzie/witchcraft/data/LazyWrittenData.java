@@ -26,8 +26,35 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
             return false;
         }
     };
-    private static final Queue<LazyWrittenData<?>> SAVE_QUEUE = new ConcurrentLinkedQueue<>();
-    private static volatile boolean closing;
+    
+    public class SaveTask extends Task {
+        @Override
+        public void run() {
+            save();
+        }
+    }
+    
+    public class LoadTask extends Task {
+        @Override
+        public void run() {
+            load();
+        }
+    }
+    
+    public abstract class Task implements Runnable {
+        
+        public abstract void run();
+        
+        @Override
+        public int hashCode() {
+            return LazyWrittenData.this.hashCode() * System.identityHashCode(this);
+        }
+        
+    }
+    
+    private transient final Task save = new SaveTask(), load = new LoadTask();
+    
+    private static final Queue<LazyWrittenData<?>.Task> IO_QUEUE = new ConcurrentLinkedQueue<>();
     
     protected transient File file;
     
@@ -36,23 +63,19 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
         target = (Type) this;
     }
     
-    public static void setClosing(boolean closing) {
-        LazyWrittenData.closing = closing;
-    }
-    
     public static Runnable processSaveTask() {
         return () -> {
-            while (!closing || !SAVE_QUEUE.isEmpty()) {
+            while (!WitchcraftAPI.isClosing() || !IO_QUEUE.isEmpty()) {
                 try {
-                    final LazyWrittenData<?> data = SAVE_QUEUE.poll();
-                    if (data == null) {
-                        if (closing) break;
+                    final LazyWrittenData<?>.Task task = IO_QUEUE.poll();
+                    if (task == null) {
+                        if (WitchcraftAPI.isClosing()) break;
                         WitchcraftAPI.sleep(100);
                         continue;
                     }
-                    data.save();
+                    task.run();
                 } catch (Throwable ex) {
-                    System.err.println("Error in saving process:");
+                    System.err.println("Error in IO process:");
                     ex.printStackTrace();
                 }
             }
@@ -62,7 +85,7 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     public void save() {
         assert this.isReady();
         try {
-            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
             if (!file.exists()) this.file.createNewFile();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -75,12 +98,13 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     }
     
     public synchronized void scheduleSave() {
-        if (SAVE_QUEUE.contains(this)) return;
-        SAVE_QUEUE.add(this);
+        if (IO_QUEUE.contains(this.save)) return;
+        IO_QUEUE.add(this.save);
     }
     
     public void scheduleLoad() {
-        WitchcraftAPI.executor.submit(this::load);
+        if (IO_QUEUE.contains(this.load)) return;
+        IO_QUEUE.add(this.load);
     }
     
     public void load() {

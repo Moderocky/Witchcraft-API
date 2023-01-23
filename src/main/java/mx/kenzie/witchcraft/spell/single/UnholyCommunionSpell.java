@@ -34,7 +34,7 @@ public class UnholyCommunionSpell extends StandardSpell {
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        Block block = caster.getLocation().add(0, 2, 0).getBlock();
+        Block block = caster.getLocation().add(0, 2.5, 0).getBlock();
         int checks = 0;
         while (++checks < 12 && !block.getRelative(BlockFace.DOWN).isSolid()) block = block.getRelative(BlockFace.DOWN);
         final Location start = block.getLocation().add(0.5, 0.2, 0.5);
@@ -48,14 +48,14 @@ public class UnholyCommunionSpell extends StandardSpell {
                 if (caster.isDead()) break;
                 if (!caster.isInsideVehicle()) break;
                 if (caster.getVehicle() != entity) break;
-                this.circle.draw(start.add(0, (1 + Math.sin(i)) * 0.9, 0));
+                this.circle.draw(start.clone().add(0, (1 + Math.sin(i / 4.0F)) * 0.9F, 0));
                 minecraft.ensureMain(() -> {
                     minecraft.heal(caster, 0.2);
                     if (caster instanceof Player player) player.setFoodLevel(player.getFoodLevel() + 1);
                 });
-                WitchcraftAPI.sleep(100);
+                WitchcraftAPI.sleep(80);
             }
-            if (!entity.isDead()) entity.remove();
+            if (!entity.isDead()) minecraft.ensureMain(entity::remove);
         });
     }
     
