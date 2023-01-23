@@ -22,6 +22,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends WardCube> WARD_CUBE_TOTEM = new CustomEntityType<>("ward_cube", true);
     public static final CustomEntityType<? extends Portal> NETHER_PORTAL = new CustomEntityType<>("NETHER_PORTAL");
     public static final CustomEntityType<? extends Portal> TANG_PORTAL = new CustomEntityType<>("TANG_PORTAL");
+    public static final CustomEntityType<? extends DimensionDoor> DIMENSION_DOOR = new CustomEntityType<>("DIMENSION_DOOR");
     public static final CustomEntityType<?> PIRATE_ENEMY = new CustomEntityType<>("PIRATE_ENEMY");
     public static final CustomEntityType<?> AXE_PIRATE_ENEMY = new CustomEntityType<>("AXE_PIRATE_ENEMY");
     public static final CustomEntityType<? extends Human> HUMAN = new CustomEntityType<>("HUMAN");
