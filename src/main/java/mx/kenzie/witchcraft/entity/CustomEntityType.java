@@ -57,6 +57,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Portal> DEMON_SPAWN_PORTAL = new CustomEntityType<>("DEMON_SPAWN_PORTAL");
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
+    public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
     
     public final String key;
     public final boolean summon;
