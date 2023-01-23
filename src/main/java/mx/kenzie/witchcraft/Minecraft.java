@@ -15,6 +15,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -179,6 +180,8 @@ public interface Minecraft {
     }
     
     void heal(Entity entity, double amount);
+    
+    void dispatchCommand(CommandSender sender, String command);
     
     void spawnFangs(LivingEntity caster, Location target, int range, float scale, double damage);
     
