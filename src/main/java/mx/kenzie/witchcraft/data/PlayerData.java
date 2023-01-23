@@ -2,6 +2,7 @@ package mx.kenzie.witchcraft.data;
 
 import mx.kenzie.fern.Fern;
 import mx.kenzie.fern.meta.Optional;
+import mx.kenzie.witchcraft.RealmManager;
 import mx.kenzie.witchcraft.Session;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.achievement.Achievement;
@@ -58,6 +59,10 @@ public class PlayerData extends CasterData<PlayerData> {
         data.load();
         CasterData.DATA.put(uuid, data);
         return data;
+    }
+    
+    public boolean hasPocketRealm() {
+        return RealmManager.getInstance().worldExists(uuid);
     }
     
     public void regenerate() {
