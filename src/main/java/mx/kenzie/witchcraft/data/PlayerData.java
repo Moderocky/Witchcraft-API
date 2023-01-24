@@ -39,12 +39,46 @@ public class PlayerData extends CasterData<PlayerData> {
     public Achievement[] achievements = new Achievement[0];
     public Title current_title = Title.NOVICE;
     public int generation = 1;
+    public Position.Static facsimile_location;
     private transient Player player;
     private transient List<ItemArchetype> outfit;
     private transient WeakReference<Facsimile> facsimile;
-    public Position.Static facsimile_location;
     
     PlayerData() {
+    }
+    
+    public static PlayerData getData(Player player) {
+        if (LOCAL_CACHE.containsKey(player)) return LOCAL_CACHE.get(player);
+        final PlayerData data = getData(player.getUniqueId());
+        data.player = player;
+        data.name = player.getName();
+        LOCAL_CACHE.put(player, data);
+        return data;
+    }
+    
+    public static PlayerData getData(UUID uuid) {
+        if (CasterData.DATA.get(uuid) instanceof PlayerData player) return player;
+        final PlayerData data = new PlayerData();
+        data.uuid = uuid;
+        data.file = new File("data/player/" + uuid + "/data.fern");
+        data.load();
+        CasterData.DATA.put(uuid, data);
+        return data;
+    }
+    
+    public Facsimile getFacsimile() {
+        if (!this.hasFacsimile(true)) return null;
+        final Facsimile stashed = facsimile.get();
+        if (stashed != null) return stashed; // reference could have been dropped somehow
+        final Location location = facsimile_location.getLocation();
+        location.getChunk().load();
+        for (LivingEntity entity : location.getNearbyLivingEntities(10)) {
+            if (!(entity instanceof Facsimile image)) continue;
+            if (image.getOwnerID() != uuid) continue;
+            this.facsimile = new WeakReference<>(image);
+            return image;
+        }
+        return null;
     }
     
     public boolean hasFacsimile(boolean guarantee) {
@@ -76,40 +110,6 @@ public class PlayerData extends CasterData<PlayerData> {
             this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
         }
         this.scheduleSave();
-    }
-    
-    public Facsimile getFacsimile() {
-        if (!this.hasFacsimile(true)) return null;
-        final Facsimile stashed = facsimile.get();
-        if (stashed != null) return stashed; // reference could have been dropped somehow
-        final Location location = facsimile_location.getLocation();
-        location.getChunk().load();
-        for (LivingEntity entity : location.getNearbyLivingEntities(10)) {
-            if (!(entity instanceof Facsimile image)) continue;
-            if (image.getOwnerID() != uuid) continue;
-            this.facsimile = new WeakReference<>(image);
-            return image;
-        }
-        return null;
-    }
-    
-    public static PlayerData getData(Player player) {
-        if (LOCAL_CACHE.containsKey(player)) return LOCAL_CACHE.get(player);
-        final PlayerData data = getData(player.getUniqueId());
-        data.player = player;
-        data.name = player.getName();
-        LOCAL_CACHE.put(player, data);
-        return data;
-    }
-    
-    public static PlayerData getData(UUID uuid) {
-        if (CasterData.DATA.get(uuid) instanceof PlayerData player) return player;
-        final PlayerData data = new PlayerData();
-        data.uuid = uuid;
-        data.file = new File("data/player/" + uuid + "/data.fern");
-        data.load();
-        CasterData.DATA.put(uuid, data);
-        return data;
     }
     
     public boolean hasPocketRealm() {

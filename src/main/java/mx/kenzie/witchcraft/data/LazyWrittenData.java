@@ -26,36 +26,8 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
             return false;
         }
     };
-    
-    public class SaveTask extends Task {
-        @Override
-        public void run() {
-            save();
-        }
-    }
-    
-    public class LoadTask extends Task {
-        @Override
-        public void run() {
-            load();
-        }
-    }
-    
-    public abstract class Task implements Runnable {
-        
-        public abstract void run();
-        
-        @Override
-        public int hashCode() {
-            return LazyWrittenData.this.hashCode() * System.identityHashCode(this);
-        }
-        
-    }
-    
-    private transient final Task save = new SaveTask(), load = new LoadTask();
-    
     private static final Queue<LazyWrittenData<?>.Task> IO_QUEUE = new ConcurrentLinkedQueue<>();
-    
+    private transient final Task save = new SaveTask(), load = new LoadTask();
     protected transient File file;
     
     @SuppressWarnings("unchecked")
@@ -118,5 +90,30 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     
     public boolean exists() {
         return file != null && file.exists() && file.isFile();
+    }
+    
+    public class SaveTask extends Task {
+        @Override
+        public void run() {
+            save();
+        }
+    }
+    
+    public class LoadTask extends Task {
+        @Override
+        public void run() {
+            load();
+        }
+    }
+    
+    public abstract class Task implements Runnable {
+        
+        public abstract void run();
+        
+        @Override
+        public int hashCode() {
+            return LazyWrittenData.this.hashCode() * System.identityHashCode(this);
+        }
+        
     }
 }

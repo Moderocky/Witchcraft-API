@@ -29,6 +29,10 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         return this.getTarget(caster, range, strikeAir, Mode.SAFE_TO_TARGET);
     }
     
+    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir, Mode mode) {
+        return findTarget(caster, caster.getEyeLocation().getDirection(), range, strikeAir, mode);
+    }
+    
     public static Target findTarget(LivingEntity caster, Vector direction, int range, boolean strikeAir, Mode mode) {
         final World world = caster.getWorld();
         final Location start = caster.getEyeLocation();
@@ -39,10 +43,6 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         final Entity found = result.getHitEntity();
         final Location target = result.getHitPosition().toLocation(world);
         return new Target(target, found, result);
-    }
-    
-    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir, Mode mode) {
-        return findTarget(caster, caster.getEyeLocation().getDirection(), range, strikeAir, mode);
     }
     
     protected Target getTarget(LivingEntity caster, Vector direction, int range, boolean strikeAir, Mode mode) {

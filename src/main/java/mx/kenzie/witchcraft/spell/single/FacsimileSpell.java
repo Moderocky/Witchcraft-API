@@ -40,30 +40,6 @@ public class FacsimileSpell extends StandardSpell {
         return true;
     }
     
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        return caster instanceof Player;
-    }
-    
-    @Override
-    protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        if (!(caster instanceof Player player)) return;
-        Component component = Component.text("You have created a facsimile..." +
-            "\nInstead of dying, your essence will transfer to this body.", WitchcraftAPI.colors()
-            .lowlight());
-        if (FacsimileSpell.hasFacsimile(player, true)) {
-            final Facsimile image = getFacsimile(player);
-            if (image != null) image.remove();
-            component = Component.text("You have replaced your facsimile.", WitchcraftAPI.colors()
-                .lowlight());
-        }
-        final Location start = player.getLocation();
-        drawRings(start);
-        final Facsimile image = CustomEntityType.FACSIMILE.summon(player, start);
-        registerFacsimile(player, image);
-        player.sendMessage(component);
-    }
-    
     public static boolean hasFacsimile(Player player, boolean guarantee) {
         final PlayerData data = PlayerData.getData(player);
         return data.hasFacsimile(guarantee);
@@ -89,6 +65,30 @@ public class FacsimileSpell extends StandardSpell {
     public static void registerFacsimile(Player player, Facsimile image) {
         final PlayerData data = PlayerData.getData(player);
         data.setFacsimile(image);
+    }
+    
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        return caster instanceof Player;
+    }
+    
+    @Override
+    protected void run(LivingEntity caster, int range, float scale, double amplitude) {
+        if (!(caster instanceof Player player)) return;
+        Component component = Component.text("You have created a facsimile..." +
+            "\nInstead of dying, your essence will transfer to this body.", WitchcraftAPI.colors()
+            .lowlight());
+        if (FacsimileSpell.hasFacsimile(player, true)) {
+            final Facsimile image = getFacsimile(player);
+            if (image != null) image.remove();
+            component = Component.text("You have replaced your facsimile.", WitchcraftAPI.colors()
+                .lowlight());
+        }
+        final Location start = player.getLocation();
+        drawRings(start);
+        final Facsimile image = CustomEntityType.FACSIMILE.summon(player, start);
+        registerFacsimile(player, image);
+        player.sendMessage(component);
     }
     
 }
