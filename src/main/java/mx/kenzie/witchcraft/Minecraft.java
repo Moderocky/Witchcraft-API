@@ -183,6 +183,8 @@ public interface Minecraft {
     
     void dispatchCommand(CommandSender sender, String command);
     
+    void launchBlock(Block block, LivingEntity caster, int delay, double damage);
+    
     void spawnFangs(LivingEntity caster, Location target, int range, float scale, double damage);
     
     void createDemonFangs(LivingEntity caster, double damage, double x, double z, double maxY, double y, double yaw, int warmup);
