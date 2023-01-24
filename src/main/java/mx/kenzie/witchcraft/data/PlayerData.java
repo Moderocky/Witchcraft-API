@@ -53,9 +53,10 @@ public class PlayerData extends CasterData<PlayerData> {
         if (facsimile != null && facsimile.get() != null) return true;
         final Location location = facsimile_location.getLocation();
         location.getChunk().load();
-        for (LivingEntity entity : location.getNearbyLivingEntities(10)) {
+        for (LivingEntity entity : location.getNearbyLivingEntities(24)) {
             if (!(entity instanceof Facsimile image)) continue;
-            if (image.getOwnerID() != uuid) continue;
+            if (!uuid.equals(image.getOwnerID())) continue;
+            if (image.isDead()) continue;
             this.facsimile = new WeakReference<>(image);
             return true;
         }
@@ -63,9 +64,13 @@ public class PlayerData extends CasterData<PlayerData> {
     }
     
     public void setFacsimile(Facsimile image) {
-        if (image == null) {
+        if (image == null && this.facsimile_location == null) return;
+        else if (image == null) {
             this.facsimile = null;
             this.facsimile_location = null;
+        } else if (facsimile != null && image == facsimile.get()) {
+            if (facsimile_location.getLocation().distanceSquared(image.getLocation()) < 48) return;
+            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
         } else {
             this.facsimile = new WeakReference<>(image);
             this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
@@ -277,6 +282,7 @@ public class PlayerData extends CasterData<PlayerData> {
         final int online = coven == null ? 0 : coven.size();
         final List<Position> positions = new ArrayList<>(memory.locations.length + online + 5);
         positions.addAll(List.of(memory.locations));
+        if (facsimile_location != null) positions.add(facsimile_location);
         if (coven != null) positions.addAll(coven.getPositions());
         if (coven != null && coven.isHomeValid(false)) positions.add(coven.getHome());
         return positions;

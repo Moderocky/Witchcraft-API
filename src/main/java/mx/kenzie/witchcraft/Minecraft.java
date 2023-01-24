@@ -20,6 +20,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.util.Vector;
@@ -190,4 +191,8 @@ public interface Minecraft {
     void spawnFangs(LivingEntity caster, Location target, int range, float scale, double damage);
     
     void createDemonFangs(LivingEntity caster, double damage, double x, double z, double maxY, double y, double yaw, int warmup);
+    
+    void registerHuman(Human human, Consumer<PlayerJoinEvent> onJoin);
+    
+    void notifyHumans(PlayerJoinEvent event);
 }
