@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft.entity;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.Coven;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -58,6 +59,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
     public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
+    public static final CustomEntityType<? extends ArmorStand> LAUNCH_BLOCK = new CustomEntityType<>("LAUNCH_BLOCK");
     
     public final String key;
     public final boolean summon;
