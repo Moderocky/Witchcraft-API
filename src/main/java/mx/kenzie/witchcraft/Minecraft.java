@@ -128,6 +128,8 @@ public interface Minecraft {
     
     MirrorImage spawnMirrorImage(Location location, Player player);
     
+    Facsimile spawnFacsimile(Location location, Player player);
+    
     Demon spawnSoldierDemon(Location location, WarlockDeity deity);
     
     MirrorImage spawnMirrorImageNoAI(Location location, Player player);

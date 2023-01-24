@@ -11,15 +11,18 @@ import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.data.modifier.ModifierMap;
 import mx.kenzie.witchcraft.data.outfit.Clothing;
 import mx.kenzie.witchcraft.data.world.WorldData;
+import mx.kenzie.witchcraft.entity.Facsimile;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class PlayerData extends CasterData<PlayerData> {
@@ -38,8 +41,51 @@ public class PlayerData extends CasterData<PlayerData> {
     public int generation = 1;
     private transient Player player;
     private transient List<ItemArchetype> outfit;
+    private transient WeakReference<Facsimile> facsimile;
+    public Position.Static facsimile_location;
     
     PlayerData() {
+    }
+    
+    public boolean hasFacsimile(boolean guarantee) {
+        if (facsimile_location == null || !facsimile_location.isValid()) return false;
+        if (!guarantee) return true;
+        if (facsimile != null && facsimile.get() != null) return true;
+        final Location location = facsimile_location.getLocation();
+        location.getChunk().load();
+        for (LivingEntity entity : location.getNearbyLivingEntities(10)) {
+            if (!(entity instanceof Facsimile image)) continue;
+            if (image.getOwnerID() != uuid) continue;
+            this.facsimile = new WeakReference<>(image);
+            return true;
+        }
+        return false;
+    }
+    
+    public void setFacsimile(Facsimile image) {
+        if (image == null) {
+            this.facsimile = null;
+            this.facsimile_location = null;
+        } else {
+            this.facsimile = new WeakReference<>(image);
+            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
+        }
+        this.scheduleSave();
+    }
+    
+    public Facsimile getFacsimile() {
+        if (!this.hasFacsimile(true)) return null;
+        final Facsimile stashed = facsimile.get();
+        if (stashed != null) return stashed; // reference could have been dropped somehow
+        final Location location = facsimile_location.getLocation();
+        location.getChunk().load();
+        for (LivingEntity entity : location.getNearbyLivingEntities(10)) {
+            if (!(entity instanceof Facsimile image)) continue;
+            if (image.getOwnerID() != uuid) continue;
+            this.facsimile = new WeakReference<>(image);
+            return image;
+        }
+        return null;
     }
     
     public static PlayerData getData(Player player) {

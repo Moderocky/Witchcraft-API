@@ -37,6 +37,12 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
             return WitchcraftAPI.minecraft.spawnMirrorImage(location, ((Player) owner));
         }
     };
+    public static final CustomEntityType<? extends Facsimile> FACSIMILE = new CustomEntityType<>("FACSIMILE", true) {
+        @Override
+        public Facsimile summon(LivingEntity owner, Location location) {
+            return WitchcraftAPI.minecraft.spawnFacsimile(location, ((Player) owner));
+        }
+    };
     public static final CustomEntityType<?> ENCHANTING_TABLE = new CustomEntityType<>("ENCHANTING_TABLE") {
         @Override
         public LivingEntity spawn(Location location, Coven coven) {
