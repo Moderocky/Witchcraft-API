@@ -1,19 +1,20 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.Minecraft;
-import mx.kenzie.witchcraft.spell.StandardSpell;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import mx.kenzie.witchcraft.spell.effect.VectorShape;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LandslideSpell extends StandardSpell {
+public class LandslideSpell extends BulwarkSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.MUD);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 2.2, 60);
     protected transient Collection<Block> blocks;
@@ -24,8 +25,7 @@ public class LandslideSpell extends StandardSpell {
     
     @Override
     public boolean canCast(LivingEntity caster) {
-        this.blocks = this.getBlocks(caster);
-        return blocks.size() > 1;
+        return super.canCast(caster) && this.getBlocks(caster).size() > 1;
     }
     
     @Override
@@ -57,22 +57,12 @@ public class LandslideSpell extends StandardSpell {
                     final Vector offset = new Vector(x - radius, y - radius, z - radius);
                     final Location point = location.clone().add(offset);
                     final Block block = point.getBlock();
-                    if (!this.isBlockOkay(block)) continue;
+                    if (!isBlockOkay(block)) continue;
                     blocks.add(block);
                 }
             }
         }
-        return blocks;
-    }
-    
-    protected boolean isBlockOkay(Block block) { // needs to be a terrain block with space above it
-        if (!block.isSolid()) return false;
-        final Block up;
-        if ((up = block.getRelative(BlockFace.UP)).isSolid()) return false;
-        if (up.getRelative(BlockFace.UP).isSolid()) return false;
-        final Material material = block.getType();
-        if (!material.isOccluding()) return false;
-        return (Tag.MINEABLE_PICKAXE.isTagged(material) || Tag.MINEABLE_SHOVEL.isTagged(material));
+        return this.blocks = blocks;
     }
     
 }

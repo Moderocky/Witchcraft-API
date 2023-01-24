@@ -65,7 +65,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
     public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
-    public static final CustomEntityType<? extends ArmorStand> LAUNCH_BLOCK = new CustomEntityType<>("LAUNCH_BLOCK");
+    public static final CustomEntityType<? extends ArmorStand> FLOATING_BLOCK = new CustomEntityType<>("FLOATING_BLOCK");
     
     public final String key;
     public final boolean summon;
