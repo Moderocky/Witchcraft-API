@@ -7,14 +7,14 @@ import org.bukkit.entity.ArmorStand;
 
 public interface FloatingBlock extends CustomEntity, ArmorStand, NoSpawnGrave {
     
-    enum Type {
-        STATIC, ROTATING
-    }
-    
     void display(Material material);
     
     void display(Block block);
     
     ParticleBuilder getBuilder();
+    
+    enum Type {
+        STATIC, ROTATING
+    }
     
 }
