@@ -27,23 +27,23 @@ public class ShieldSpell extends StandardSpell {
     
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final int size = (int) (1 + Math.ceil(scale * 2));
+        final int size = (int) (3 + Math.ceil(scale * 2));
         final Location eye = caster.getEyeLocation(), start = eye.clone();
         WitchcraftAPI.executor.submit(() -> {
             final Vector direction = eye.getDirection();
             start.add(direction.clone().multiply(size));
             final float factor = 26.56F, space = factor * (2.0F / size);
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++) {
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
                     final Location point = eye.clone();
-                    point.setYaw(point.getYaw() + space * x);
-                    point.setPitch(point.getPitch() + space * y);
+                    point.setYaw(point.getYaw() - factor + (space * x));
+                    point.setPitch(point.getPitch() + (space * y));
                     point.add(point.getDirection().multiply(size));
                     final FloatingBlock block = Minecraft.getInstance()
                         .spawnFloatingBlock(point, caster, FloatingBlock.Type.ROTATING, Material.LIGHT_BLUE_STAINED_GLASS);
-                    block.getBuilder().count(0).particle(Particle.FIREWORKS_SPARK);
+                    block.getBuilder().count(0).particle(Particle.WATER_BUBBLE).data(null);
                 }
-                WitchcraftAPI.sleep(300);
+                WitchcraftAPI.sleep(200);
             }
         });
     }
