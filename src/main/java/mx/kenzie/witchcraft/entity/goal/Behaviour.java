@@ -30,4 +30,10 @@ public class Behaviour<EntityType> {
         return entity;
     }
     
+    public static <EntityType> Behaviour<EntityType> empty(EntityType entity) {
+        final Behaviour<EntityType> behaviour = new Behaviour<>();
+        behaviour.entity = entity;
+        return behaviour;
+    }
+    
 }

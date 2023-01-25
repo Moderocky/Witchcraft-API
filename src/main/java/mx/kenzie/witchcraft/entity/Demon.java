@@ -4,7 +4,7 @@ import mx.kenzie.witchcraft.data.WarlockDeity;
 
 import java.util.UUID;
 
-public interface Demon extends Human, Owned {
+public interface Demon extends Human, Owned, Active {
     
     WarlockDeity getDeity();
     
