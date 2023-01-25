@@ -3,7 +3,7 @@ package mx.kenzie.witchcraft.entity;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.Coven;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -65,7 +65,12 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
     public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
-    public static final CustomEntityType<? extends ArmorStand> FLOATING_BLOCK = new CustomEntityType<>("FLOATING_BLOCK");
+    public static final CustomEntityType<? extends FloatingBlock> FLOATING_BLOCK = new CustomEntityType<>("FLOATING_BLOCK") {
+        @Override
+        public FloatingBlock summon(LivingEntity owner, Location location) {
+            return WitchcraftAPI.minecraft.spawnFloatingBlock(location, owner, FloatingBlock.Type.STATIC, Material.MUD);
+        }
+    };
     
     public final String key;
     public final boolean summon;

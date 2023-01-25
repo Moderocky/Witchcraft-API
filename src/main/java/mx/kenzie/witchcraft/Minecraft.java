@@ -188,6 +188,9 @@ public interface Minecraft {
     
     FloatingBlock launchBlock(Block block, LivingEntity caster, int delay, double damage);
     
+    @SuppressWarnings("unchecked")
+    FloatingBlock spawnFloatingBlock(Location location, LivingEntity caster, FloatingBlock.Type type, Material material);
+    
     void spawnBlockShield(LivingEntity caster);
     
     void spawnFireRing(LivingEntity caster, double damage);
