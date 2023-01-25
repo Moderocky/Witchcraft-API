@@ -41,8 +41,8 @@ public class DarkBlastSpell extends AbstractProjectileSpell {
             creator.drawPlate(point, 0.5, 3);
         });
         projectile.onCollide(() -> {
-            world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4F, 0.4F);
-            creator.drawPoof(location, 1, 12);
+            projectile.getWorld().playSound(projectile.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4F, 0.4F);
+            creator.drawPoof(projectile.getLocation(), 1, 12);
         });
         world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.4F);
         return projectile;

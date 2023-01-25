@@ -2,9 +2,11 @@ package mx.kenzie.witchcraft.entity.handle;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface ProjectileHandle extends Handle {
@@ -34,7 +36,7 @@ public interface ProjectileHandle extends Handle {
     
     void setCanCollideWith(Function<Entity, Boolean> function);
     
-    void onCollideWithBlock(Function<Block, Boolean> function);
+    void onCollideWithBlock(BiFunction<Block, BlockFace, Boolean> function);
     
     void onCollideWithEntity(Function<Entity, Boolean> function);
     
