@@ -2,16 +2,28 @@ package mx.kenzie.witchcraft.entity.goal;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Behaviour<EntityType> {
+public class Behaviour<EntityType> {
     
-    public static final Behaviour<?> EMPTY = new Behaviour<>() {};
+    public static final Behaviour<?> EMPTY = new Behaviour<>();
     
     public EntityType entity;
     
     public void tick() {
     }
     
+    public void click(PlayerInteraction.Position interaction) {
+        this.click((PlayerInteraction) interaction);
+    }
+    
     public void click(PlayerInteraction interaction) {
+        interaction.setResult(Interaction.Result.PASS);
+    }
+    
+    public void discard() {
+    }
+    
+    public void collide(PushInteraction interaction) {
+        interaction.setResult(Interaction.Result.SUCCESS);
     }
     
     public final @NotNull EntityType getEntity() {

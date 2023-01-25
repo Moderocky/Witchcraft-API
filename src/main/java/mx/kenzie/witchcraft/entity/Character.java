@@ -5,7 +5,7 @@ import mx.kenzie.witchcraft.entity.goal.CharacterGoal;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.NPC;
 
-public interface Character extends NPC, CustomEntity, LivingEntity {
+public interface Character extends NPC, CustomEntity, LivingEntity, Active {
     
     boolean isNamed();
     
@@ -13,8 +13,6 @@ public interface Character extends NPC, CustomEntity, LivingEntity {
     
     void setGoal(CharacterGoal goal);
     
-    <EntityType extends Character> Behaviour<EntityType> getBehaviour();
-    
-    <EntityType extends Character> void setBehaviour(Behaviour<EntityType> behaviour);
+    Behaviour<? extends Character> getBehaviour();
     
 }

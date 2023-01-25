@@ -13,6 +13,16 @@ public class Interaction {
     }
     
     public enum Result {
-        PASS, SUCCESS, FAIL
+        SUCCESS(true),
+        CONSUME(true),
+        CONSUME_PARTIAL(true),
+        PASS(false),
+        FAIL(false);
+        
+        public final boolean run;
+        
+        Result(boolean run) {
+            this.run = run;
+        }
     }
 }
