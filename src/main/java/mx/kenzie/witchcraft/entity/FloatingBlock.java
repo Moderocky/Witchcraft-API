@@ -16,8 +16,10 @@ public interface FloatingBlock extends CustomEntity, ArmorStand, NoSpawnGrave, A
     
     Behaviour<? extends FloatingBlock> getBehaviour();
     
+    void setDamage(double damage);
+    
     enum Type {
-        STATIC, ROTATING
+        STATIC, ROTATING, BURNING_SPHERE
     }
     
 }
