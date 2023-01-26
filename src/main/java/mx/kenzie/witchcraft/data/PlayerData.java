@@ -14,12 +14,11 @@ import mx.kenzie.witchcraft.data.world.WorldData;
 import mx.kenzie.witchcraft.entity.Facsimile;
 import mx.kenzie.witchcraft.spell.Spell;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -126,6 +125,16 @@ public class PlayerData extends CasterData<PlayerData> {
         final Memory[] memories = new Memory[history.length + 1];
         memories[memories.length - 1] = memory;
         this.memory = new Memory();
+        this.history = memories;
+        this.scheduleSave();
+    }
+    
+    public void setMemory(Memory memory) {
+        this.style = memory.style;
+        this.current_title = Title.NOVICE;
+        final Memory[] memories = new Memory[history.length + 1];
+        memories[memories.length - 1] = this.memory;
+        this.memory = memory;
         this.history = memories;
         this.scheduleSave();
     }
@@ -373,5 +382,21 @@ public class PlayerData extends CasterData<PlayerData> {
         public LearnedSpell[] spells = new LearnedSpell[0];
         public Position.Static[] locations = new Position.Static[0];
         public UUID[] banished_planes = new UUID[0];
+        
+        public ItemStack icon() {
+            final ItemStack stack = new ItemStack(Material.TOTEM_OF_UNDYING);
+            final ItemMeta meta = stack.getItemMeta();
+            meta.displayName(style.displayName());
+            final List<Component> list = new ArrayList<>();
+            list.add(Component.textOfChildren(
+                Component.text(spells.length, WitchcraftAPI.colors().highlight()),
+                Component.text(" Spells", WitchcraftAPI.colors().lowlight())));
+            if (deity != WarlockDeity.NONE) list.add(Component.textOfChildren(
+                Component.text("Sworn to ", WitchcraftAPI.colors().lowlight()),
+                this.deity.displayName().color(WitchcraftAPI.colors().highlight())));
+            meta.lore(list);
+            stack.setItemMeta(meta);
+            return stack;
+        }
     }
 }
