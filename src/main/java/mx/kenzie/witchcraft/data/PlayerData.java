@@ -378,6 +378,10 @@ public class PlayerData extends CasterData<PlayerData> {
         return archetype.isOutfit();
     }
     
+    public boolean isSorcerer() {
+        return false;
+    }
+    
     public class Temporary {
         public final ModifierMap modifiers = new ModifierMap();
         public Session session;

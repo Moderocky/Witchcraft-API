@@ -5,7 +5,9 @@ import mx.kenzie.argo.meta.Name;
 import mx.kenzie.witchcraft.SpellManager;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.MagicClass;
+import mx.kenzie.witchcraft.data.PlayerData;
 import mx.kenzie.witchcraft.data.SpellType;
+import mx.kenzie.witchcraft.data.modifier.Modifier;
 import mx.kenzie.witchcraft.data.recipe.Ingredient;
 import mx.kenzie.witchcraft.event.SpellCastEvent;
 import mx.kenzie.witchcraft.event.SpellPreCastEvent;
@@ -147,7 +149,12 @@ public abstract class StandardSpell implements Spell {
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return SpellResult.CANCELLED;
             this.takeIngredients(caster);
-            this.takeEnergy(caster);
+            final int taken = this.takeEnergy(caster);
+            if (!PlayerData.getData(player).isSorcerer()) {
+                final int restore = (int) Math.min(taken, 3 + Modifier.get(caster)
+                    .get(Modifier.Type.ENERGY_REGENERATION));
+                SpellManager.getInstance().regenerateEnergy(player, restore * 2);
+            }
         }
         this.cast(caster, range, scale, amplitude);
         return SpellResult.SUCCESS;
@@ -164,11 +171,13 @@ public abstract class StandardSpell implements Spell {
         for (Ingredient material : this.getMaterials()) material.remove(player.getInventory());
     }
     
-    public void takeEnergy(LivingEntity caster) {
+    public int takeEnergy(LivingEntity caster) {
         final int bonus = WitchcraftAPI.spells.getBonusEnergy(caster, caster.getEquipment());
-        if (!(caster instanceof Player player)) return;
+        if (!(caster instanceof Player player)) return 0;
         final int energy = this.getEnergy();
+        final int taken = ((energy - bonus) * 2);
         player.setFoodLevel(player.getFoodLevel() - ((energy - bonus) * 2));
+        return taken;
     }
     
     protected abstract void run(LivingEntity caster, int range, float scale, double amplitude);

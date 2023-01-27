@@ -16,7 +16,7 @@ public record Modifier(Type type, double amount, long timeout) {
     }
     
     public enum Type {
-        AMPLITUDE, ARMOUR, BONUS_ENERGY, DEMON_COOLDOWN
+        AMPLITUDE, ARMOUR, BONUS_ENERGY, DEMON_COOLDOWN, ENERGY_REGENERATION
     }
     
 }

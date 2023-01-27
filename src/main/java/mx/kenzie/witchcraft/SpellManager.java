@@ -172,6 +172,8 @@ public interface SpellManager {
     
     boolean cast(LivingEntity caster, String id, float scale);
     
+    void regenerateEnergy(Player player, int amount);
+    
     interface Value {
         boolean worth();
         
