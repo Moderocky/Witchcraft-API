@@ -9,6 +9,7 @@ import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.entity.handle.Handle;
 import mx.kenzie.witchcraft.entity.handle.NPC;
 import mx.kenzie.witchcraft.world.CollisionTraceResult;
+import mx.kenzie.witchcraft.world.WorldEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -187,6 +188,8 @@ public interface Minecraft {
     void dispatchCommand(CommandSender sender, String command);
     
     FloatingBlock launchBlock(Block block, LivingEntity caster, int delay, double damage);
+    
+    WorldEvent startWorldEvent(WorldEvent.Type type, Location location, Player starter);
     
     @SuppressWarnings("unchecked")
     FloatingBlock spawnFloatingBlock(Location location, LivingEntity caster, FloatingBlock.Type type, Material material);
