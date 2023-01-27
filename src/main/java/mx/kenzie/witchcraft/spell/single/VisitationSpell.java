@@ -31,10 +31,14 @@ public class VisitationSpell extends TeleportationCircleSpell {
     
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final Location location = target.getLocation().add(0, 0.5, 0);
         if (!(caster instanceof Player player)) return;
-        location.setDirection(location.toVector().subtract(caster.getLocation().toVector()));
-        location.setPitch(0);
+        final Location location;
+        if (target == null) location = null; // extending spells use the GUI
+        else {
+            location = target.getLocation().add(0, 0.5, 0);
+            location.setDirection(location.toVector().subtract(caster.getLocation().toVector()));
+            location.setPitch(0);
+        }
         final List<Position> list = new ArrayList<>();
         for (Player online : Bukkit.getOnlinePlayers()) list.add(new Position.Person(online));
         final Position[] positions = list.toArray(new Position[0]);
@@ -47,14 +51,14 @@ public class VisitationSpell extends TeleportationCircleSpell {
             if (slot >= positions.length) return;
             final Position position = positions[slot];
             clicker.closeInventory();
-            this.doPortal(position, location);
+            this.doPortal(position, location, player);
             
         };
         assembleMenu(player, buttons, gui, consumer);
         this.target = null;
     }
     
-    protected void doPortal(Position position, Location location) {
+    protected void doPortal(Position position, Location location, Player player) {
         final Portal portal = CustomEntityType.TANG_PORTAL.spawn(location);
         portal.setOrientation(location.getDirection());
         portal.setCollideConsumer(entity -> {
@@ -83,4 +87,5 @@ public class VisitationSpell extends TeleportationCircleSpell {
         else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
         return true;
     }
+    
 }
