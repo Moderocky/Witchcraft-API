@@ -1,5 +1,6 @@
 package mx.kenzie.witchcraft.world;
 
+import mx.kenzie.witchcraft.entity.EventMarker;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -16,6 +17,7 @@ public abstract class WorldEvent implements Keyed {
     protected final Type type;
     protected final long start;
     protected @NotNull Status status;
+    public EventMarker marker;
     
     protected WorldEvent(Type type, Location location) {
         this.location = location;
@@ -65,6 +67,16 @@ public abstract class WorldEvent implements Keyed {
     
     public Type getType() {
         return type;
+    }
+    
+    public void discard() {
+    
+    }
+    
+    protected void close() {
+        if (marker == null) return;
+        this.marker.clearEvent();
+        this.marker.remove();
     }
     
     public enum Status {
