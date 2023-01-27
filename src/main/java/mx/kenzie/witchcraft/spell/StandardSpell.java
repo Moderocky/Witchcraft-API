@@ -150,7 +150,7 @@ public abstract class StandardSpell implements Spell {
             if (event.isCancelled()) return SpellResult.CANCELLED;
             this.takeIngredients(caster);
             final int taken = this.takeEnergy(caster);
-            if (!PlayerData.getData(player).isSorcerer()) {
+            if (taken > 0 && !PlayerData.getData(player).isSorcerer()) {
                 final int restore = (int) Math.min(taken, 3 + Modifier.get(caster)
                     .get(Modifier.Type.ENERGY_REGENERATION));
                 SpellManager.getInstance().regenerateEnergy(player, restore * 2);
@@ -175,8 +175,9 @@ public abstract class StandardSpell implements Spell {
         final int bonus = WitchcraftAPI.spells.getBonusEnergy(caster, caster.getEquipment());
         if (!(caster instanceof Player player)) return 0;
         final int energy = this.getEnergy();
-        final int taken = ((energy - bonus) * 2);
-        player.setFoodLevel(player.getFoodLevel() - ((energy - bonus) * 2));
+        final int taken = (energy - bonus);
+        if (taken < 1) return 0;
+        player.setFoodLevel(player.getFoodLevel() - (taken * 2));
         return taken;
     }
     
