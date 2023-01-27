@@ -17,6 +17,10 @@ public class PlayerInteraction extends Interaction {
         this.hand = hand;
     }
     
+    public Player getPlayer() {
+        return player;
+    }
+    
     public Hand getHand() {
         return hand;
     }

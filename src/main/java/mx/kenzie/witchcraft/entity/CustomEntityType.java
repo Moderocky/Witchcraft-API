@@ -71,17 +71,17 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
             return WitchcraftAPI.minecraft.spawnFloatingBlock(location, owner, FloatingBlock.Type.STATIC, Material.MUD);
         }
     };
+    public static final CustomEntityType<? extends EventMarker> WORLD_EVENT = new CustomEntityType<>("WORLD_EVENT");
     
     public final String key;
     public final boolean summon;
     public Object internalType;
     
-    
-    CustomEntityType(String key) {
+    public CustomEntityType(String key) {
         this(key, false);
     }
     
-    CustomEntityType(String key, boolean summon) {
+    public CustomEntityType(String key, boolean summon) {
         this.key = key.trim().toLowerCase().replace(' ', '_');
         this.summon = summon;
     }

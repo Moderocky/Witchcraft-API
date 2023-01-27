@@ -192,6 +192,13 @@ public class PlayerData extends CasterData<PlayerData> {
         return new HashSet<>(List.of(memory.spells));
     }
     
+    public void removeSpellsFrom(MagicClass style) {
+        final Set<LearnedSpell> set = this.getSpells();
+        final boolean result = set.removeIf(learned -> learned.getStyle() == style);
+        this.memory.spells = set.toArray(new LearnedSpell[0]);
+        this.scheduleSave();
+    }
+    
     public boolean forgetSpell(Spell spell) { // true if yes, false if none
         final Set<LearnedSpell> set = this.getSpells();
         final boolean result = set.removeIf(learned -> learned.getSpell() == spell);

@@ -4,6 +4,7 @@ import mx.kenzie.witchcraft.ResourceManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.entity.Player;
 
 public enum MagicClass {
     PURE {},
@@ -93,6 +94,14 @@ public enum MagicClass {
     
     public long discordId() {
         return 1062802667816099961L;
+    }
+    
+    public void apply(Player player) {
+        final PlayerData data = PlayerData.getData(player);
+        final MagicClass old = data.style;
+        if (old == this) return;
+        data.setClass(this);
+        data.removeSpellsFrom(old);
     }
     
 }
