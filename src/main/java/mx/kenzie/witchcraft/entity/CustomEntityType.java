@@ -63,6 +63,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Summon> HELL_BAT_SUMMON = new CustomEntityType<>("HELL_BAT_SUMMON", true);
     public static final CustomEntityType<? extends Portal> DEMON_SPAWN_PORTAL = new CustomEntityType<>("DEMON_SPAWN_PORTAL");
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
+    public static final CustomEntityType<? extends Demon> INQUISITOR_DEMON = new CustomEntityType<>("INQUISITOR_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
     public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
     public static final CustomEntityType<? extends FloatingBlock> FLOATING_BLOCK = new CustomEntityType<>("FLOATING_BLOCK") {
