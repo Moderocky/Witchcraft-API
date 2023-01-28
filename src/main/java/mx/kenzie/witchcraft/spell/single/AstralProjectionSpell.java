@@ -17,12 +17,12 @@ public class AstralProjectionSpell extends StandardSpell {
     public AstralProjectionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -56,5 +56,5 @@ public class AstralProjectionSpell extends StandardSpell {
         }, 300, 100, TimeUnit.MILLISECONDS);
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, end, lifetime * 20L);
     }
-    
+
 }

@@ -109,16 +109,6 @@ public class Coven extends LazyWrittenData<Coven> {
         return coven.getTeam();
     }
 
-    public Team getTeam() {
-        if (team != null) return team;
-        final Team here = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(uuid.toString());
-        if (here != null) return team = here;
-        final Team created = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(uuid.toString());
-        created.setCanSeeFriendlyInvisibles(true);
-        created.setAllowFriendlyFire(false);
-        return team = created;
-    }
-
     public static Coven createNewCoven(UUID creator) {
         final Coven coven = new Coven();
         coven.uuid = UUID.randomUUID();
@@ -131,6 +121,16 @@ public class Coven extends LazyWrittenData<Coven> {
         COVEN_CACHE.put(coven.uuid, coven);
         coven.scheduleSave();
         return coven;
+    }
+
+    public Team getTeam() {
+        if (team != null) return team;
+        final Team here = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(uuid.toString());
+        if (here != null) return team = here;
+        final Team created = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(uuid.toString());
+        created.setCanSeeFriendlyInvisibles(true);
+        created.setAllowFriendlyFire(false);
+        return team = created;
     }
 
     @Override

@@ -10,12 +10,12 @@ import java.util.List;
 
 public interface Session {
     void resetCast();
-    
+
     void input(PlayerInteractEvent event);
-    
+
     void drawPattern(Pattern pattern, Location start, int delay);
-    
+
     void drawPattern(Pattern pattern, Duration duration);
-    
+
     void drawUI(List<Angle> angles);
 }

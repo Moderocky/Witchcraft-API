@@ -11,7 +11,7 @@ import static java.lang.annotation.ElementType.METHOD;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Default {
-    
+
     boolean value() default true;
-    
+
 }

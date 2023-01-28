@@ -13,18 +13,18 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class CloakOfDarknessSpell extends AbstractSummonSpell {
-    
+
     transient final ParticleCreator creator = ParticleCreator.of(Particle.FIREWORKS_SPARK);
-    
+
     public CloakOfDarknessSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.SHADOW) < 1 && super.canCast(caster);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);

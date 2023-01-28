@@ -13,29 +13,29 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 
 public class FortifySpell extends TunnelSpell {
-    
+
     private transient final ParticleCreator creator = ParticleCreator.of(Particle.ASH),
         repel = ParticleCreator.of(Particle.WAX_OFF);
     private transient Block start;
-    
+
     public FortifySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         this.start = caster.getTargetBlockExact(5);
         if (start == null) return false;
         return this.isAllowed(start);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location point = start.getLocation();
         this.fortify(point, caster);
         this.creator.drawPoof(point, 3, 30);
     }
-    
+
     public void fortify(Location location, LivingEntity caster) {
         final Block centre = location.getBlock();
         if (!this.isSoft(centre)) return;
@@ -53,9 +53,9 @@ public class FortifySpell extends TunnelSpell {
                     else minecraft.setBlock(block, this.getSolid());
                 }
     }
-    
+
     protected BlockData getSolid() {
         return Material.STONE.createBlockData();
     }
-    
+
 }

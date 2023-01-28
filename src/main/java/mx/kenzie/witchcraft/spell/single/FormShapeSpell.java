@@ -22,12 +22,12 @@ public class FormShapeSpell extends StandardSpell {
     public FormShapeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player thing)) return;

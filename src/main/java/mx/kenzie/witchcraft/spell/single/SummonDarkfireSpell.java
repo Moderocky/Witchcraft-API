@@ -12,7 +12,7 @@ public class SummonDarkfireSpell extends BaneSpell {
     public SummonDarkfireSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         WitchcraftAPI.executor.submit(() -> {
@@ -25,5 +25,5 @@ public class SummonDarkfireSpell extends BaneSpell {
             }
         });
     }
-    
+
 }

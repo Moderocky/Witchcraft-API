@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class HexSpell extends AbstractTargetedSpell {
-    
+
     protected transient final Color color = new Color(147, 18, 183);
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
@@ -28,16 +28,16 @@ public class HexSpell extends AbstractTargetedSpell {
         .force(true);
     protected transient final ParticleBuilder dust = new ParticleBuilder(Particle.DRIPPING_OBSIDIAN_TEAR)
         .count(0).force(true);
-    
+
     public HexSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range, true);
@@ -70,5 +70,5 @@ public class HexSpell extends AbstractTargetedSpell {
             creator.drawPoof(target, 1.1, 16);
         });
     }
-    
+
 }

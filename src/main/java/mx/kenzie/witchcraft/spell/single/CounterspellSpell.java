@@ -23,7 +23,7 @@ public class CounterspellSpell extends CounteractSpell {
     public CounterspellSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final List<Entity> entities = new ArrayList<>(caster.getNearbyEntities(range, range / 2F, range));
@@ -44,5 +44,5 @@ public class CounterspellSpell extends CounteractSpell {
             .createCircle(new Vector(0, 1, 0), 1, 35).draw(location);
         caster.getWorld().playSound(location, Sound.BLOCK_BEACON_DEACTIVATE, 1.0F, 0.5F);
     }
-    
+
 }

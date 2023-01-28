@@ -24,16 +24,16 @@ public class WitherAuraSpell extends AbstractWardSpell {
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0)
         .force(true);
-    
+
     public WitherAuraSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     public static Location getRandom(Location centre) {
         final Random random = ThreadLocalRandom.current();
         return centre.add((random.nextDouble() - 0.5) * 20, (random.nextDouble() - 0.2) * 8, (random.nextDouble() - 0.5) * 20);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
@@ -60,5 +60,5 @@ public class WitherAuraSpell extends AbstractWardSpell {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
     }
-    
+
 }

@@ -24,14 +24,14 @@ import java.util.Set;
 public class SolidarityForeverSpell extends AbstractTeleportSpell {
     protected transient final ParticleCreator creator;
     protected transient List<Block> blocks;
-    
+
     public SolidarityForeverSpell(Map<String, Object> map) {
         super(map);
         if (!WitchcraftAPI.isTest)
             creator = WitchcraftAPI.client.particles(new ParticleBuilder(Particle.SPELL_WITCH).count(2).force(true));
         else creator = null;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Coven coven = Coven.getCoven(caster);
@@ -68,7 +68,7 @@ public class SolidarityForeverSpell extends AbstractTeleportSpell {
             }
         });
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Location centre = caster.getEyeLocation();

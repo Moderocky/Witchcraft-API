@@ -19,19 +19,19 @@ public enum Title {
     DIVINE("All that you know is at an end.", "Unobtainable."),
     BATTLEMAGE("Magic is sharper than any sword.", "Kill a player with magic."),
     GRANDMASTER("The great mystery is revealed.", "Master every spell.");
-    
+
     public final String description, goal;
-    
+
     Title(String description, String goal) {
         this.description = description;
         this.goal = goal;
     }
-    
+
     public Component displayName() {
         return Component.text(this.toString())
             .hoverEvent(Component.textOfChildren(Component.text(this.description), Component.newline(), Component.text(this.goal)));
     }
-    
+
     @Override
     public String toString() {
         return ResourceManager.pascalCase(this.name().replace('_', ' '));

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.*;
 
 public class ItemMaterial implements ItemArchetype {
-    
+
     public String id;
     public String name;
     public String description;
@@ -47,14 +47,14 @@ public class ItemMaterial implements ItemArchetype {
     private PlayerProfile profile = null;
     private ItemStack stack = null;
     private PlaceableMaterial[] building = new PlaceableMaterial[0];
-    
+
     public ItemMaterial() {
     }
-    
+
     public static ItemMaterial fromJson(Map<String, Object> element) {
         return apply(new ItemMaterial(), element);
     }
-    
+
     public static ItemMaterial apply(ItemMaterial item, Map<String, Object> map) {
         item.id = map.get("id").toString();
         item.name = map.get("name").toString();
@@ -95,23 +95,7 @@ public class ItemMaterial implements ItemArchetype {
         }
         return item;
     }
-    
-    public String baseConvert(String url) {
-        URI actualUrl;
-        try {
-            actualUrl = new URI(url);
-        } catch (URISyntaxException exception) {
-            throw new RuntimeException(exception);
-        }
-        JsonObject urlObj = new JsonObject();
-        urlObj.addProperty("url", actualUrl.toString());
-        JsonObject skin = new JsonObject();
-        skin.add("SKIN", urlObj);
-        JsonObject object = new JsonObject();
-        object.add("textures", skin);
-        return Base64.getEncoder().encodeToString(object.toString().getBytes(StandardCharsets.UTF_8));
-    }
-    
+
     public static PlayerProfile createProfile(String texture) {
         texture = baseConvert0("http://textures.minecraft.net/texture/" + texture);
         UUID uuid;
@@ -129,7 +113,7 @@ public class ItemMaterial implements ItemArchetype {
 //        profile.setProperty(new ProfileProperty("textures", skinValue, skinSignature));
         return profile;
     }
-    
+
     static String baseConvert0(String url) {
         URI actualUrl;
         try {
@@ -145,35 +129,55 @@ public class ItemMaterial implements ItemArchetype {
         object.add("textures", skin);
         return Base64.getEncoder().encodeToString(object.toString().getBytes(StandardCharsets.UTF_8));
     }
-    
+
+    public static org.bukkit.Color convert(Color color) {
+        return org.bukkit.Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public String baseConvert(String url) {
+        URI actualUrl;
+        try {
+            actualUrl = new URI(url);
+        } catch (URISyntaxException exception) {
+            throw new RuntimeException(exception);
+        }
+        JsonObject urlObj = new JsonObject();
+        urlObj.addProperty("url", actualUrl.toString());
+        JsonObject skin = new JsonObject();
+        skin.add("SKIN", urlObj);
+        JsonObject object = new JsonObject();
+        object.add("textures", skin);
+        return Base64.getEncoder().encodeToString(object.toString().getBytes(StandardCharsets.UTF_8));
+    }
+
     public Set<PlaceableMaterial> getBuilding() {
         return new LinkedHashSet<>(List.of(building));
     }
-    
+
     @Override
     public boolean isProtected() {
         return restricted;
     }
-    
+
     public Set<Tag> tags() {
         return tags;
     }
-    
+
     @Override
     public String name() {
         return name;
     }
-    
+
     @Override
     public Rarity rarity() {
         return rarity;
     }
-    
+
     @Override
     public String id() {
         return id;
     }
-    
+
     public List<Component> itemLore() {
         final List<Component> list = ItemArchetype.super.itemLore();
         if (!tags.isEmpty()) {
@@ -186,12 +190,12 @@ public class ItemMaterial implements ItemArchetype {
         }
         return list;
     }
-    
+
     @Override
     public String description() {
         return description;
     }
-    
+
     @Override
     public ItemStack create() {
         if (stack != null) return stack.clone();
@@ -215,16 +219,12 @@ public class ItemMaterial implements ItemArchetype {
         item.setItemMeta(meta);
         return item.clone();
     }
-    
+
     public PlayerProfile getProfile() {
         if (profile == null) profile = this.createProfile();
         return profile;
     }
-    
-    public static org.bukkit.Color convert(Color color) {
-        return org.bukkit.Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
-    }
-    
+
     private PlayerProfile createProfile() {
         if (!this.isSkull() || (skinValue == null)) return null;
         UUID uuid;
@@ -242,28 +242,28 @@ public class ItemMaterial implements ItemArchetype {
 //        profile.setProperty(new ProfileProperty("textures", skinValue, skinSignature));
         return profile;
     }
-    
+
     public boolean isSkull() {
         return material == Material.PLAYER_HEAD;
     }
-    
+
     @Override
     public boolean isEmpty() {
         return false;
     }
-    
+
     public boolean isFinite() {
         return finite;
     }
-    
+
     public Material material() {
         return material;
     }
-    
+
     @Override
     public String toString() {
         return Fern.out(this, null);
     }
-    
-    
+
+
 }

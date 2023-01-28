@@ -10,16 +10,16 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 
 public class FirebatsSpell extends AbstractSummonSpell {
-    
+
     public FirebatsSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.HELL_BAT_SUMMON) < 1 && super.canCast(caster);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.5, 0.5);

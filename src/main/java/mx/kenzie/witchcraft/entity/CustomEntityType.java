@@ -72,35 +72,35 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
         }
     };
     public static final CustomEntityType<? extends EventMarker> WORLD_EVENT = new CustomEntityType<>("WORLD_EVENT");
-    
+
     public final String key;
     public final boolean summon;
     public Object internalType;
-    
+
     public CustomEntityType(String key) {
         this(key, false);
     }
-    
+
     public CustomEntityType(String key, boolean summon) {
         this.key = key.trim().toLowerCase().replace(' ', '_');
         this.summon = summon;
     }
-    
+
     public String name() {
         return key;
     }
-    
+
     public EntityClass spawn(Location location) {
         return WitchcraftAPI.minecraft.spawn(this, location, false);
     }
-    
+
     @SuppressWarnings("unchecked")
     public EntityClass summon(LivingEntity owner, Location location) {
         return (EntityClass) WitchcraftAPI.minecraft.summon(owner, (CustomEntityType<? extends Owned>) this, location);
     }
-    
+
     public LivingEntity spawn(Location location, Coven coven) {
         throw new RuntimeException("Not an enchanting table.");
     }
-    
+
 }

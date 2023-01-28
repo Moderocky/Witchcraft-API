@@ -9,20 +9,20 @@ import java.util.UUID;
 public class AreaWardInstance extends WardInstance {
     protected UUID world;
     protected int x1, y1, z1, x2, y2, z2;
-    
+
     protected AreaWardInstance(long expiry) {
         super(expiry);
     }
-    
+
     protected AreaWardInstance() {
         super(0);
     }
-    
+
     @Override
     public UUID getWorld() {
         return world;
     }
-    
+
     @Override
     public boolean includes(Location location) {
         if (location == null) return false;
@@ -32,7 +32,7 @@ public class AreaWardInstance extends WardInstance {
         if (y < y1 || y > y2) return false;
         return !(z < z1) && !(z > z2);
     }
-    
+
     public void save(OutputStream stream) {
         final Fern fern = new Fern(null, stream);
         fern.write(this);

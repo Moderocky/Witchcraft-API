@@ -9,14 +9,14 @@ public interface RecipeManager {
     static RecipeManager getInstance() {
         return WitchcraftAPI.recipes;
     }
-    
+
     boolean hasMatch(ItemStack[] matrix);
-    
+
     RecipeType getRecipe(ItemStack[] matrix);
-    
+
     boolean hasPossibleMatches(ItemStack[] matrix);
-    
+
     List<RecipeType> getPartialMatches(ItemStack[] matrix);
-    
+
     List<RecipeType> getRecipes();
 }

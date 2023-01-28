@@ -9,9 +9,9 @@ public enum SpellResult {
     CANCELLED(false),
     NOT_IN_HOME(false),
     OTHER(false);
-    
+
     public final boolean success;
-    
+
     SpellResult(boolean success) {
         this.success = success;
     }

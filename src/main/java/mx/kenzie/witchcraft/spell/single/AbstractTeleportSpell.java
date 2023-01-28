@@ -19,7 +19,7 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
     public AbstractTeleportSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     public static List<Block> getValidTeleportSpaces(Location centre, double radius) {
         final World world = centre.getWorld();
         final List<Block> blocks = new ArrayList<>();
@@ -40,25 +40,25 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
-    
+
     public static boolean isInvalidStand(Block block) {
         return block.getType().isCollidable();
     }
-    
+
     public static boolean isInvalidAbove(Block block) {
         return block.getRelative(BlockFace.UP).getType().isCollidable();
     }
-    
+
     public static boolean isInvalidBelow(Block block) {
         return !block.getRelative(BlockFace.DOWN).getType().isSolid();
     }
-    
+
     public static boolean isValidResult(Block block, boolean stand) {
         if (AbstractTeleportSpell.isInvalidStand(block)) return false;
         if (AbstractTeleportSpell.isInvalidAbove(block)) return false;
         return !stand || !AbstractTeleportSpell.isInvalidBelow(block);
     }
-    
+
     public static List<Block> getValidTeleportSpacesNoSight(Location centre, double radius) {
         final World world = centre.getWorld();
         final List<Block> blocks = new ArrayList<>();
@@ -78,7 +78,7 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
-    
+
     public static List<Block> getUnoccupiedTeleportSpaces(Location centre, double radius) {
         final World world = centre.getWorld();
         final List<Block> blocks = new ArrayList<>();
@@ -97,10 +97,10 @@ public abstract class AbstractTeleportSpell extends StandardSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player && Protection.getInstance().canTeleport(caster, caster.getLocation());
     }
-    
+
 }

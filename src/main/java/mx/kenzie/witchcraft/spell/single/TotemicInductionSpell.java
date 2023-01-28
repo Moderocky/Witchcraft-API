@@ -19,16 +19,16 @@ public class TotemicInductionSpell extends StandardSpell {
         .force(true));
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.REDSTONE.builder().count(0))
         .color(new Color(20, 18, 21));
-    
+
     public TotemicInductionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getEyeLocation();

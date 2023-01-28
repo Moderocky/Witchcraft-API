@@ -18,40 +18,19 @@ import java.util.concurrent.ThreadLocalRandom;
 
 abstract class AbstractSummonSpell extends StandardSpell {
     protected transient Block target;
-    
+
     public AbstractSummonSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     protected static int summonCount(LivingEntity caster) {
         return Minecraft.getInstance().nearbySummons(caster, null);
     }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        if (WitchcraftAPI.minecraft.nearbySummons(caster, null) >= maxSummonCount(caster)) return false;
-        Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
-        if (block == null) return false;
-        block = block.getRelative(BlockFace.UP);
-        attempt:
-        {
-            if (AbstractTeleportSpell.isInvalidStand(block)) break attempt;
-            if (AbstractTeleportSpell.isInvalidAbove(block)) break attempt;
-            if (AbstractTeleportSpell.isInvalidBelow(block)) break attempt;
-            this.target = block;
-            return true;
-        }
-        final List<Block> blocks = getValidSpawnSpaces(block.getLocation(), 3);
-        if (blocks.isEmpty()) return false;
-        if (blocks.size() == 1) this.target = blocks.get(0);
-        else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
-        return true;
-    }
-    
+
     protected static int maxSummonCount(LivingEntity caster) {
         return 5;
     }
-    
+
     public static List<Block> getValidSpawnSpaces(Location centre, double radius) {
         final World world = centre.getWorld();
         final List<Block> blocks = new ArrayList<>();
@@ -72,5 +51,26 @@ abstract class AbstractSummonSpell extends StandardSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
-    
+
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        if (WitchcraftAPI.minecraft.nearbySummons(caster, null) >= maxSummonCount(caster)) return false;
+        Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
+        if (block == null) return false;
+        block = block.getRelative(BlockFace.UP);
+        attempt:
+        {
+            if (AbstractTeleportSpell.isInvalidStand(block)) break attempt;
+            if (AbstractTeleportSpell.isInvalidAbove(block)) break attempt;
+            if (AbstractTeleportSpell.isInvalidBelow(block)) break attempt;
+            this.target = block;
+            return true;
+        }
+        final List<Block> blocks = getValidSpawnSpaces(block.getLocation(), 3);
+        if (blocks.isEmpty()) return false;
+        if (blocks.size() == 1) this.target = blocks.get(0);
+        else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
+        return true;
+    }
+
 }

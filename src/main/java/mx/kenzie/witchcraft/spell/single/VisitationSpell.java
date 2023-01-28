@@ -24,11 +24,11 @@ import java.util.function.BiConsumer;
 
 public class VisitationSpell extends TeleportationCircleSpell {
     protected transient Block target;
-    
+
     public VisitationSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -52,12 +52,12 @@ public class VisitationSpell extends TeleportationCircleSpell {
             final Position position = positions[slot];
             clicker.closeInventory();
             this.doPortal(position, location, player);
-            
+
         };
         assembleMenu(player, buttons, gui, consumer);
         this.target = null;
     }
-    
+
     protected void doPortal(Position position, Location location, Player player) {
         final Portal portal = CustomEntityType.TANG_PORTAL.spawn(location);
         portal.setOrientation(location.getDirection());
@@ -67,7 +67,7 @@ public class VisitationSpell extends TeleportationCircleSpell {
             portal.remove();
         });
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         Block block = caster.getTargetBlockExact(25, FluidCollisionMode.NEVER);
@@ -87,5 +87,5 @@ public class VisitationSpell extends TeleportationCircleSpell {
         else this.target = blocks.get(ThreadLocalRandom.current().nextInt(blocks.size()));
         return true;
     }
-    
+
 }

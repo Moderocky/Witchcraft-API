@@ -12,16 +12,16 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class RainbowRoadSpell extends StandardSpell {
-    
+
     public RainbowRoadSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location point = caster.getLocation().add(0, -1, 0);
@@ -35,5 +35,5 @@ public class RainbowRoadSpell extends StandardSpell {
             }
         });
     }
-    
+
 }

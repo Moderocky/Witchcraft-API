@@ -17,13 +17,13 @@ import java.util.Map;
 public class ShadowstepSpell extends AbstractTeleportSpell {
     private transient final ParticleCreator creator = ParticleCreator.of(Particle.REDSTONE.builder().count(0))
         .color(new Color(20, 18, 21));
-    
+
     private transient List<Block> blocks;
-    
+
     public ShadowstepSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location start, location = start = caster.getEyeLocation();
@@ -46,7 +46,7 @@ public class ShadowstepSpell extends AbstractTeleportSpell {
         world.playSound(start, Sound.BLOCK_END_PORTAL_SPAWN, 0.2F, 1.9F);
         world.playSound(end, Sound.BLOCK_END_PORTAL_SPAWN, 0.2F, 1.9F);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Block test = caster.getTargetBlockExact(25);

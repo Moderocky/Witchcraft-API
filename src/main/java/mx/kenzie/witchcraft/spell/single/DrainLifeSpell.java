@@ -14,11 +14,11 @@ import java.util.Map;
 public class DrainLifeSpell extends AbstractEntitySpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.REDSTONE_BLOCK);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 0.8, 26);
-    
+
     public DrainLifeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         assert target != null;
@@ -43,7 +43,7 @@ public class DrainLifeSpell extends AbstractEntitySpell {
             }
         });
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Minecraft minecraft = Minecraft.getInstance();

@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RepositionSpell extends WarpSpell {
     protected transient final ParticleCreator creator;
     protected transient Location end;
-    
+
     public RepositionSpell(Map<String, Object> map) {
         super(map);
         if (!WitchcraftAPI.isTest)
@@ -27,7 +27,7 @@ public class RepositionSpell extends WarpSpell {
                 .count(1));
         else creator = null;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         this.end.setDirection(caster.getLocation().add(0, 0.5, 0).toVector().subtract(end.toVector()));
@@ -45,7 +45,7 @@ public class RepositionSpell extends WarpSpell {
         world.playSound(s1, Sound.BLOCK_BEACON_ACTIVATE, 1.8F, 1.1F);
         world.playSound(s2, Sound.BLOCK_BEACON_DEACTIVATE, 1.8F, 1.1F);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Location location = caster.getLocation();

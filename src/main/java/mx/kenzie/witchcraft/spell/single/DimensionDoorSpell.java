@@ -23,11 +23,11 @@ import java.util.function.BiConsumer;
 
 public class DimensionDoorSpell extends ThassalurgySpell {
     protected transient Target target;
-    
+
     public DimensionDoorSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final RayTraceResult result = target.result();
@@ -54,10 +54,10 @@ public class DimensionDoorSpell extends ThassalurgySpell {
             Minecraft.getInstance().ensureMain(() -> assembleMenu(player, buttons, gui, consumer));
         });
     }
-    
+
     protected void doGateway(Position position, Block first) {
         final DimensionDoor door = CustomEntityType.DIMENSION_DOOR.spawn(first.getLocation().add(0.5, 0, 0.5));
         door.setOutcome(position.getLocation());
     }
-    
+
 }

@@ -15,7 +15,7 @@ public class ArgInteger implements Argument<Integer> {
     private String label = "int";
     private boolean required = true;
     private Integer def = null;
-    
+
     @Override
     public @NotNull Integer serialise(String string) {
         try {
@@ -24,7 +24,7 @@ public class ArgInteger implements Argument<Integer> {
             return def;
         }
     }
-    
+
     @Override
     public boolean matches(String string) {
         if (string.isEmpty()) return false;
@@ -35,44 +35,44 @@ public class ArgInteger implements Argument<Integer> {
             return false;
         }
     }
-    
+
     @Override
     public @NotNull String getName() {
         return label;
     }
-    
+
     @Override
     public @Nullable List<String> getCompletions() {
         return null;
     }
-    
+
     @Override
     public boolean isPlural() {
         return false;
     }
-    
+
     @Override
     public boolean isRequired() {
         return required;
     }
-    
+
     @Override
     public ArgInteger setRequired(boolean boo) {
         required = boo;
         return this;
     }
-    
+
     @Override
     public ArgInteger setLabel(@NotNull String label) {
         this.label = label;
         return this;
     }
-    
+
     @Override
     public Pattern getPattern() {
         return pattern;
     }
-    
+
     public ArgInteger setDefault(Integer def) {
         this.def = def;
         return this;

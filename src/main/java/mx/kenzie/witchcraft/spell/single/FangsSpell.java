@@ -9,19 +9,19 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class FangsSpell extends AbstractTargetedSpell {
-    
+
     protected final Polygon shape = UnholyBlastSpell.PURPLE.createPolygon(new Vector(0, 1, 0), 1, 5);
-    
+
     public FangsSpell(Map<String, Object> map) {
         super(map);
         if (shape != null) shape.fillInLines(true, 0.2);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, 15, true, Mode.NOT_ALLIES);
@@ -32,5 +32,5 @@ public class FangsSpell extends AbstractTargetedSpell {
         Minecraft.getInstance().spawnFangs(caster, end, range, scale, damage);
         this.shape.draw(caster.getLocation().add(0, 0.2, 0));
     }
-    
+
 }

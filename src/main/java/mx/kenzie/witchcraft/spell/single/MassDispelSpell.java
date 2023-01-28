@@ -24,16 +24,16 @@ public class MassDispelSpell extends StandardSpell {
         .color(Color.fromRGB(35, 173, 252))
         .count(0).force(true));
     protected final ParticleBuilder soul = new ParticleBuilder(Particle.SOUL_FIRE_FLAME).count(0).extra(0);
-    
+
     public MassDispelSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         for (PotionEffectType value : PotionEffectType.values()) {

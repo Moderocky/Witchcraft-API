@@ -23,21 +23,21 @@ import java.util.function.BiConsumer;
 
 public class WonderworkSpell extends StandardSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.TOTEM);
-    
+
     public WonderworkSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final PaginatedGUI gui = new PaginatedGUI(WitchcraftAPI.plugin, InventoryType.DISPENSER, "Wonderwork");
-        gui.setLayout(new String[] {
+        gui.setLayout(new String[]{
             "A#B",
             "###",
             "C#D"
@@ -67,17 +67,17 @@ public class WonderworkSpell extends StandardSpell {
         gui.finalise();
         gui.open(player);
     }
-    
+
     @SuppressWarnings({"unchecked", "RawUseOfParameterized"})
     protected void spawnItem(Player player, InventoryClickEvent click) {
         this.spawnThing(player, (Set) WitchcraftAPI.resources.getItems());
     }
-    
+
     @SuppressWarnings({"unchecked", "RawUseOfParameterized"})
     protected void spawnMaterial(Player player, InventoryClickEvent click) {
         this.spawnThing(player, (Set) WitchcraftAPI.resources.getMaterials());
     }
-    
+
     private void spawnThing(Player player, Set<ItemArchetype> archetypes) {
         final List<ItemStack> materials = new ArrayList<>(380);
         for (ItemArchetype material : archetypes) {

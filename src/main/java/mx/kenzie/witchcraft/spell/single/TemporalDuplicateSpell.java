@@ -13,13 +13,13 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class TemporalDuplicateSpell extends AbstractSummonSpell {
-    
+
     transient final ParticleCreator creator = ParticleCreator.of(Particle.SOUL.builder().count(0));
-    
+
     public TemporalDuplicateSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -38,19 +38,19 @@ public class TemporalDuplicateSpell extends AbstractSummonSpell {
             image.remove();
         }, Math.min(Math.max((((long) amplitude + 1) * 10), this.minLifeTime()), this.maxLifeTime()) * 20);
     }
-    
+
     protected ParticleCreator getCreator() {
         return this.creator;
     }
-    
+
     protected int minLifeTime() {
         return 14;
     }
-    
+
     protected int maxLifeTime() {
         return 70;
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return super.canCast(caster) && caster instanceof Player && WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.MIRROR_IMAGE) < 2;

@@ -12,9 +12,9 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Permission {
-    
+
     String value();
-    
+
     String message() default "";
-    
+
 }

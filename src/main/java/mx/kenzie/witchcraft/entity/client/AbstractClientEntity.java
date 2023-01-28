@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public abstract class AbstractClientEntity implements IClientsideEntity {
-    
+
     public static final Random RANDOM = new Random();
     public final UUID uuid;
     public final int id;
@@ -32,28 +32,28 @@ public abstract class AbstractClientEntity implements IClientsideEntity {
     public float pitch;
     protected Location location = Bukkit.getWorlds().get(0).getSpawnLocation();
     protected EntityType type = EntityType.PIG;
-    
+
     public AbstractClientEntity(UUID uuid) {
         this(uuid, getRandom());
     }
-    
+
     public AbstractClientEntity(UUID uuid, int id) {
         this.uuid = uuid;
         this.id = id;
     }
-    
-    protected static int getRandom() {
-        return 5000 + RANDOM.nextInt(3000);
-    }
-    
+
     public AbstractClientEntity(int id) {
         this(UUID.randomUUID(), id);
     }
-    
+
     public AbstractClientEntity() {
         this(UUID.randomUUID(), getRandom());
     }
-    
+
+    protected static int getRandom() {
+        return 5000 + RANDOM.nextInt(3000);
+    }
+
     @Override
     public void show(Player... players) {
         WitchcraftAPI.client.spawnClientsideEntity(id, location, getType().getName(), players);
@@ -64,7 +64,7 @@ public abstract class AbstractClientEntity implements IClientsideEntity {
             updateEquipment(player);
         }
     }
-    
+
     @Override
     public void hide(Player... players) {
         WitchcraftAPI.client.destroyClientsideEntity(id, players);
@@ -72,49 +72,49 @@ public abstract class AbstractClientEntity implements IClientsideEntity {
             this.players.remove(player);
         }
     }
-    
+
     @Override
     public Set<Player> getViewers() {
         return new HashSet<>(players);
     }
-    
+
     @Override
     public Location getLocation() {
         return location;
     }
-    
+
     @Override
     public void setLocation(Location location) {
         this.location = location;
     }
-    
+
     @Override
     public UUID getUUID() {
         return uuid;
     }
-    
+
     @Override
     public int getId() {
         return id;
     }
-    
+
     @Override
     public int getRawType() {
         return type.getTypeId();
     }
-    
+
     public abstract void updateMetadata();
-    
+
     @Override
     public EntityType getType() {
         return type;
     }
-    
+
     @Override
     public void setType(EntityType type) {
         this.type = type;
     }
-    
+
     @Override
     public void remove() {
         synchronized (players) {
@@ -122,32 +122,32 @@ public abstract class AbstractClientEntity implements IClientsideEntity {
         }
         WitchcraftAPI.client.remove(this);
     }
-    
+
     @Override
     public boolean isInvisible() {
         return invisible;
     }
-    
+
     @Override
     public void setInvisible(boolean boo) {
         invisible = boo;
     }
-    
+
     @Override
     public boolean isGlowing() {
         return glowing;
     }
-    
+
     @Override
     public void setGlowing(boolean boo) {
         glowing = boo;
     }
-    
+
     @Override
     public ItemStack[] getEquipment() {
         return equipment;
     }
-    
+
     public abstract void updateEquipment(Player player);
-    
+
 }

@@ -18,12 +18,12 @@ public class InvisibilitySpell extends AbstractPotionSpell {
     public InvisibilitySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getEyeLocation();
@@ -41,12 +41,12 @@ public class InvisibilitySpell extends AbstractPotionSpell {
             }
         });
     }
-    
+
     @Override
     public PotionEffectType getPotion() {
         return PotionEffectType.INVISIBILITY;
     }
-    
+
     @Override
     public Color getColor() {
         return new Color(124, 253, 253);

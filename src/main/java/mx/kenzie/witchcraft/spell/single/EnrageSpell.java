@@ -17,16 +17,16 @@ public class EnrageSpell extends StandardSpell {
         .color(new Color(176, 22, 22));
     protected final ParticleCreator darkness = ParticleCreator.of(Particle.SPELL_MOB.builder().count(0))
         .color(new Color(20, 18, 21));
-    
+
     public EnrageSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1, true, true, false);

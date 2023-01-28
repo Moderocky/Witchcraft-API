@@ -12,13 +12,13 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class RaiseFleshSpell extends AbstractGraveSpell {
-    
+
     private transient final ParticleCreator creator = ParticleCreator.of(Material.REDSTONE_BLOCK);
-    
+
     public RaiseFleshSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         for (Grave grave : graves) {

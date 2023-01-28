@@ -18,12 +18,12 @@ public class LevitationSpell extends AbstractPotionSpell {
     public LevitationSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getEyeLocation();
@@ -41,12 +41,12 @@ public class LevitationSpell extends AbstractPotionSpell {
             }
         });
     }
-    
+
     @Override
     public PotionEffectType getPotion() {
         return PotionEffectType.LEVITATION;
     }
-    
+
     @Override
     public Color getColor() {
         return new Color(67, 255, 162);

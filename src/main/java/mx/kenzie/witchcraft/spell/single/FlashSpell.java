@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FlashSpell extends AbstractTeleportSpell {
-    
+
     private transient List<Block> blocks;
-    
+
     public FlashSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getEyeLocation();
@@ -39,7 +39,7 @@ public class FlashSpell extends AbstractTeleportSpell {
         world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 0.8F, 1.4F);
         world.playSound(end, Sound.ENTITY_ENDERMAN_TELEPORT, 0.8F, 1.4F);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Block test = caster.getTargetBlockExact(12);

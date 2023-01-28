@@ -13,23 +13,23 @@ public enum SpellType {
     EDICT(TextColor.color(234, 65, 65)),
     WARD(TextColor.color(73, 143, 138));
     public final TextColor color;
-    
+
     SpellType(TextColor color) {
         this.color = color;
     }
-    
+
     public static SpellType get(String name) {
         return valueOf(name.trim().replace(' ', '_').toUpperCase());
     }
-    
+
     public Component displayName() {
         return Component.text(this.qualifiedName()).color(this.colour());
     }
-    
+
     public String qualifiedName() {
         return ResourceManager.pascalCase(this.name().replace('_', ' '));
     }
-    
+
     public TextColor colour() {
         return color;
     }

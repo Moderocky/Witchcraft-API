@@ -13,9 +13,9 @@ import static java.lang.annotation.ElementType.METHOD;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Arguments {
-    
+
     String[] literal() default {};
-    
+
     Class<? extends Argument<?>>[] value() default {};
-    
+
 }

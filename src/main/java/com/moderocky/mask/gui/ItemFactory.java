@@ -16,12 +16,12 @@ import java.util.function.Consumer;
  * This makes use of chain methods as well as consumers to simplify the process.
  */
 public class ItemFactory {
-    
+
     private final @NotNull List<Consumer<ItemMeta>> consumers = new ArrayList<>();
     private @NotNull Material material;
     private @NotNull ItemMeta meta;
     private int amount;
-    
+
     /**
      * Creates a default factory for an Air item.
      */
@@ -30,7 +30,7 @@ public class ItemFactory {
         amount = 1;
         meta = Bukkit.getItemFactory().getItemMeta(material);
     }
-    
+
     /**
      * Creates an item factory for the given material.
      *
@@ -41,7 +41,7 @@ public class ItemFactory {
         this.amount = 1;
         this.meta = Bukkit.getItemFactory().getItemMeta(material);
     }
-    
+
     /**
      * Creates an item factory for the given material.
      *
@@ -53,7 +53,7 @@ public class ItemFactory {
         this.amount = amount;
         this.meta = Bukkit.getItemFactory().getItemMeta(material);
     }
-    
+
     /**
      * Creates an item factory for the given material.
      *
@@ -66,7 +66,7 @@ public class ItemFactory {
         this.meta = Bukkit.getItemFactory().getItemMeta(material);
         this.consumers.add(consumer);
     }
-    
+
     /**
      * Creates an item factory for the given material.
      *
@@ -80,7 +80,7 @@ public class ItemFactory {
         this.meta = Bukkit.getItemFactory().getItemMeta(material);
         this.consumers.add(consumer);
     }
-    
+
     /**
      * Creates an item factory based on the given item.
      * Remember: any edits will not be applied to this item.
@@ -94,7 +94,7 @@ public class ItemFactory {
         this.meta = itemStack.getItemMeta();
         this.amount = itemStack.getAmount();
     }
-    
+
     /**
      * Set the final amount. This will be bounded between 0 and 127 inclusively.
      *
@@ -105,7 +105,7 @@ public class ItemFactory {
         amount = i;
         return this;
     }
-    
+
     /**
      * Adds a consumer that can be run on the meta upon creation or application.
      * An unlimited number of consumers can be added here.
@@ -117,7 +117,7 @@ public class ItemFactory {
         consumers.add(consumer);
         return this;
     }
-    
+
     /**
      * Applies this factory to an existing item.
      * If the material differs, the meta will be converted to match this new item.
@@ -139,14 +139,14 @@ public class ItemFactory {
         itemStack.setItemMeta(meta);
         return this;
     }
-    
+
     /**
      * @return The given material
      */
     public @NotNull Material getMaterial() {
         return material;
     }
-    
+
     /**
      * Re-sets the material.
      * Will attempt to convert the existing item meta to match the new material.
@@ -162,7 +162,7 @@ public class ItemFactory {
         this.meta = meta;
         return this;
     }
-    
+
     /**
      * @return The meta, with any given consumers applied
      */
@@ -176,7 +176,7 @@ public class ItemFactory {
         }
         return meta;
     }
-    
+
     /**
      * This creates a new item given the provided material and amounts.
      * Any consumers will then be applied to its meta, and the meta will be
@@ -203,5 +203,5 @@ public class ItemFactory {
         }
         return itemStack;
     }
-    
+
 }

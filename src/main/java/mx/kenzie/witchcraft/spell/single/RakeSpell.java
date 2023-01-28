@@ -17,16 +17,16 @@ public class RakeSpell extends AbstractTargetedSpell {
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0).force(true);
-    
+
     public RakeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range, false, Mode.NOT_ALLIES);
@@ -43,5 +43,5 @@ public class RakeSpell extends AbstractTargetedSpell {
             creator.createLine(first, second, 0.2).draw(effect.clone().add(first), 30);
         }
     }
-    
+
 }

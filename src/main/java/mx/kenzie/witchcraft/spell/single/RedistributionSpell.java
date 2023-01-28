@@ -19,16 +19,16 @@ import java.util.Map;
 
 public class RedistributionSpell extends StandardSpell {
     public ParticleBuilder builder = new ParticleBuilder(Particle.DAMAGE_INDICATOR).count(0).force(true);
-    
+
     public RedistributionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location centre = caster.getEyeLocation();
@@ -44,7 +44,7 @@ public class RedistributionSpell extends StandardSpell {
             this.playLine(caster, entity);
         }
     }
-    
+
     protected void playLine(LivingEntity caster, LivingEntity target) {
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         WitchcraftAPI.executor.submit(() -> {

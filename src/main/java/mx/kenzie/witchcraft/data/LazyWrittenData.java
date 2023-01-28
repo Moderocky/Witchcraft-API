@@ -16,11 +16,11 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
         @Override
         public void save() {
         }
-        
+
         @Override
         public void load() {
         }
-        
+
         @Override
         public boolean exists() {
             return false;
@@ -29,12 +29,12 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
     private static final Queue<LazyWrittenData<?>.Task> IO_QUEUE = new ConcurrentLinkedQueue<>();
     private transient final Task save = new SaveTask(), load = new LoadTask();
     protected transient File file;
-    
+
     @SuppressWarnings("unchecked")
     protected LazyWrittenData() {
         target = (Type) this;
     }
-    
+
     public static Runnable processSaveTask() {
         return () -> {
             while (!WitchcraftAPI.isClosing() || !IO_QUEUE.isEmpty()) {
@@ -53,7 +53,7 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
             }
         };
     }
-    
+
     public void save() {
         assert this.isReady();
         try {
@@ -68,17 +68,17 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public synchronized void scheduleSave() {
         if (IO_QUEUE.contains(this.save)) return;
         IO_QUEUE.add(this.save);
     }
-    
+
     public void scheduleLoad() {
         if (IO_QUEUE.contains(this.load)) return;
         IO_QUEUE.add(this.load);
     }
-    
+
     public void load() {
         if (file.exists()) try (final Fern fern = new Fern(new FileInputStream(file))) {
             fern.toObject(this);
@@ -87,33 +87,33 @@ public class LazyWrittenData<Type> extends Lazy<Type> {
         }
         this.finish();
     }
-    
+
     public boolean exists() {
         return file != null && file.exists() && file.isFile();
     }
-    
+
     public class SaveTask extends Task {
         @Override
         public void run() {
             save();
         }
     }
-    
+
     public class LoadTask extends Task {
         @Override
         public void run() {
             load();
         }
     }
-    
+
     public abstract class Task implements Runnable {
-        
+
         public abstract void run();
-        
+
         @Override
         public int hashCode() {
             return LazyWrittenData.this.hashCode() * System.identityHashCode(this);
         }
-        
+
     }
 }

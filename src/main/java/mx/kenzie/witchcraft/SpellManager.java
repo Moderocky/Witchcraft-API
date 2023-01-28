@@ -28,37 +28,56 @@ public interface SpellManager {
     int SCALE = MAX - MIN;
     // Maximum average deviation for a cast to be accepted as a given pattern as a factor of SCALE
     double MAXIMUM_DEVIATION = 0.15;
-    
+
     static SpellManager getInstance() {
         return WitchcraftAPI.spells;
     }
-    
+
+    static void makeMenu(PaginatedGUI gui) {
+        gui.setLayout(new String[]{
+            "#########",
+            "#########",
+            "#########",
+            "#########",
+            "XXXXXXXXX",
+            "A_______B",
+        });
+        gui.createButton('A', WitchcraftAPI.resources.back(), (clicker, event) -> {
+            gui.prev();
+            clicker.updateInventory();
+        });
+        gui.createButton('B', WitchcraftAPI.resources.next(), (clicker, event) -> {
+            gui.next();
+            clicker.updateInventory();
+        });
+    }
+
     Pattern generate(int points, Random random);
-    
+
     @NotNull SpellSupplier create(String id);
-    
+
     boolean forceCast(LivingEntity caster, String id, float scale, int range);
-    
+
     double getAmplitude(LivingEntity caster, EntityEquipment equipment);
-    
+
     boolean cast(LivingEntity caster, Spell spell, float scale);
-    
+
     int getRange(LivingEntity caster, EntityEquipment equipment);
-    
+
     void handle(LivingEntity entity, Spell spell, SpellResult result);
-    
+
     int getEnergy(LivingEntity caster, EntityEquipment equipment);
-    
+
     int getBonusEnergy(LivingEntity caster, EntityEquipment equipment);
-    
+
     Set<Spell> getSpells(MagicClass style);
-    
+
     Map<String, Spell> getMap();
-    
+
     default PaginatedGUI spellsList(Player player) {
         return this.spellsList(this.knownSpells(player, player.getEquipment()));
     }
-    
+
     default PaginatedGUI spellsList(Collection<LearnedSpell> collection) {
         final List<LearnedSpell> spells = new ArrayList<>(collection);
         spells.sort(Comparator.comparing(LearnedSpell::getStyle).thenComparing(spell -> spell.getSpell().getPoints())
@@ -91,7 +110,7 @@ public interface SpellManager {
         gui.finalise();
         return gui;
     }
-    
+
     default Set<LearnedSpell> knownSpells(LivingEntity caster, EntityEquipment equipment) {
         final Set<LearnedSpell> set;
         if (caster instanceof Player player) {
@@ -117,42 +136,23 @@ public interface SpellManager {
         }
         return set;
     }
-    
-    static void makeMenu(PaginatedGUI gui) {
-        gui.setLayout(new String[] {
-            "#########",
-            "#########",
-            "#########",
-            "#########",
-            "XXXXXXXXX",
-            "A_______B",
-        });
-        gui.createButton('A', WitchcraftAPI.resources.back(), (clicker, event) -> {
-            gui.prev();
-            clicker.updateInventory();
-        });
-        gui.createButton('B', WitchcraftAPI.resources.next(), (clicker, event) -> {
-            gui.next();
-            clicker.updateInventory();
-        });
-    }
-    
+
     Spell getSpell(String id);
-    
+
     void drawPattern(Spell spell, Location location, int delay, ParticleCreator creator);
-    
+
     Set<Spell> getSpells();
-    
+
     default LearnedSpell makeKnown(Spell spell, LivingEntity caster, EntityEquipment equipment) {
         final Set<LearnedSpell> set = this.knownSpells(caster, equipment);
         for (LearnedSpell learned : set) if (learned.getSpell().equals(spell)) return learned;
         return new LearnedSpell(spell, 1);
     }
-    
+
     LearnedSpell getSpell(long code);
-    
+
     long getCode(LearnedSpell spell);
-    
+
     default PaginatedGUI spellsListAdmin() {
         final Set<LearnedSpell> set = new HashSet<>();
         for (Spell spell : this.getSpells()) {
@@ -161,27 +161,27 @@ public interface SpellManager {
         }
         return this.spellsList(set);
     }
-    
+
     LearnResult attemptLearnSpell(Player player, Value value);
-    
+
     void castStoredSpell(LivingEntity entity, ItemStack item);
-    
+
     default void cast(Player player, String id, float scale, ItemStack item) {
         if (this.cast(player, id, scale)) item.damage(1, player);
     }
-    
+
     boolean cast(LivingEntity caster, String id, float scale);
-    
+
     void regenerateEnergy(Player player, int amount);
-    
+
     interface Value {
         boolean worth();
-        
+
         int value();
-        
+
         float amount();
     }
-    
+
     record LearnResult(Spell spell, boolean success, boolean learned, boolean levelled) {
     }
 }

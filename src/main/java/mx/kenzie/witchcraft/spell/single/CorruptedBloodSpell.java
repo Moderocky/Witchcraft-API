@@ -23,16 +23,16 @@ public class CorruptedBloodSpell extends AbstractTargetedSpell {
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
         .force(true));
-    
+
     public CorruptedBloodSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range, true);
@@ -51,5 +51,5 @@ public class CorruptedBloodSpell extends AbstractTargetedSpell {
         for (Entity entity : list)
             WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, damage, EntityDamageEvent.DamageCause.MAGIC);
     }
-    
+
 }

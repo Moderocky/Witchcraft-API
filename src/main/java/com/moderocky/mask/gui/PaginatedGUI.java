@@ -17,49 +17,49 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class PaginatedGUI extends VisualGUI {
-    
+
     private final List<ItemStack> entries = new ArrayList<>();
-    
+
     private char entryChar;
-    
+
     private BiConsumer<Player, InventoryClickEvent> consumer = null;
     private int pageCount = 0;
     private int page = 0;
-    
+
     public PaginatedGUI(Plugin plugin, InventoryType type, String title) {
         super(plugin, type, title);
     }
-    
+
     public PaginatedGUI(Plugin plugin, int size, String title) {
         super(plugin, size, title);
     }
-    
+
     public BiConsumer<Player, InventoryClickEvent> getEntryConsumer() {
         return consumer;
     }
-    
+
     public void setEntryConsumer(@NotNull BiConsumer<Player, InventoryClickEvent> consumer) {
         this.consumer = consumer;
     }
-    
+
     public void setEntryChar(char c) {
         entryChar = c;
     }
-    
+
     public List<ItemStack> getEntries() {
         return new ArrayList<>(entries);
     }
-    
+
     public void setEntries(Collection<ItemStack> entries) {
         this.entries.clear();
         this.entries.addAll(entries);
     }
-    
+
     public void setEntries(ItemStack... entries) {
         this.entries.clear();
         this.entries.addAll(Arrays.asList(entries));
     }
-    
+
     public BiConsumer<Player, InventoryClickEvent> getPageUp() {
         return (player, event) -> {
             final PaginatedGUI gui = this;
@@ -71,12 +71,12 @@ public class PaginatedGUI extends VisualGUI {
             }.runTaskLater(plugin, 1L);
         };
     }
-    
+
     public void next() {
         this.page = Math.min(pageCount, (page + 1));
         this.createPage();
     }
-    
+
     private void createPage() {
         this.clearEntrySlots();
         final int[] ints = getSlots(entryChar);
@@ -93,11 +93,11 @@ public class PaginatedGUI extends VisualGUI {
             this.inventory.setItem(j, entries.get(i));
         }
     }
-    
+
     private void clearEntrySlots() {
         for (int slot : getSlots(entryChar)) inventory.setItem(slot, new ItemStack(Material.AIR));
     }
-    
+
     public BiConsumer<Player, InventoryClickEvent> getPageDown() {
         return (player, event) -> {
             final PaginatedGUI gui = this;
@@ -109,29 +109,29 @@ public class PaginatedGUI extends VisualGUI {
             }.runTaskLater(plugin, 1L);
         };
     }
-    
+
     public void prev() {
         this.page = Math.max(0, (page - 1));
         this.createPage();
     }
-    
+
     @Override
     public PaginatedGUI setLayout(String[] layout) {
         return (PaginatedGUI) super.setLayout(layout);
     }
-    
+
     @Override
     public void open(Player player) {
         super.open(player);
     }
-    
+
     @Override
     public void finalise() {
         super.finalise();
         this.pageCount = (int) Math.ceil((float) entries.size() / getSlots(entryChar).length);
         this.reset();
     }
-    
+
     @Override
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
@@ -152,7 +152,7 @@ public class PaginatedGUI extends VisualGUI {
         else if (Arrays.stream(getSlots(entryChar)).anyMatch(i -> i == event.getSlot()))
             if (consumer != null) consumer.accept(player, event);
     }
-    
+
     @Override
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -163,12 +163,12 @@ public class PaginatedGUI extends VisualGUI {
         super.onClose(event);
         if (this.players.isEmpty()) this.reset();
     }
-    
+
     public void reset() {
         this.page = 0;
         this.createPage();
     }
-    
+
     public BiConsumer<Player, InventoryClickEvent> getPageReset() {
         return (player, event) -> {
             final PaginatedGUI gui = this;
@@ -180,7 +180,7 @@ public class PaginatedGUI extends VisualGUI {
             }.runTaskLater(plugin, 1L);
         };
     }
-    
+
     private int getFreeSlotCount() {
         int j = 0;
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -189,7 +189,7 @@ public class PaginatedGUI extends VisualGUI {
         }
         return j;
     }
-    
+
     private int[] getFreeSlots() {
         final List<Integer> slots = new ArrayList<>();
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -204,5 +204,5 @@ public class PaginatedGUI extends VisualGUI {
         }
         return ints;
     }
-    
+
 }

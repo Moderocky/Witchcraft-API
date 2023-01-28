@@ -18,16 +18,16 @@ import java.util.Map;
 
 public class SteadfastSpell extends StandardSpell {
     public transient final ParticleCreator creator = ParticleCreator.of(Particle.CRIT.builder().count(0));
-    
+
     public SteadfastSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final EntityEquipment equipment = caster.getEquipment();
@@ -44,7 +44,7 @@ public class SteadfastSpell extends StandardSpell {
             }
         });
     }
-    
+
     protected void enchant(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return;
         if (item.containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) return;

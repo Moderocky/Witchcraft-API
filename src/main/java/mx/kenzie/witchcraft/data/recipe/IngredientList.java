@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IngredientList extends ArrayList<Ingredient> {
-    
+
     public boolean matches(ItemStack... stacks) {
         final List<Ingredient> sample = new ArrayList<>(this);
         final List<ItemStack> workingCopy = new ArrayList<>(List.of(stacks));
@@ -35,11 +35,11 @@ public class IngredientList extends ArrayList<Ingredient> {
         }
         return false;
     }
-    
+
     private boolean isInvalid(ItemStack stack) {
         return stack == null || stack.getType() == Material.AIR;
     }
-    
+
     private <T> void rotateArray(T[] array) {
         T[] copy = Arrays.copyOf(array, array.length);
         for (int i = 0; i < array.length; i++) {
@@ -47,7 +47,7 @@ public class IngredientList extends ArrayList<Ingredient> {
             array[index] = copy[i];
         }
     }
-    
+
     private void sorting(List<Ingredient> ingredients) {
         ingredients.sort((o1, o2) -> {
             if (o1 == null || o1.getType() == null) return 1;
@@ -67,9 +67,9 @@ public class IngredientList extends ArrayList<Ingredient> {
             } else return o1.item.compareTo(o2.item);
         });
     }
-    
+
     private void sort(List<ItemStack> stacks) {
-    
+
     }
-    
+
 }

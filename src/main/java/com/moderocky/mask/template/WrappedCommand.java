@@ -17,16 +17,16 @@ import java.util.List;
 import java.util.logging.Level;
 
 public interface WrappedCommand extends CommandExecutor, TabCompleter {
-    
+
     default @NotNull Component getHelpMessage(int i, @NotNull String[] args) {
         final PluginCommand command = Bukkit.getPluginCommand(this.getCommand());
         if (command == null) return Component.text("No instructions found.", NamedTextColor.GRAY);
         return Component.text("Usage: " + command.getUsage(), NamedTextColor.GRAY);
     }
-    
+
     @NotNull
     String getCommand();
-    
+
     @Override
     default @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> strings = getCompletions(args.length, sender, command, alias, args);
@@ -36,15 +36,15 @@ public interface WrappedCommand extends CommandExecutor, TabCompleter {
         Collections.sort(completions);
         return completions;
     }
-    
+
     default @Nullable List<String> getCompletions(int i, @NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return getCompletions(i);
     }
-    
+
     default @Nullable List<String> getCompletions(int i) {
         return null;
     }
-    
+
     /**
      * This registers your command :)
      *
@@ -86,36 +86,36 @@ public interface WrappedCommand extends CommandExecutor, TabCompleter {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * @return the aliases, or new ArrayList if none
      */
     @NotNull List<String> getAliases();
-    
+
     /**
      * @return A description of your command
      */
     @NotNull String getDescription();
-    
+
     /**
      * @return The command's permission
      */
     @Nullable String getPermission();
-    
+
     /**
      * @return The no-permission message
      */
     @Nullable Component getPermissionMessage();
-    
+
     /**
      * @return The 'correct usage' string
      */
     @NotNull String getUsage();
-    
+
     default CommandMap getCommandMap() {
         return Bukkit.getCommandMap();
     }
-    
+
     @Override
     boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args);
 }

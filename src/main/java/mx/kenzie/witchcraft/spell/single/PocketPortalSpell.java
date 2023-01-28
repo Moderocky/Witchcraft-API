@@ -19,18 +19,18 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class PocketPortalSpell extends AbstractTeleportSpell {
-    
+
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.GLOW_SQUID_INK);
-    
+
     public PocketPortalSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return super.canCast(caster) && RealmManager.getInstance().worldExists(caster.getUniqueId());
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final RealmManager manager = RealmManager.getInstance();
@@ -40,7 +40,7 @@ public class PocketPortalSpell extends AbstractTeleportSpell {
         final Location start = caster.getLocation();
         this.enterRealm(caster, future, start);
     }
-    
+
     protected void enterRealm(LivingEntity caster, CompletableFuture<World> future, Location start) {
         caster.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 90, 1, false, false, false));
         caster.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 90, 1, false, false, false));
@@ -57,5 +57,5 @@ public class PocketPortalSpell extends AbstractTeleportSpell {
             caster.teleportAsync(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.NETHER_PORTAL);
         });
     }
-    
+
 }

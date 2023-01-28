@@ -25,11 +25,11 @@ import java.util.function.BiConsumer;
 
 public class ThassalurgySpell extends AbstractTargetedSpell {
     protected transient Target target;
-    
+
     public ThassalurgySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         if (!(caster instanceof Player)) return false;
@@ -37,7 +37,7 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
         this.target = this.getTarget(caster, 10, false);
         return target.target() != null && target.result() != null && target.result().getHitBlock() != null;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final RayTraceResult result = target.result();
@@ -61,11 +61,11 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
             final Position position = positions[slot];
             clicker.closeInventory();
             this.doGateway(position, first, second);
-            
+
         };
         assembleMenu(player, buttons, gui, consumer);
     }
-    
+
     protected void doGateway(Position position, Block first, Block second) {
         final BlockData data = Material.END_GATEWAY.createBlockData();
         first.setBlockData(data);

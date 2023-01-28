@@ -8,22 +8,22 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class StringReader implements Iterable<Character> {
-    
+
     public final char[] chars;
     protected transient int position;
-    
+
     StringReader(final MagicStringList list) {
         chars = list.toString().toCharArray();
     }
-    
+
     public StringReader(final String string) {
         chars = string.toCharArray();
     }
-    
+
     public StringReader(final char[] chars) {
         this.chars = chars;
     }
-    
+
     public String readRest() {
         StringBuilder builder = new StringBuilder();
         while (canRead()) {
@@ -32,11 +32,11 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public boolean canRead() {
         return position < chars.length && position >= 0;
     }
-    
+
     public String read(int length) {
         int end = position + length;
         StringBuilder builder = new StringBuilder();
@@ -47,7 +47,7 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public String readUntil(char c) {
         StringBuilder builder = new StringBuilder();
         while (canRead()) {
@@ -58,7 +58,7 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public String readUntilEscape(char c) {
         StringBuilder builder = new StringBuilder();
         boolean ignore = false;
@@ -72,7 +72,7 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public String readUntilMatches(Function<String, Boolean> function) {
         StringBuilder builder = new StringBuilder();
         while (canRead()) {
@@ -83,7 +83,7 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public String readUntilMatches(Pattern pattern) {
         StringBuilder builder = new StringBuilder();
         while (canRead()) {
@@ -94,7 +94,7 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public String readUntilMatchesAfter(Pattern pattern, char end) {
         StringBuilder builder = new StringBuilder();
         boolean canEnd = false;
@@ -107,65 +107,65 @@ public class StringReader implements Iterable<Character> {
         }
         return builder.toString();
     }
-    
+
     public boolean hasApproaching(int index) {
         return remaining().length > index;
     }
-    
+
     public char[] remaining() {
         return Arrays.copyOfRange(chars, position, chars.length);
     }
-    
+
     public char getApproaching(int index) {
         return remaining()[index];
     }
-    
+
     public boolean hasNext() {
         return position < chars.length - 1;
     }
-    
+
     public void skip() {
         if (canRead()) position++;
     }
-    
+
     public void skip(int i) {
         position += i;
     }
-    
+
     public void rotateBack(int i) {
         position -= i;
     }
-    
+
     public int getPosition() {
         return position;
     }
-    
+
     public void setPosition(int i) {
         position = i;
     }
-    
+
     public int length() {
         return chars.length;
     }
-    
+
     public char current() {
         if (canRead())
             return chars[position];
         throw new RuntimeException("Limit exceeded!");
     }
-    
+
     public char previous() {
         if (position - 1 >= 0)
             return chars[position - 1];
         throw new RuntimeException("Limit exceeded!");
     }
-    
+
     public char next() {
         if (position + 1 < chars.length)
             return chars[position + 1];
         throw new RuntimeException("Limit exceeded!");
     }
-    
+
     public char rotate() {
         if (canRead()) {
             char c = chars[position];
@@ -173,11 +173,11 @@ public class StringReader implements Iterable<Character> {
             return c;
         } else throw new RuntimeException("Limit exceeded!");
     }
-    
+
     public void reset() {
         position = 0;
     }
-    
+
     public int charCount(char c) {
         int i = 0;
         for (char ch : chars) {
@@ -185,13 +185,13 @@ public class StringReader implements Iterable<Character> {
         }
         return i;
     }
-    
+
     @NotNull
     @Override
     public Iterator<Character> iterator() {
         return new Iterative();
     }
-    
+
     @Override
     @SuppressWarnings("all")
     public StringReader clone() {
@@ -199,24 +199,24 @@ public class StringReader implements Iterable<Character> {
         reader.position = position;
         return reader;
     }
-    
+
     @Override
     public String toString() {
         return new String(chars);
     }
-    
+
     protected class Iterative implements Iterator<Character> {
         int cursor;       // index of next element to return
         int lastRet = -1; // index of last element returned; -1 if no such
         int size = chars.length;
-        
+
         Iterative() {
         }
-        
+
         public boolean hasNext() {
             return cursor != chars.length;
         }
-        
+
         public Character next() {
             checkForComodification();
             int i = cursor;
@@ -225,11 +225,11 @@ public class StringReader implements Iterable<Character> {
             cursor = i + 1;
             return chars[lastRet = i];
         }
-        
+
         public void remove() {
             throw new ConcurrentModificationException();
         }
-        
+
         @Override
         public void forEachRemaining(Consumer<? super Character> consumer) {
             Objects.requireNonNull(consumer);
@@ -246,9 +246,9 @@ public class StringReader implements Iterable<Character> {
             lastRet = i - 1;
             checkForComodification();
         }
-        
+
         final void checkForComodification() {
         }
     }
-    
+
 }

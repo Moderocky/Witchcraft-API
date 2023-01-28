@@ -20,12 +20,12 @@ public class GazeSpell extends AbstractTargetedSpell {
     public GazeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range, false, Mode.NOT_ALLIES);
@@ -35,7 +35,7 @@ public class GazeSpell extends AbstractTargetedSpell {
         this.explode(target);
         WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 2.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
     }
-    
+
     private void explode(final Location target) {
         final PotionEffect effect = new PotionEffect(PotionEffectType.CONFUSION, 40, 1, false, false, false);
         for (LivingEntity entity : target.getNearbyLivingEntities(3)) entity.addPotionEffect(effect);

@@ -18,7 +18,7 @@ public class FireballSpell extends AbstractProjectileSpell {
     public FireballSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

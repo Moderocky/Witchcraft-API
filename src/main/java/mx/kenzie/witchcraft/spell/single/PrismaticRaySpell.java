@@ -26,15 +26,15 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         INDIGO = new Color(128, 79, 255),
         VIOLET = new Color(183, 40, 255);
     public static final Color[] COLORS = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET};
-    
+
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
         .count(0)
         .force(true);
-    
+
     public PrismaticRaySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     public static ParticleBuilder setRandom(ParticleBuilder builder) {
         final Color color = COLORS[ThreadLocalRandom.current().nextInt(COLORS.length)];
         if (builder.particle() == Particle.SPELL_MOB)
@@ -42,12 +42,12 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         else builder.color(color.getRed(), color.getGreen(), color.getBlue());
         return builder;
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range, true);
@@ -77,5 +77,5 @@ public class PrismaticRaySpell extends AbstractTargetedSpell {
         for (Entity entity : set)
             WitchcraftAPI.minecraft.damageEntitySafely(entity, caster, damage, EntityDamageEvent.DamageCause.MAGIC);
     }
-    
+
 }

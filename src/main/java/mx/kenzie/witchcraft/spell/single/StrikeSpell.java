@@ -16,11 +16,11 @@ import java.util.Map;
 public class StrikeSpell extends AbstractProjectileSpell {
     private transient final ParticleBuilder builder = new ParticleBuilder(Particle.WHITE_ASH)
         .count(3).offset(0.1, 0.1, 0.1).force(true);
-    
+
     public StrikeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

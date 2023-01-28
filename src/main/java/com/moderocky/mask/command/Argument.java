@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * The key aspects are to check if an input is valid, convert it to a workable type and to provide completions for guidance.
  */
 public interface Argument<X> {
-    
+
     /**
      * This should convert the player's input to a valid object.
      * This should never be null (?!) as {@link #matches(String)} will be called first.
@@ -26,7 +26,7 @@ public interface Argument<X> {
      * @return The serialised object
      */
     @NotNull X serialise(String string);
-    
+
     /**
      * This is your matcher, to check if the player's input is valid. If it isn't, the action won't pass.
      * <p>
@@ -39,12 +39,12 @@ public interface Argument<X> {
      * @return Boo
      */
     boolean matches(String string);
-    
+
     @SuppressWarnings("unchecked")
     default Class<X> getType() {
         return ((Class<X>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
-    
+
     /**
      * This is what your argument shows up as in a command.
      * <p>
@@ -55,7 +55,7 @@ public interface Argument<X> {
      * @return The argument name
      */
     @NotNull String getName();
-    
+
     /**
      * A list of completions for this argument type.
      * This helps the player to understand what is required.
@@ -63,7 +63,7 @@ public interface Argument<X> {
      * @return A list of completions
      */
     @Nullable List<String> getCompletions();
-    
+
     /**
      * Used by the system to determine if this argument accepts multiple inputs.
      * These should almost always be separated by commas.
@@ -75,7 +75,7 @@ public interface Argument<X> {
      * @return Whether this accepts plurals, true or false
      */
     boolean isPlural();
-    
+
     /**
      * Used by the system when testing the command.
      * This should ALWAYS default to true.
@@ -83,7 +83,7 @@ public interface Argument<X> {
      * @return Boo
      */
     boolean isRequired();
-    
+
     /**
      * Ideally, this should set a field that will then be returned by {@link #isRequired()}.
      * This should ALWAYS default to true.
@@ -94,7 +94,7 @@ public interface Argument<X> {
      * @return The argument, allowing for method chaining
      */
     Argument<X> setRequired(boolean boo);
-    
+
     /**
      * Ideally, this should set a field that will then be returned by {@link #getName()}.
      * <p>
@@ -104,21 +104,21 @@ public interface Argument<X> {
      * @return The argument, allowing for method chaining
      */
     Argument<X> setLabel(@NotNull String name);
-    
+
     default Pattern getPattern() {
         return Pattern.compile("^(\\S+)$");
     }
-    
+
     default boolean acceptSpaces() {
         return false;
     }
-    
+
     default boolean isLiteral() {
         return false;
     }
-    
+
     default boolean isFinal() {
         return false;
     }
-    
+
 }

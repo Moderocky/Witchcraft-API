@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface VectorShape extends List<Vector> {
     VectorShape rotate(Vector axis, double degrees);
-    
+
     @Override
     int size();
-    
+
     void draw(Location location);
-    
+
     default void draw(Location location, long delay) {
         WitchcraftAPI.executor.submit(() -> {
             for (Vector vector : this.getVectors()) {
@@ -24,8 +24,8 @@ public interface VectorShape extends List<Vector> {
             }
         });
     }
-    
+
     List<Vector> getVectors();
-    
+
     ParticleBuilder builder();
 }

@@ -18,16 +18,21 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
     public transient final ParticleBuilder builder = new ParticleBuilder(Particle.CAMPFIRE_COSY_SMOKE)
         .count(1).force(true);
-    
+
     public CircleOfDefianceSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
+    public static Location getRandom(Location centre) {
+        final Random random = ThreadLocalRandom.current();
+        return centre.add((random.nextDouble() - 0.5) * 20, (random.nextDouble() - 0.2) * 8, (random.nextDouble() - 0.5) * 20);
+    }
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
@@ -54,10 +59,5 @@ public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
     }
-    
-    public static Location getRandom(Location centre) {
-        final Random random = ThreadLocalRandom.current();
-        return centre.add((random.nextDouble() - 0.5) * 20, (random.nextDouble() - 0.2) * 8, (random.nextDouble() - 0.5) * 20);
-    }
-    
+
 }

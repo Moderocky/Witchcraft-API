@@ -11,13 +11,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("all")
 public class NaturesFriendSpell extends AbstractSummonSpell {
-    
+
     protected transient final Class[] animals = {Sheep.class, Cow.class, Pig.class, Chicken.class, Donkey.class};
-    
+
     public NaturesFriendSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);

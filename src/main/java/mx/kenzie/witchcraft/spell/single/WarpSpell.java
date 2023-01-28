@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public class WarpSpell extends AbstractTeleportSpell {
-    
+
     private transient List<Block> blocks;
-    
+
     public WarpSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getLocation();
@@ -42,7 +42,7 @@ public class WarpSpell extends AbstractTeleportSpell {
         world.playSound(s1, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 0.7F);
         world.playSound(s2, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.3F);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Block test = caster.getTargetBlockExact(25);

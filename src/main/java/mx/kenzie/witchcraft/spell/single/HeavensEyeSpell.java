@@ -21,11 +21,11 @@ public class HeavensEyeSpell extends AbstractWardSpell {
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.ELECTRIC_SPARK)
         .count(0)
         .force(true);
-    
+
     public HeavensEyeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
@@ -48,5 +48,5 @@ public class HeavensEyeSpell extends AbstractWardSpell {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
     }
-    
+
 }

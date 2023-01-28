@@ -20,49 +20,49 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public record PlaceableMaterial(Material material) implements ItemArchetype {
-    
+
     public static final Set<Namespaced>
         BLOCKS = Arrays.stream(Material.values())
         .filter(Material::isBlock).map(Material::getKey).collect(Collectors.toSet()),
         FULL_BLOCKS = Arrays.stream(Material.values())
             .filter(Material::isBlock).filter(Material::isSolid).filter(Material::isOccluding).map(Material::getKey)
             .collect(Collectors.toSet());
-    
+
     public PlaceableMaterial(BukkitMaterial material) {
         this(material.material());
     }
-    
+
     @Override
     public boolean isProtected() {
         return false;
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return new HashSet<>();
     }
-    
+
     @Override
     public Component itemName() {
         return Component.translatable(material.translationKey(), NamedTextColor.DARK_GRAY)
             .decoration(TextDecoration.ITALIC, false);
     }
-    
+
     @Override
     public String name() {
         return ResourceManager.pascalCase(material.name().toLowerCase().replace('_', ' '));
     }
-    
+
     @Override
     public Rarity rarity() {
         return Rarity.COMMON;
     }
-    
+
     @Override
     public String id() {
         return material.name().toLowerCase();
     }
-    
+
     @Override
     public List<Component> itemLore() {
         final List<String> lines = new ArrayList<>(4);
@@ -78,12 +78,12 @@ public record PlaceableMaterial(Material material) implements ItemArchetype {
             .decoration(TextDecoration.ITALIC, false));
         return components;
     }
-    
+
     @Override
     public String description() {
         return "Consumes resources when placed.";
     }
-    
+
     @Override
     public ItemStack create() {
         final ItemStack stack = new ItemStack(material);

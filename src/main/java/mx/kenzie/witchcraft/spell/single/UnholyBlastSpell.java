@@ -15,7 +15,7 @@ import java.awt.*;
 import java.util.Map;
 
 public class UnholyBlastSpell extends AbstractProjectileSpell {
-    
+
     static final ParticleCreator PURPLE = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_WITCH).count(0)
         .force(true));
     protected transient final Color color = new Color(194, 21, 44);
@@ -23,11 +23,11 @@ public class UnholyBlastSpell extends AbstractProjectileSpell {
         .color(color.getRed(), color.getGreen(), color.getBlue())
         .count(0)
         .force(true));
-    
+
     public UnholyBlastSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

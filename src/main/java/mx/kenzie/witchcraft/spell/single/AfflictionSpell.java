@@ -17,17 +17,17 @@ import java.awt.*;
 import java.util.Map;
 
 public class AfflictionSpell extends AbstractProjectileSpell {
-    
+
     protected transient final Color color = new Color(43, 243, 21);
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SPELL_MOB)
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0)
         .force(true);
-    
+
     public AfflictionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

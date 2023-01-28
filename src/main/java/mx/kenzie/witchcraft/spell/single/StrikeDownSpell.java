@@ -25,16 +25,16 @@ public class StrikeDownSpell extends AbstractTargetedSpell {
         .build(),
         SHOOT = sound().type(ENTITY_MINECART_INSIDE_UNDERWATER).volume(0.5F).pitch(1.9F).source(Source.AMBIENT).build();
     protected transient ParticleCreator creator = ParticleCreator.of(Particle.WAX_ON.builder().count(0));
-    
+
     public StrikeDownSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target trace = this.getTarget(caster, range, true);

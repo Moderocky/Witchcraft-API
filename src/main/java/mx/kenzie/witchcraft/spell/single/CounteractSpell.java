@@ -20,16 +20,16 @@ import java.util.Map;
 
 public class CounteractSpell extends StandardSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.END_ROD.builder().count(1));
-    
+
     public CounteractSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final List<Entity> entities = new ArrayList<>(caster.getNearbyEntities(range, range / 2F, range));
@@ -48,5 +48,5 @@ public class CounteractSpell extends StandardSpell {
         // todo limit this to level 5 spells
         caster.getWorld().playSound(caster.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 1.0F, 1.5F);
     }
-    
+
 }

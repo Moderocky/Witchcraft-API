@@ -16,7 +16,7 @@ public class LightningSpell extends AbstractProjectileSpell {
     public LightningSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
@@ -45,5 +45,5 @@ public class LightningSpell extends AbstractProjectileSpell {
         world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 0.6F, 1.4F);
         return projectile;
     }
-    
+
 }

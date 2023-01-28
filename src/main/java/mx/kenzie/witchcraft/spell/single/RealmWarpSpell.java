@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public class RealmWarpSpell extends TeleportSpell {
-    
+
     public RealmWarpSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -32,5 +32,5 @@ public class RealmWarpSpell extends TeleportSpell {
         }
         this.createMenu(player, list);
     }
-    
+
 }

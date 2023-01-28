@@ -23,11 +23,20 @@ import java.util.concurrent.locks.LockSupport;
 public class LightRaySpell extends AbstractProjectileSpell {
     private transient final ParticleBuilder builder = new ParticleBuilder(Particle.END_ROD)
         .force(true).count(0);
-    
+
     public LightRaySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
+    static void drawSpiralPart(World world, ParticleCreator creator, Projectile projectile) {
+        projectile.onTick(() -> {
+            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
+            double distance = projectile.getPrevious().distance(projectile.getLocation());
+            if (distance > 5) return;
+            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
+        });
+    }
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
@@ -89,14 +98,5 @@ public class LightRaySpell extends AbstractProjectileSpell {
         }));
         world.playSound(location, Sound.BLOCK_BEACON_ACTIVATE, 1.1F, 1.3F);
         return projectile;
-    }
-    
-    static void drawSpiralPart(World world, ParticleCreator creator, Projectile projectile) {
-        projectile.onTick(() -> {
-            world.playSound(projectile.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.5F, 1.7F);
-            double distance = projectile.getPrevious().distance(projectile.getLocation());
-            if (distance > 5) return;
-            creator.playSpiral(projectile.getPrevious(), 0.2, distance, 12, 1);
-        });
     }
 }

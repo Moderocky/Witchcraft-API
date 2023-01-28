@@ -11,7 +11,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Usage {
-    
+
     String value();
-    
+
 }

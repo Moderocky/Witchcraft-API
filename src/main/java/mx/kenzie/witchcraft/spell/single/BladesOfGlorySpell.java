@@ -19,17 +19,17 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BladesOfGlorySpell extends AbstractSummonSpell {
-    
+
     protected transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.REDSTONE)
         .data(new Particle.DustOptions(Color.fromRGB(253, 58, 9), 3))
         .count(0)
         .extra(0));
     protected transient List<Block> blocks;
-    
+
     public BladesOfGlorySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
@@ -43,11 +43,11 @@ public class BladesOfGlorySpell extends AbstractSummonSpell {
             );
         }
     }
-    
+
     protected CustomEntityType getEntityType() {
         return CustomEntityType.BLADE_OF_GLORY;
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         if (WitchcraftAPI.minecraft.nearbySummons(caster, this.getEntityType()) > 0) return false;

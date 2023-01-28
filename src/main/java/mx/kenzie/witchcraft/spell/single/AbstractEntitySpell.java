@@ -7,11 +7,11 @@ import java.util.Map;
 
 public abstract class AbstractEntitySpell extends AbstractTargetedSpell {
     protected transient LivingEntity target;
-    
+
     public AbstractEntitySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Target target = this.getTarget(caster, 25, false, Mode.SAFE_TO_TARGET);

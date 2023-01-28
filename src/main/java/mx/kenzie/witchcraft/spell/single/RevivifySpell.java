@@ -18,16 +18,16 @@ public class RevivifySpell extends AbstractTargetedSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.REDSTONE)
         .data(new Particle.DustOptions(Color.fromRGB(55, 250, 94), 2))
         .count(0).force(true));
-    
+
     public RevivifySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range);

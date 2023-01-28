@@ -15,22 +15,22 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class TunnelSpell extends StandardSpell {
-    
+
     private transient final ParticleCreator creator = ParticleCreator.of(Particle.ASH),
         repel = ParticleCreator.of(Particle.WAX_OFF);
     private transient Block start;
-    
+
     public TunnelSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         this.start = caster.getTargetBlockExact(5);
         if (start == null) return false;
         return this.isAllowed(start);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location point = start.getLocation();
@@ -45,7 +45,7 @@ public class TunnelSpell extends StandardSpell {
             }
         });
     }
-    
+
     public boolean bore(Location location, LivingEntity caster) {
         final Block centre = location.getBlock();
         if (!this.isAllowed(centre)) return false;
@@ -63,12 +63,12 @@ public class TunnelSpell extends StandardSpell {
                 }
         return true;
     }
-    
+
     public boolean isAllowed(Block block) {
         if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR) return true;
         return this.isSoft(block);
     }
-    
+
     public boolean isSoft(Block block) {
         return switch (block.getType()) {
             case MUD, DIRT, ROOTED_DIRT, PODZOL, GRASS_BLOCK,
@@ -78,5 +78,5 @@ public class TunnelSpell extends StandardSpell {
             default -> false;
         };
     }
-    
+
 }

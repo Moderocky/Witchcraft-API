@@ -11,12 +11,12 @@ import java.util.Map;
  */
 public class OutfitData implements Comparable<Integer> {
     private static final Part EMPTY = Part.empty();
-    
+
     /**
      * The ID of the outfit texture in the file source.
      */
     public String texture_id;
-    
+
     /**
      * The weight given to this in the outfit renderer.
      * Heavier options are rendered last, making sure they are prioritised.
@@ -25,12 +25,12 @@ public class OutfitData implements Comparable<Integer> {
      * since this could erase previously-rendered items.
      */
     public int weight = 0;
-    
+
     /**
      * What kind of outfit this counts as.
      */
     public Clothing slot = Clothing.JACKET;
-    
+
     /**
      * The body parts, where this will be rendered.
      */
@@ -38,14 +38,14 @@ public class OutfitData implements Comparable<Integer> {
     @Optional Part head = EMPTY, body = EMPTY,
         right_arm = EMPTY, left_arm = EMPTY,
         right_leg = EMPTY, left_leg = EMPTY;
-    
+
     /**
      * If this outfit can actually be rendered.
      */
     public boolean isValid() {
         return texture_id != null && !this.isEmpty();
     }
-    
+
     /**
      * If this outfit is empty (has no actual texturing.)
      */
@@ -54,12 +54,12 @@ public class OutfitData implements Comparable<Integer> {
             && right_arm.isEmpty() && left_arm.isEmpty()
             && right_leg.isEmpty() && left_leg.isEmpty();
     }
-    
+
     @Override
     public int compareTo(@NotNull Integer o) {
         return Integer.compare(weight, o);
     }
-    
+
     public Map<String, Part> getParts() {
         final Map<String, Part> map = new LinkedHashMap<>(6);
         map.put("head", head);

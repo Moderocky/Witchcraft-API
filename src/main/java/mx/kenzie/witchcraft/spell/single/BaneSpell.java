@@ -17,13 +17,13 @@ public class BaneSpell extends AbstractProjectileSpell {
     public BaneSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         return this.createProjectile(caster, caster.getLocation().getDirection()
             .multiply(0.6), scale, amplitude, range);
     }
-    
+
     public Projectile createProjectile(LivingEntity caster, Vector direction, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();
         final World world = location.getWorld();
@@ -60,5 +60,5 @@ public class BaneSpell extends AbstractProjectileSpell {
         skull.setHelmet(ItemArchetype.of("darkfire_eye").create());
         return projectile;
     }
-    
+
 }

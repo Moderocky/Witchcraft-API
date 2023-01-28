@@ -6,8 +6,8 @@ import org.bukkit.event.EventPriority;
 
 @FunctionalInterface
 public interface Listener<T extends Event> extends org.bukkit.event.Listener {
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     void event(T event);
-    
+
 }

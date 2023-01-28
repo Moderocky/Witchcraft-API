@@ -14,11 +14,11 @@ import java.util.WeakHashMap;
 public abstract class AbstractWarhammerSpell extends StandardSpell {
     protected static final Cache<LivingEntity, Hammer> HAMMERS = Cache.weak(WeakHashMap::new);
     protected transient Block target;
-    
+
     public AbstractWarhammerSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     protected Hammer summonHammer(LivingEntity caster, int range) {
         final Hammer past = this.getCurrentHammer(caster);
         if (past != null) past.remove();
@@ -33,9 +33,9 @@ public abstract class AbstractWarhammerSpell extends StandardSpell {
         HAMMERS.put(caster, hammer);
         return hammer;
     }
-    
+
     public Hammer getCurrentHammer(LivingEntity caster) {
         return HAMMERS.get(caster);
     }
-    
+
 }

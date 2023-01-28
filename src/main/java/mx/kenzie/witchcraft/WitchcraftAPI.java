@@ -13,7 +13,7 @@ import java.util.concurrent.locks.LockSupport;
  * Some fields may be disabled or annulled after plugin disabling.
  */
 public class WitchcraftAPI {
-    
+
     /**
      * A multithreaded scheduler.
      */
@@ -66,20 +66,20 @@ public class WitchcraftAPI {
      * If this is running in test mode: server/minecraft features are unavailable.
      */
     public static boolean isTest;
-    
+
     static volatile boolean closing;
-    
+
     public static boolean isClosing() {
         return closing;
     }
-    
+
     /**
      * This can be used on EXECUTOR threads, e.g. during animations.
      */
     public static void sleep(long millis) {
         LockSupport.parkNanos(millis * 1000000L);
     }
-    
+
     public static ColorProfile colors() {
         return plugin.getColors();
     }

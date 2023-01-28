@@ -10,9 +10,9 @@ public enum WardType {
     PROTECT_MEMBERS,
     BLOCK_TELEPORT,
     PROTECT_TERRAIN;
-    
+
     public AreaWardInstance create(Coven coven) {
         return new CovenHomeWardInstance(this, coven, -1);
     }
-    
+
 }

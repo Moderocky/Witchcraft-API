@@ -14,16 +14,16 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class OmnipresenceSpell extends AbstractTargetedSpell {
-    
+
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.DRAGON_BREATH)
         .extra(0.03)
         .force(true);
     private transient List<Block> blocks;
-    
+
     public OmnipresenceSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Location location = caster.getEyeLocation();
@@ -32,7 +32,7 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
         this.blocks.removeIf(block -> !WitchcraftAPI.minecraft.hasLineOfSight(block.getLocation(), location));
         return blocks.size() > 6;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Player player = ((Player) caster);
@@ -58,7 +58,7 @@ public class OmnipresenceSpell extends AbstractTargetedSpell {
             }
         }, Math.min(Math.max(((long) scale * 8), 8), 20) * 20);
     }
-    
+
     private void splash(Location location) {
         ParticleCreator.of(builder).drawPoof(location, 1, 10);
     }

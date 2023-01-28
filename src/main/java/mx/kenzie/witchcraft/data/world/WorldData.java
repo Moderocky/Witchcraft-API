@@ -39,17 +39,17 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
     public @Name("protected") boolean restricted;
     protected transient UUID uuid;
     protected transient World world;
-    
+
     public WorldData() {
     }
-    
+
     public WorldData(World world) {
         this.world = world;
         this.uuid = world.getUID();
         this.id = world.key().asString();
         this.name = world.getName();
     }
-    
+
     public static void reloadAll() {
         if (ALL.size() > 0) {
             for (WorldData value : ALL.values()) value.save();
@@ -72,11 +72,11 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
             ALL.put(uuid, data);
         }
     }
-    
+
     public static WorldData getData(UUID uuid) {
         return ALL.get(uuid);
     }
-    
+
     public static WorldData getData(World world) {
         final WorldData initial = WorldData.DATA.get(world);
         if (initial != null) return initial;
@@ -94,49 +94,49 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
         data.scheduleSave();
         return data;
     }
-    
+
     public static void delete(UUID uuid) {
         WorldData.ALL.remove(uuid);
         final File file = new File("data/world/" + uuid + ".fern");
         if (file.exists()) file.delete();
     }
-    
+
     public World getWorld() {
         if (world != null) return world;
         return world = Bukkit.getWorld(uuid);
     }
-    
+
     public boolean isMainWorld() {
         return main_world;
     }
-    
+
     @Override
     public boolean isProtected() {
         return restricted;
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return Collections.emptySet();
     }
-    
+
     @Override
     public String name() {
         return name;
     }
-    
+
     @Override
     public Rarity rarity() {
         if (pocket_realm) return Rarity.UNCOMMON;
         if (major_realm) return Rarity.EPIC;
         return Rarity.VERY_RARE;
     }
-    
+
     @Override
     public String id() {
         return id;
     }
-    
+
     @Override
     public List<Component> itemLore() {
         final List<String> lines = new ArrayList<>(4);
@@ -152,12 +152,12 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
             .decoration(TextDecoration.ITALIC, false));
         return components;
     }
-    
+
     @Override
     public String description() {
         return description;
     }
-    
+
     @Override
     public ItemStack create() {
         final ItemStack item = new ItemStack(Material.PLAYER_HEAD);
@@ -173,7 +173,7 @@ public class WorldData extends LazyWrittenData implements ItemArchetype {
         item.setItemMeta(meta);
         return item;
     }
-    
+
     public Component getRealmType() {
         if (pocket_realm) return Component.text("Pocket Realm");
         if (major_realm) return Component.text("Major Realm");

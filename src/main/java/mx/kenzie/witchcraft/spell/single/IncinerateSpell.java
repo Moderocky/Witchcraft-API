@@ -24,12 +24,12 @@ public class IncinerateSpell extends AbstractTargetedSpell {
     public IncinerateSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final AbstractTargetedSpell.Target trace = this.getTarget(caster, range);
@@ -39,7 +39,7 @@ public class IncinerateSpell extends AbstractTargetedSpell {
         this.explode(caster, target, scale);
         if (found != null) found.setFireTicks((int) (found.getFireTicks() + 60 * scale));
     }
-    
+
     private void explode(Entity caster, final Location target, float scale) {
         target.getWorld().createExplosion(target, 3 * scale, true, false, caster);
         final Sound sound = sound().type(ENTITY_GENERIC_EXPLODE)
@@ -56,7 +56,7 @@ public class IncinerateSpell extends AbstractTargetedSpell {
                 for (final Vector vector : sphere.getVectors()) {
                     final Vector velocity = vector.clone().normalize().multiply(Math.random() / 2.0 + 0.5);
                     final double x = velocity.getX(), y = velocity.getY(), z = velocity.getZ();
-                    
+
                     builder.location(target.clone().add(vector)).extra(4 / (double) count.get()).offset(x, y, z)
                         .spawn();
                 }

@@ -14,15 +14,15 @@ import java.awt.*;
 import java.util.Map;
 
 public class ShadowbeamSpell extends AbstractProjectileSpell {
-    
+
     protected transient final Color color = new Color(178, 0, 169);
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.REDSTONE.builder().count(0)
         .force(true)).color(color);
-    
+
     public ShadowbeamSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

@@ -10,11 +10,11 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class NocturnalPursuitSpell extends AbstractSummonSpell {
-    
+
     public NocturnalPursuitSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);

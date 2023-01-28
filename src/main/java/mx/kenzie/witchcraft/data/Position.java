@@ -25,13 +25,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface Position extends ItemArchetype {
-    
+
     default void teleport(LivingEntity entity) {
         entity.teleportAsync(this.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
-    
+
     Location getLocation();
-    
+
     default boolean is(Block block) {
         if (!this.isValid()) return false;
         final Location location = this.getLocation();
@@ -40,39 +40,39 @@ public interface Position extends ItemArchetype {
             && block.getY() == location.getBlockY()
             && block.getZ() == location.getBlockZ();
     }
-    
+
     boolean isValid();
-    
+
     @Override
     default boolean isProtected() {
         return true;
     }
-    
+
     @Override
     default Set<Tag> tags() {
         return Collections.emptySet();
     }
-    
+
     @Override
     default String name() {
         return "Location";
     }
-    
+
     @Override
     default Rarity rarity() {
         return Rarity.UNCOMMON;
     }
-    
+
     @Override
     default String id() {
         return "position";
     }
-    
+
     @Override
     default String description() {
         return "";
     }
-    
+
     @Override
     default ItemStack create() {
         if (!this.isValid()) return new ItemStack(Material.AIR);
@@ -95,47 +95,47 @@ public interface Position extends ItemArchetype {
         item.setItemMeta(meta);
         return item;
     }
-    
+
     World getWorld();
-    
+
     Component displayName();
-    
+
     @Override
     default boolean isEmpty() {
         return true;
     }
-    
+
     record Major(Location getLocation, String name, String texture) implements Position {
-        
+
         @Override
         public boolean isValid() {
             return true;
         }
-        
+
         @Override
         public World getWorld() {
             return getLocation.getWorld();
         }
-        
+
         @Override
         public Component displayName() {
             return Component.text(name);
         }
     }
-    
+
     class Static implements Position {
         public UUID world;
         public double x, y, z;
         public String name;
         protected transient Location location;
-        
+
         public Static() {
         }
-        
+
         public Static(Location location) {
             this(location, "Known Location");
         }
-        
+
         public Static(Location location, String name) {
             this.location = location;
             this.world = location.getWorld().getUID();
@@ -144,50 +144,50 @@ public interface Position extends ItemArchetype {
             this.z = location.getZ();
             this.name = name;
         }
-        
+
         @Override
         public Location getLocation() {
             if (location != null) return location;
             return location = new Location(this.getWorld(), x, y, z);
         }
-        
+
         @Override
         public boolean isValid() {
             return location != null || Bukkit.getWorld(world) != null;
         }
-        
+
         @Override
         public World getWorld() {
             return Bukkit.getWorld(world);
         }
-        
+
         @Override
         public Component displayName() {
             return Component.text(name);
         }
     }
-    
+
     record Person(Player player) implements Position {
-        
+
         @Override
         public Location getLocation() {
             return player.getLocation();
         }
-        
+
         @Override
         public boolean isValid() {
             return player.isOnline();
         }
-        
+
         @Override
         public World getWorld() {
             return player.getWorld();
         }
-        
+
         @Override
         public Component displayName() {
             return player.displayName();
         }
     }
-    
+
 }

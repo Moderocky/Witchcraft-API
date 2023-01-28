@@ -20,16 +20,16 @@ import java.util.Map;
 public class GodsendSpell extends StandardSpell {
     protected transient final ParticleCreator failure = ParticleCreator.of(Particle.FIREWORKS_SPARK),
         success = ParticleCreator.of(Particle.TOTEM);
-    
+
     public GodsendSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player player && PlayerData.getData(player).isSworn();
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;

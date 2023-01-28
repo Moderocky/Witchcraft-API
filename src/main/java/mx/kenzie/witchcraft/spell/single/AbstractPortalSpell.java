@@ -15,11 +15,11 @@ import java.util.Map;
 
 public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
     protected transient Block target;
-    
+
     public AbstractPortalSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Coven coven = Coven.getCoven(caster);
@@ -41,7 +41,7 @@ public abstract class AbstractPortalSpell extends TeleportationCircleSpell {
         this.target = blocks.get(0);
         return true;
     }
-    
+
     protected void doPortal(Position position, Location location) {
         final Portal portal = CustomEntityType.TANG_PORTAL.spawn(location);
         portal.setOrientation(location.getDirection());

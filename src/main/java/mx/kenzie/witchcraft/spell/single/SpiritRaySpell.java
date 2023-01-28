@@ -17,11 +17,11 @@ public class SpiritRaySpell extends AbstractProjectileSpell {
     private transient final ParticleBuilder builder = new ParticleBuilder(Particle.DRIPPING_OBSIDIAN_TEAR)
         .force(true)
         .count(0);
-    
+
     public SpiritRaySpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

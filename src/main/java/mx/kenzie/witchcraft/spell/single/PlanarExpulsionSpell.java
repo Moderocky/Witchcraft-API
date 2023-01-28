@@ -22,12 +22,12 @@ public class PlanarExpulsionSpell extends StandardSpell {
     public PlanarExpulsionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final World world = caster.getWorld();
@@ -55,7 +55,7 @@ public class PlanarExpulsionSpell extends StandardSpell {
         };
         assembleMenu(player, buttons, gui, consumer);
     }
-    
+
     protected void doExpel(Player player, World world) {
         if (player.getWorld() != world) return;
         player.sendMessage(Component.text("You were expelled from this realm...", WitchcraftAPI.colors().lowlight()));

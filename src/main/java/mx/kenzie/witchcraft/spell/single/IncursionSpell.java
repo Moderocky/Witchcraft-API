@@ -19,7 +19,7 @@ public class IncursionSpell extends VisitationSpell {
     public IncursionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     protected void doPortal(Position position, Location location, Player player) {
         final WorldEvent event = Minecraft.getInstance()
@@ -37,10 +37,10 @@ public class IncursionSpell extends VisitationSpell {
             target.sendTitlePart(TitlePart.TITLE, Component.empty());
         }
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
 }

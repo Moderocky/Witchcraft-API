@@ -13,18 +13,18 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class ShieldSpell extends StandardSpell {
-    
+
     protected transient final Material material = Material.LIGHT_BLUE_STAINED_GLASS;
-    
+
     public ShieldSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int size = (int) (3 + Math.ceil(scale * 2));
@@ -47,5 +47,5 @@ public class ShieldSpell extends StandardSpell {
             }
         });
     }
-    
+
 }

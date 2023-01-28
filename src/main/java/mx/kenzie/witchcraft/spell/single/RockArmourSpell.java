@@ -17,16 +17,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RockArmourSpell extends StandardSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.IRON_BARS);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 1, 28);
-    
+
     public RockArmourSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getLocation();
@@ -51,7 +51,7 @@ public class RockArmourSpell extends StandardSpell {
             }
         });
     }
-    
+
     protected Collection<Block> getBlocks(LivingEntity caster) {
         final int radius = 8;
         final Location location = caster.getLocation();

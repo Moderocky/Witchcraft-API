@@ -25,16 +25,16 @@ import java.util.function.BiConsumer;
 public class StandUnitedSpell extends AbstractTeleportSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.IRON_BARS);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 1, 28);
-    
+
     public StandUnitedSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return super.canCast(caster) && Coven.getCoven(caster) != null;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -54,7 +54,7 @@ public class StandUnitedSpell extends AbstractTeleportSpell {
         };
         assembleMenu(player, buttons, gui, consumer);
     }
-    
+
     protected void doTeleport(Position position, Player caster) {
         final Position.Person person = (Position.Person) position;
         final Player target = person.player();
@@ -71,5 +71,5 @@ public class StandUnitedSpell extends AbstractTeleportSpell {
             }
         });
     }
-    
+
 }

@@ -7,11 +7,11 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 
 public class PortalHomeSpell extends AbstractPortalSpell {
-    
+
     public PortalHomeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0, 0.5, 0);
@@ -21,8 +21,8 @@ public class PortalHomeSpell extends AbstractPortalSpell {
         this.doPortal(coven.getHome(), location);
         this.target = null;
     }
-    
-    
+
+
     @Override
     public boolean canCast(LivingEntity caster) {
         final Coven coven = Coven.getCoven(caster);

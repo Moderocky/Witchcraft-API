@@ -20,17 +20,17 @@ public class GravityBubbleSpell extends AbstractWardSpell {
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.SOUL_FIRE_FLAME)
         .count(0)
         .force(true);
-    
+
     protected transient final Color color = new Color(27, 160, 255);
     protected transient final ParticleBuilder bubble = new ParticleBuilder(Particle.SPELL_MOB)
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0)
         .force(true);
-    
+
     public GravityBubbleSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
@@ -54,5 +54,5 @@ public class GravityBubbleSpell extends AbstractWardSpell {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
     }
-    
+
 }

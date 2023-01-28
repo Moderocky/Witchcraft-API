@@ -12,16 +12,16 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 
 public class BurningSpheresSpell extends StandardSpell {
-    
+
     public BurningSpheresSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int amount = (int) Math.max(1, Math.min(5, 4 * scale));
@@ -44,5 +44,5 @@ public class BurningSpheresSpell extends StandardSpell {
         }
         caster.getWorld().playSound(start, Sound.BLOCK_FIRE_AMBIENT, 2.5F, 0.8F);
     }
-    
+
 }

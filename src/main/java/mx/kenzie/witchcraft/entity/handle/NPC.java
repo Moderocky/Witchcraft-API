@@ -8,18 +8,18 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface NPC {
-    
+
     Player getBukkitEntity();
-    
+
     void setOnDamage(BiConsumer<NPC, EntityDamageEvent> onDamage);
-    
+
     void setOnDeath(BiConsumer<NPC, PlayerDeathEvent> onDeath);
-    
+
     void setOnTick(Consumer<NPC> onTick);
-    
+
     void discard();
-    
+
     float getYHeadRot();
-    
+
     void setYHeadRot(float v);
 }

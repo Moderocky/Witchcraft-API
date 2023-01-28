@@ -14,7 +14,7 @@ public record Pattern(List<Point> points) {
     public Pattern {
         points = Collections.unmodifiableList(points);
     }
-    
+
     public List<Angle> toAngles(final Angle origin) {
         final Pattern scaled = scaledBy(1 / scale());
         final List<Angle> angles = new ArrayList<>();
@@ -28,7 +28,7 @@ public record Pattern(List<Point> points) {
         }
         return angles;
     }
-    
+
     public Pattern scaledBy(final double factor) {
         final ArrayList<Point> newPoints = new ArrayList<>(points);
         final ListIterator<Point> iter = points.listIterator();
@@ -37,18 +37,18 @@ public record Pattern(List<Point> points) {
         }
         return new Pattern(newPoints);
     }
-    
+
     public double scale() {
         if (this.points.isEmpty()) return 0;
         if (this.points.size() == 1) return 1;
         return this.points.get(1).distance(this.points.get(0));
     }
-    
+
     @Override
     public String toString() {
         return "Pattern" + points;
     }
-    
+
     public double deviation(final Pattern other) {
         if (this.points.size() != other.points.size()) return Double.MAX_VALUE;
         double total = 0;
@@ -57,13 +57,13 @@ public record Pattern(List<Point> points) {
         }
         return total / points.size();
     }
-    
+
     public Pattern scaledToMatch(final Pattern other) {
         if (points.size() < 2) return this;
         if (other.points.size() < 2) return this;
         return this.scaledBy(this.relativeScale(other));
     }
-    
+
     public double relativeScale(final Pattern other) {
         if (this.scale() == 0) return 0;
         return other.scale() / this.scale();

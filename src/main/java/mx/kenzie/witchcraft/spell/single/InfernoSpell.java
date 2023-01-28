@@ -24,33 +24,33 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class InfernoSpell extends AbstractTargetedSpell {
-    
+
     protected transient final ParticleCreator burst = ParticleCreator.of(Particle.FLAME.builder().count(0));
     protected transient final VectorShape shape = UnholyBlastSpell.PURPLE.createCircle(new Vector(0, 1, 0), 1.5, 50);
-    
+
     public InfernoSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final double damage = Math.max(3, Math.min(9, 1.5 + amplitude));
         final Inferno inferno = new Inferno(caster, caster.getLocation(), range, damage);
         inferno.task = WitchcraftAPI.scheduler.scheduleAtFixedRate(inferno, 200, 50, TimeUnit.MILLISECONDS);
-        
+
     }
-    
+
     protected Vector getEnd(LivingEntity caster, int range) {
         return caster.getEyeLocation().add(caster.getEyeLocation().getDirection().multiply(range)).toVector();
     }
-    
+
     protected static class Breaker {
-        
+
         private final Block block;
         private final int health, id;
         private final Player player;
@@ -58,7 +58,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
         private int lifetime;
         private int stage;
         private boolean done;
-        
+
         protected Breaker(Block block, Player player) {
             this.block = block;
             final float hardness = block.getType().getHardness();
@@ -70,7 +70,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
             this.viewers.removeIf(viewer -> viewer.getWorld() != block.getWorld());
             this.viewers.removeIf(viewer -> viewer.getLocation().distanceSquared(block.getLocation()) > 1600);
         }
-        
+
         public void tick() {
             if (done) return;
             if (health > 1000) return;
@@ -86,21 +86,21 @@ public class InfernoSpell extends AbstractTargetedSpell {
             this.stage = stage;
             WitchcraftAPI.client.sendBlockBreak(id, block, stage, viewers.toArray(new Player[0]));
         }
-        
+
         public void clear() {
             WitchcraftAPI.client.sendBlockBreak(id, block, 10, viewers.toArray(new Player[0]));
         }
-        
+
         public void destroy() {
             if (!Protection.getInstance().canBreak(player, block.getLocation())) return;
             this.block.breakNaturally(true, true);
             this.done = true;
         }
-        
+
     }
-    
+
     protected class Inferno implements Runnable {
-        
+
         private final LivingEntity caster;
         private final ParticleCreator ring = ParticleCreator.of(Particle.FLAME.builder().count(0).extra(0.5));
         private final Location start;
@@ -113,7 +113,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
         private volatile Vector end, direction;
         private volatile boolean cancelled;
         private int lifetime;
-        
+
         protected Inferno(LivingEntity caster, Location start, int range, double damage) {
             this.caster = caster;
             this.start = start;
@@ -121,7 +121,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
             this.damage = damage;
             this.end = getEnd(caster, range);
         }
-        
+
         @Override
         public void run() {
             if (cancelled) return;
@@ -138,13 +138,13 @@ public class InfernoSpell extends AbstractTargetedSpell {
             else if (caster.getLocation().distanceSquared(start) > 2.5) this.cancel();
             else this.tick();
         }
-        
+
         public void cancel() {
             this.cancelled = true;
             if (task == null) return;
             this.task.cancel(true);
         }
-        
+
         public void tick() {
             final Vector predict = getEnd(caster, range);
             if (end.distanceSquared(predict) < 4) end = predict;
@@ -157,7 +157,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
                 ring.createCircle(direction, 0.2, 12).draw(caster.getEyeLocation().add(0, 0.55, 0));
             }
         }
-        
+
         private void calculateTarget() {
             final Target target = getTarget(caster, direction, range, true, Mode.NOT_ALLIES);
             final Location end = target.target(), start = caster.getEyeLocation().add(0, 0.55, 0);
@@ -180,7 +180,7 @@ public class InfernoSpell extends AbstractTargetedSpell {
                 breaker.tick();
             }
         }
-        
+
     }
-    
+
 }

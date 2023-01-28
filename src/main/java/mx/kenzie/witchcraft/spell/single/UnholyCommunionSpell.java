@@ -19,19 +19,19 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class UnholyCommunionSpell extends StandardSpell {
-    
+
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.SPELL_WITCH);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 1, 20);
-    
+
     public UnholyCommunionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         Block block = caster.getLocation().add(0, 2.5, 0).getBlock();
@@ -58,5 +58,5 @@ public class UnholyCommunionSpell extends StandardSpell {
             if (!entity.isDead()) minecraft.ensureMain(entity::remove);
         });
     }
-    
+
 }

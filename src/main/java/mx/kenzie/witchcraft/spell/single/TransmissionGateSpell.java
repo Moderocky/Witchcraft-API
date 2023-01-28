@@ -6,5 +6,5 @@ public class TransmissionGateSpell extends ThassalurgySpell {
     public TransmissionGateSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
 }

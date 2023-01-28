@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class Item implements ItemArchetype {
-    
+
     private static final NamespacedKey SPELL_KEY = new NamespacedKey("witchcraft", "stored_spells");
     private transient final Set<Tag> _tags = new HashSet<>();
     private final transient Collection<Namespaced> canBreak = Collections.emptySet();
@@ -40,7 +40,7 @@ public class Item implements ItemArchetype {
     public @Optional OutfitData outfit;
     private transient ItemStack stack;
     private transient Collection<Namespaced> placedOn = Collections.emptySet();
-    
+
     public Item(InputStream stream) {
         final Fern fern = new Fern(stream);
         fern.toObject(this);
@@ -54,61 +54,61 @@ public class Item implements ItemArchetype {
         if (placeable) placedOn = PlaceableMaterial.FULL_BLOCKS;
         for (String tag : tags) _tags.add(Tag.register(tag));
     }
-    
+
     public Item() {
     }
-    
+
     @Override
     public boolean isOutfit() {
         return outfit != null && outfit.isValid();
     }
-    
+
     @Override
     public OutfitData asOutfit() {
         return outfit;
     }
-    
+
     @Override
     public boolean isProtected() {
         return restricted;
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return _tags;
     }
-    
+
     @Override
     public Component itemName() {
         return Component.translatable("item." + this.id).color(this.rarity().color())
             .decoration(TextDecoration.ITALIC, false);
     }
-    
+
     @Override
     public String name() {
         return name;
     }
-    
+
     @Override
     public Rarity rarity() {
         return rarity;
     }
-    
+
     @Override
     public String id() {
         return id;
     }
-    
+
     @Override
     public List<Component> itemLore() {
         return this.itemLore(null);
     }
-    
+
     @Override
     public String description() {
         return description;
     }
-    
+
     @Override
     public void update(ItemStack item) {
         if (item == null) return;
@@ -124,7 +124,7 @@ public class Item implements ItemArchetype {
         meta.displayName(this.itemName());
         item.setItemMeta(meta);
     }
-    
+
     @Override
     public ItemStack create() {
         if (stack != null) return stack.clone();
@@ -148,17 +148,17 @@ public class Item implements ItemArchetype {
         this.stack.setItemMeta(meta);
         return stack;
     }
-    
+
     @Override
     public boolean isHelmet() {
         return helmet || this.hasTag(Tag.parse("HELMET"));
     }
-    
+
     @Override
     public boolean isMagic() {
         return (magic != null) && magic.can_cast;
     }
-    
+
     @Override
     public Set<LearnedSpell> getSpells() {
         if (magic == null) return ItemArchetype.super.getSpells();
@@ -170,30 +170,30 @@ public class Item implements ItemArchetype {
         }
         return set;
     }
-    
+
     @Override
     public double bonusAmplitude() {
         if (magic != null) return magic.amplitude;
         return ItemArchetype.super.bonusAmplitude();
     }
-    
+
     @Override
     public int castRange() {
         if (magic != null) return magic.range;
         return ItemArchetype.super.castRange();
     }
-    
+
     @Override
     public int bonusEnergy() {
         if (magic != null) return magic.energy;
         return ItemArchetype.super.bonusEnergy();
     }
-    
+
     @Override
     public boolean isEmpty() {
         return false;
     }
-    
+
     public boolean storeSpell(ItemMeta meta, LearnedSpell spell) {
         final Set<LearnedSpell> known = this.getSpells();
         final List<LearnedSpell> stored = this.storedSpells(meta);
@@ -218,7 +218,7 @@ public class Item implements ItemArchetype {
         meta.lore(this.itemLore(meta));
         return true;
     }
-    
+
     protected List<LearnedSpell> storedSpells(ItemMeta meta) {
         if (meta == null) return Collections.emptyList();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -232,12 +232,12 @@ public class Item implements ItemArchetype {
         }
         return list;
     }
-    
+
     public int getSpellSlots() {
         if (magic == null) return 0;
         return magic.spell_slots;
     }
-    
+
     protected void storeSpells(ItemMeta meta, List<LearnedSpell> list) {
         final PersistentDataContainer container = meta.getPersistentDataContainer();
         if (list == null || list.isEmpty()) {
@@ -253,7 +253,7 @@ public class Item implements ItemArchetype {
         }
         container.set(SPELL_KEY, PersistentDataType.LONG_ARRAY, codes);
     }
-    
+
     public List<Component> itemLore(ItemMeta meta) {
         final TextColor pop = WitchcraftAPI.colors().pop();
         final List<Component> list = ItemArchetype.super.itemLore();
@@ -271,7 +271,7 @@ public class Item implements ItemArchetype {
         this.writeSpellSlots(meta, list);
         return list;
     }
-    
+
     protected void writeSpellSlots(ItemMeta meta, List<Component> list) {
         final Set<LearnedSpell> known = this.getSpells();
         final List<LearnedSpell> stored = this.storedSpells(meta);
@@ -300,7 +300,7 @@ public class Item implements ItemArchetype {
             ));
         }
     }
-    
+
     public LearnedSpell castStoredSpell(ItemMeta meta) {
         final List<LearnedSpell> spells = this.storedSpells(meta);
         if (spells == null || spells.isEmpty()) return null;
@@ -309,10 +309,10 @@ public class Item implements ItemArchetype {
         meta.lore(this.itemLore(meta));
         return spell;
     }
-    
+
     private record ItemSpell(LearnedSpell spell, boolean stored) {
     }
-    
+
     public static class MagicData {
         public boolean can_cast;
         public int range = 5, energy;

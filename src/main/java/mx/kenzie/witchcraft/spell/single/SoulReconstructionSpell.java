@@ -28,17 +28,17 @@ public class SoulReconstructionSpell extends StandardSpell {
     public SoulReconstructionSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final PaginatedGUI gui = new PaginatedGUI(WitchcraftAPI.plugin, InventoryType.HOPPER, "Soul Reconstruction");
-        gui.setLayout(new String[] {
+        gui.setLayout(new String[]{
             "#A#B#"
         });
         gui.createButton('A', ItemArchetype.of("glowing_wither").mutate()
@@ -52,11 +52,11 @@ public class SoulReconstructionSpell extends StandardSpell {
         gui.finalise();
         gui.open(player);
     }
-    
+
     protected void deadPlayers(Player player, InventoryClickEvent click) {
         // todo
     }
-    
+
     protected void pastLives(Player player, InventoryClickEvent click) {
         final PlayerData data = PlayerData.getData(player);
         final PlayerData.Memory[] memories = data.history;
@@ -73,7 +73,7 @@ public class SoulReconstructionSpell extends StandardSpell {
         };
         assembleMenu(player, buttons, gui, consumer);
     }
-    
+
     protected void setMemory(Player player, PlayerData.Memory memory) {
         final PlayerData data = PlayerData.getData(player);
         data.setMemory(memory);
@@ -85,5 +85,5 @@ public class SoulReconstructionSpell extends StandardSpell {
             .draw(player.getLocation(), 20);
         player.sendMessage(Component.text("Old memories have returned to you...", WitchcraftAPI.colors().lowlight()));
     }
-    
+
 }

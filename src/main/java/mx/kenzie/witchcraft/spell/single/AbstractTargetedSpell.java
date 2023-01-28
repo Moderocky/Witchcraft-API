@@ -16,23 +16,11 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public abstract class AbstractTargetedSpell extends StandardSpell {
-    
+
     public AbstractTargetedSpell(Map<String, Object> map) {
         super(map);
     }
-    
-    protected Target getTarget(LivingEntity caster, int range) {
-        return this.getTarget(caster, range, false);
-    }
-    
-    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir) {
-        return this.getTarget(caster, range, strikeAir, Mode.SAFE_TO_TARGET);
-    }
-    
-    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir, Mode mode) {
-        return findTarget(caster, caster.getEyeLocation().getDirection(), range, strikeAir, mode);
-    }
-    
+
     public static Target findTarget(LivingEntity caster, Vector direction, int range, boolean strikeAir, Mode mode) {
         final World world = caster.getWorld();
         final Location start = caster.getEyeLocation();
@@ -44,11 +32,23 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         final Location target = result.getHitPosition().toLocation(world);
         return new Target(target, found, result);
     }
-    
+
+    protected Target getTarget(LivingEntity caster, int range) {
+        return this.getTarget(caster, range, false);
+    }
+
+    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir) {
+        return this.getTarget(caster, range, strikeAir, Mode.SAFE_TO_TARGET);
+    }
+
+    protected Target getTarget(LivingEntity caster, int range, boolean strikeAir, Mode mode) {
+        return findTarget(caster, caster.getEyeLocation().getDirection(), range, strikeAir, mode);
+    }
+
     protected Target getTarget(LivingEntity caster, Vector direction, int range, boolean strikeAir, Mode mode) {
         return findTarget(caster, direction, range, strikeAir, mode);
     }
-    
+
     public enum Mode {
         ALL((entity, caster) -> !entity.equals(caster)),
         ALLIES_ONLY((entity, caster) -> !entity.equals(caster)
@@ -66,18 +66,18 @@ public abstract class AbstractTargetedSpell extends StandardSpell {
         SAFE_TO_TARGET((entity, caster) -> !entity.equals(caster)
             && !Minecraft.getInstance().isSameVehicle(entity, caster)
             && Minecraft.getInstance().isValidToDamage(entity));
-        
+
         public final BiFunction<Entity, LivingEntity, Boolean> filter;
-        
+
         Mode(BiFunction<Entity, LivingEntity, Boolean> filter) {
             this.filter = filter;
         }
     }
-    
+
     public record Target(Location target, @Nullable Entity entity, RayTraceResult result) {
         private Target(Location target, @Nullable Entity entity) {
             this(target, entity, null);
         }
     }
-    
+
 }

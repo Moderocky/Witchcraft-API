@@ -12,13 +12,13 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class SkeletonHordeSpell extends AbstractGraveSpell {
-    
+
     private transient final ParticleCreator creator = ParticleCreator.of(Material.REDSTONE_BLOCK);
-    
+
     public SkeletonHordeSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         int summons = summonCount(caster);

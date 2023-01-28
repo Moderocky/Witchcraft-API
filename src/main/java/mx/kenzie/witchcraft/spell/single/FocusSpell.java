@@ -13,12 +13,12 @@ public class FocusSpell extends AbstractTargetedSpell {
     public FocusSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Target target = this.getTarget(caster, range, false);

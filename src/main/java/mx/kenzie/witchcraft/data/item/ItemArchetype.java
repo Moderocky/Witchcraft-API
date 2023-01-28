@@ -20,11 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface ItemArchetype {
-    
+
     Set<LearnedSpell> EMPTY_SET = new HashSet<>();
-    
+
     Pattern LINE = Pattern.compile("\\G\\s*(.{1," + 32 + "})(?=\\s|$)", Pattern.DOTALL);
-    
+
     static @NotNull ItemArchetype of(ItemStack stack) {
         if (stack == null) return BukkitMaterial.AIR;
         if (stack.getType() == Material.AIR) return BukkitMaterial.AIR;
@@ -34,40 +34,40 @@ public interface ItemArchetype {
         if (container.has(WitchcraftAPI.plugin.getKey("building"))) return new PlaceableMaterial(stack.getType());
         return new BukkitMaterial(stack.getType());
     }
-    
+
     static @NotNull ItemArchetype of(String id) {
         if (id == null || id.isBlank()) return BukkitMaterial.AIR;
         final ItemArchetype sample = WitchcraftAPI.resources.getArchetype(id);
         if (sample != null) return sample;
         return BukkitMaterial.AIR;
     }
-    
+
     default boolean isOutfit() {
         return false;
     }
-    
+
     default OutfitData asOutfit() {
         return null;
     }
-    
+
     boolean isProtected();
-    
+
     default boolean hasTag(Tag tag) {
         return this.tags().contains(tag);
     }
-    
+
     Set<Tag> tags();
-    
+
     default Component itemName() {
         return Component.text(this.name()).color(this.rarity().color()).decoration(TextDecoration.ITALIC, false);
     }
-    
+
     String name();
-    
+
     Rarity rarity();
-    
+
     String id();
-    
+
     default List<Component> itemLore() {
         final List<String> lines = new ArrayList<>(4);
         final Matcher matcher = LINE.matcher(this.description());
@@ -81,9 +81,9 @@ public interface ItemArchetype {
         components.add(this.typeDescriptor().decoration(TextDecoration.ITALIC, false));
         return components;
     }
-    
+
     String description();
-    
+
     default Component typeDescriptor() {
         return (this instanceof ItemMaterial
             ? Component.text(this.rarity().qualifiedName() + " Material")
@@ -102,11 +102,11 @@ public interface ItemArchetype {
             : Component.text(this.rarity().qualifiedName())
         ).color(this.rarity().color());
     }
-    
+
     default boolean hasTag(String tag) {
         return this.tags().contains(Tag.parse(tag));
     }
-    
+
     default void update(ItemStack item) {
         if (item == null) return;
         final ItemStack template = this.create();
@@ -117,37 +117,37 @@ public interface ItemArchetype {
         Minecraft.getInstance().merge(container, replacement);
         item.setItemMeta(template.getItemMeta());
     }
-    
+
     ItemStack create();
-    
+
     default boolean isHelmet() {
         return false;
     }
-    
+
     default boolean isMagic() {
         return false;
     }
-    
+
     default Set<LearnedSpell> getSpells() {
         return EMPTY_SET;
     }
-    
+
     default double bonusAmplitude() {
         return 0.0;
     }
-    
+
     default int castRange() {
         return 10;
     }
-    
+
     default int bonusEnergy() {
         return 0;
     }
-    
+
     default boolean isEmpty() {
         return true;
     }
-    
+
     default boolean giveSafely(Player player) {
         final HashMap<Integer, ItemStack> rest = player.getInventory().addItem(this.create());
         if (rest.size() > 0) {
@@ -163,9 +163,9 @@ public interface ItemArchetype {
         }
         return rest.isEmpty();
     }
-    
+
     default MutableArchetype mutate() {
         return new MutableArchetype(this);
     }
-    
+
 }

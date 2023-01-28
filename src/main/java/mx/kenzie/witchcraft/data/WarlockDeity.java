@@ -22,25 +22,25 @@ public enum WarlockDeity {
     TERRORACH("terrorach_staff", "horns_curly", false),
     NEFAERIAN("endragora", "horns_halo", true),
     RENOVAMEN("varrichor", "horns_unicorn", true);
-    
+
     public final String weaponId, hornsId;
     public final boolean locked;
-    
+
     WarlockDeity(String weaponId, String hornsId, boolean locked) {
         this.weaponId = weaponId;
         this.hornsId = hornsId;
         this.locked = locked;
     }
-    
+
     public ItemArchetype getWeapon() {
         if (this == NONE) return BukkitMaterial.AIR;
         return ItemArchetype.of(weaponId);
     }
-    
+
     public Component displayName() {
         return Component.text(ResourceManager.pascalCase(this.name().toLowerCase().replace('_', ' ')));
     }
-    
+
     public void updateHorns(@Nullable LivingEntity entity) {
         if (entity == null) return;
         final EntityEquipment equipment = entity.getEquipment();
@@ -51,10 +51,10 @@ public enum WarlockDeity {
         if (archetype.isEmpty() || archetype.isProtected()) return;
         if (entity instanceof Player player) archetype.giveSafely(player);
     }
-    
+
     public ItemArchetype getHorns() {
         if (this == NONE) return BukkitMaterial.AIR;
         return ItemArchetype.of(hornsId).mutate().meta(meta -> meta.addEnchant(Enchantment.BINDING_CURSE, 1, true));
     }
-    
+
 }

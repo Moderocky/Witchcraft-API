@@ -22,38 +22,11 @@ public class ShadeShiftSpell extends AbstractTeleportSpell {
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0).force(true);
     private transient List<Block> blocks;
-    
+
     public ShadeShiftSpell(Map<String, Object> map) {
         super(map);
     }
-    
-    @Override
-    public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final Location centre = caster.getLocation();
-        WitchcraftAPI.executor.submit(() -> this.playCircles(centre.clone()));
-        final List<Block> found = blocks;
-        final Location end = found.get(found.size() - 1).getLocation();
-        end.setDirection(centre.getDirection());
-        caster.teleportAsync(end);
-        WitchcraftAPI.executor.submit(() -> this.playCircles(end.clone()));
-    }
-    
-    private void playCircles(Location location) {
-        final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
-        final VectorShape shape = creator.createCircle(new Vector(0, 1, 0), 0.9, 20);
-        for (int i = 0; i < 7; i++) {
-            shape.draw(location);
-            location.add(0, 0.3, 0);
-            WitchcraftAPI.sleep(50);
-        }
-    }
-    
-    @Override
-    public boolean canCast(LivingEntity caster) {
-        this.blocks = getValidShadedLocations(caster.getLocation(), 15);
-        return blocks.size() > 0; // this is easier to attempt-cast since we can be doing the blocks at the same time :)
-    }
-    
+
     public static List<Block> getValidShadedLocations(Location centre, int radius) {
         final int startX = centre.getBlockX(), startY = centre.getBlockY(), startZ = centre.getBlockZ();
         final List<Block> blocks = new ArrayList<>(30);
@@ -74,7 +47,34 @@ public class ShadeShiftSpell extends AbstractTeleportSpell {
         blocks.sort(Comparator.comparing(block -> block.getLocation().distanceSquared(centre)));
         return blocks;
     }
-    
+
+    @Override
+    public void run(LivingEntity caster, int range, float scale, double amplitude) {
+        final Location centre = caster.getLocation();
+        WitchcraftAPI.executor.submit(() -> this.playCircles(centre.clone()));
+        final List<Block> found = blocks;
+        final Location end = found.get(found.size() - 1).getLocation();
+        end.setDirection(centre.getDirection());
+        caster.teleportAsync(end);
+        WitchcraftAPI.executor.submit(() -> this.playCircles(end.clone()));
+    }
+
+    private void playCircles(Location location) {
+        final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
+        final VectorShape shape = creator.createCircle(new Vector(0, 1, 0), 0.9, 20);
+        for (int i = 0; i < 7; i++) {
+            shape.draw(location);
+            location.add(0, 0.3, 0);
+            WitchcraftAPI.sleep(50);
+        }
+    }
+
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        this.blocks = getValidShadedLocations(caster.getLocation(), 15);
+        return blocks.size() > 0; // this is easier to attempt-cast since we can be doing the blocks at the same time :)
+    }
+
     // Potentially could be a static/default method in ParticleCreator?
     private void drawShape(VectorShape shape, Location location, long delay) {
         final ParticleBuilder builder = shape.builder();

@@ -9,12 +9,12 @@ public class ApotheosisSpell extends StandardSpell {
     public ApotheosisSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         // todo spell functionality

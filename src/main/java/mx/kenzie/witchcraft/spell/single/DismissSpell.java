@@ -11,16 +11,16 @@ import java.util.Map;
 
 public class DismissSpell extends StandardSpell {
     protected final ParticleCreator creator = ParticleCreator.of(Particle.FIREWORKS_SPARK.builder().count(0));
-    
+
     public DismissSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         for (Entity summon : Minecraft.getInstance().getSummons(caster)) {

@@ -18,16 +18,16 @@ public class GalvaniseSpell extends StandardSpell {
     public transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.TOTEM)
         .count(0)
         .force(true));
-    
+
     public GalvaniseSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final EntityEquipment equipment = caster.getEquipment();
@@ -38,7 +38,7 @@ public class GalvaniseSpell extends StandardSpell {
         if (this.enchant(off)) return; // we try to enchant the offhand
         this.enchant(main); // if this doesn't work we enchant the player's magic item
     }
-    
+
     protected boolean enchant(ItemStack item) {
         final ItemArchetype archetype = ItemArchetype.of(item);
         if (archetype.isEmpty()) return false;

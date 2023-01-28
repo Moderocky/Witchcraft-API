@@ -19,16 +19,16 @@ import java.util.Set;
 
 public class UnravelSpell extends StandardSpell {
     protected transient ParticleCreator creator = ParticleCreator.of(Particle.SOUL_FIRE_FLAME.builder().count(0));
-    
+
     public UnravelSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return Protection.getInstance().canBreak(caster, caster.getLocation());
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Minecraft minecraft = WitchcraftAPI.minecraft;
@@ -44,7 +44,7 @@ public class UnravelSpell extends StandardSpell {
             break;
         }
     }
-    
+
     protected boolean destroyConnected(Block block) {
         if (!this.isPortal(block)) return false;
         block.setType(Material.AIR, false);
@@ -52,7 +52,7 @@ public class UnravelSpell extends StandardSpell {
         for (BlockFace value : BlockFace.values()) this.destroyConnected(block.getRelative(value));
         return true;
     }
-    
+
     protected boolean isPortal(Block block) {
         if (block == null) return false;
         return switch (block.getType()) {

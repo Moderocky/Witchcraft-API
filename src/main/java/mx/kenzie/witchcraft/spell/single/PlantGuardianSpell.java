@@ -11,18 +11,18 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class PlantGuardianSpell extends AbstractSummonSpell {
-    
+
     protected transient final ParticleCreator creator = ParticleCreator.of(Particle.COMPOSTER);
-    
+
     public PlantGuardianSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return WitchcraftAPI.minecraft.nearbySummons(caster, CustomEntityType.PLANT_GUARDIAN_SUMMON) < 2 && super.canCast(caster);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);

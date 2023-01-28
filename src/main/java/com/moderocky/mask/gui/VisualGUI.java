@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  *
  */
 public class VisualGUI implements InventoryGUI, Listener {
-    
+
     protected final Inventory inventory;
     protected final List<Player> players = new ArrayList<>();
     protected final TreeMap<Integer, BiConsumer<Player, InventoryClickEvent>> map = new TreeMap<>();
@@ -37,52 +37,52 @@ public class VisualGUI implements InventoryGUI, Listener {
     protected final Plugin plugin;
     protected final List<Consumer<?>> preActionConsumers = new ArrayList<>();
     protected BiConsumer<Player, InventoryCloseEvent> closeConsumer;
-    
+
     protected boolean finished = false;
     protected String[] layout = new String[0];
-    
+
     public VisualGUI(Plugin plugin, InventoryType type, String title) {
         this.plugin = plugin;
         if (!type.isCreatable()) throw new IllegalArgumentException();
         this.inventory = Bukkit.createInventory(null, type, title);
         this.editable = false;
     }
-    
+
     public VisualGUI(Plugin plugin, int size, String title) {
         this.plugin = plugin;
         this.inventory = Bukkit.createInventory(null, size, title);
         this.editable = false;
     }
-    
+
     public String[] getLayout() {
         return layout;
     }
-    
+
     public VisualGUI setLayout(String[] layout) {
         if (!finished)
             this.layout = layout;
         return this;
     }
-    
+
     public @NotNull ItemStack getReference(char ch) {
         return layoutMap.getOrDefault(ch, new ItemStack(Material.AIR));
     }
-    
+
     @Override
     public int getSize() {
         return inventory.getSize();
     }
-    
+
     @Override
     public boolean isEditable() {
         return editable;
     }
-    
+
     @Override
     public InventoryType getType() {
         return inventory.getType();
     }
-    
+
     public VisualGUI createButton(char ch, @NotNull ItemStack itemStack, @NotNull BiConsumer<Player, InventoryClickEvent> consumer) {
         this.preActionConsumers.add(o -> {
             for (int slot : this.getSlots(ch)) {
@@ -92,7 +92,7 @@ public class VisualGUI implements InventoryGUI, Listener {
         });
         return this;
     }
-    
+
     public int[] getSlots(char ch) {
         List<Integer> integers = new ArrayList<>();
         char[] chars = String.join("", layout).toCharArray();
@@ -107,7 +107,7 @@ public class VisualGUI implements InventoryGUI, Listener {
         }
         return ints;
     }
-    
+
     public VisualGUI createTile(char ch, ItemStack itemStack, boolean stealable) {
         preActionConsumers.add(o -> {
             BiConsumer<Player, InventoryClickEvent> consumer = (player, event) -> event.setCancelled(!stealable);
@@ -115,22 +115,22 @@ public class VisualGUI implements InventoryGUI, Listener {
                 map.put(Math.max(0, Math.min(inventory.getSize(), slot)), consumer);
                 inventory.setItem(Math.max(0, Math.min(inventory.getSize(), slot)), itemStack);
             }
-            
+
         });
         return this;
     }
-    
+
     public VisualGUI createTile(char ch, @NotNull ItemStack itemStack) {
         layoutMap.put(ch, itemStack);
         preActionConsumers.add(o -> {
             for (int slot : getSlots(ch)) {
                 inventory.setItem(Math.max(0, Math.min(inventory.getSize(), slot)), itemStack);
             }
-            
+
         });
         return this;
     }
-    
+
     @Override
     public void open(Player player) {
         if (!finished) finalise();
@@ -138,30 +138,30 @@ public class VisualGUI implements InventoryGUI, Listener {
         player.openInventory(inventory);
         players.add(player);
     }
-    
+
     public void finalise() {
         map.clear();
         inventory.clear();
         for (Consumer<?> consumer : preActionConsumers) consumer.accept(null);
         finished = true;
     }
-    
+
     protected boolean hasListener() {
         for (RegisteredListener listener : HandlerList.getRegisteredListeners(plugin)) {
             if (listener.getListener() == this) return true;
         }
         return false;
     }
-    
+
     private void register() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @Override
     public boolean isOpen(Player player) {
         return players.contains(player);
     }
-    
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (event.isCancelled()) return;
@@ -179,7 +179,7 @@ public class VisualGUI implements InventoryGUI, Listener {
         if (!map.containsKey(event.getSlot())) return;
         map.get(event.getSlot()).accept(player, event);
     }
-    
+
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!event.getInventory().equals(inventory)) return;
@@ -191,7 +191,7 @@ public class VisualGUI implements InventoryGUI, Listener {
         if (closeConsumer != null) closeConsumer.accept(player, event);
         this.remove();
     }
-    
+
     protected void remove() {
         new BukkitRunnable() {
             @Override
@@ -200,13 +200,13 @@ public class VisualGUI implements InventoryGUI, Listener {
             }
         }.runTaskLater(plugin, 80);
     }
-    
+
     public void unregister() {
         HandlerList.unregisterAll(this);
     }
-    
+
     public void onClose(BiConsumer<Player, InventoryCloseEvent> consumer) {
         this.closeConsumer = consumer;
     }
-    
+
 }

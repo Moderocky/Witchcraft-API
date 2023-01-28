@@ -13,7 +13,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 
 public enum Achievement {
-    
+
     ROOT("Witchcraft", "A record of your magical journey.", "book", "mangrove") {
         @Override
         public void complete(Player player) {
@@ -178,12 +178,12 @@ public enum Achievement {
     RESURRECT("Resurrection", "Bring a player back from the dead.", "totem", BECOME_SHADOWLORD),
     EXECUTE("The Killing Curse", "Kill a player permanently.", "wither", RESURRECT, "goal"),
     REINCARNATE("Time and Time Again", "Reincarnate as a past life.", "health_boost", RESURRECT, "challenge");
-    
-    
+
+
     public final String name, description;
     public final String icon, background, frame;
     public final NamespacedKey parent;
-    
+
     Achievement(String name, String description, String icon, String background) {
         this.name = name;
         this.description = description;
@@ -192,7 +192,7 @@ public enum Achievement {
         this.parent = null;
         this.frame = "task";
     }
-    
+
     Achievement(String name, String description, String icon, Achievement parent) {
         this.name = name;
         this.description = description;
@@ -201,12 +201,7 @@ public enum Achievement {
         this.parent = parent.key();
         this.frame = "task";
     }
-    
-    public NamespacedKey key() {
-        if (WitchcraftAPI.plugin == null) return null; // test only
-        return WitchcraftAPI.plugin.getKey(this.name().toLowerCase());
-    }
-    
+
     Achievement(String name, String description, String icon, Achievement parent, String frame) {
         this.name = name;
         this.description = description;
@@ -215,7 +210,12 @@ public enum Achievement {
         this.parent = parent.key();
         this.frame = frame;
     }
-    
+
+    public NamespacedKey key() {
+        if (WitchcraftAPI.plugin == null) return null; // test only
+        return WitchcraftAPI.plugin.getKey(this.name().toLowerCase());
+    }
+
     public void register() {
         try {
             final Advancement advancement = this.createAdvancement();
@@ -224,7 +224,7 @@ public enum Achievement {
             throw new RuntimeException("Error registering advancement for " + name(), ex);
         }
     }
-    
+
     public Advancement createAdvancement() {
         final Advancement advancement = new Advancement(this.name().toLowerCase());
         advancement.display = new Display();
@@ -242,22 +242,22 @@ public enum Achievement {
         } else advancement.setParent(parent);
         return advancement;
     }
-    
+
     public Component displayName() {
         return Component.text(name).hoverEvent(this.description());
     }
-    
+
     public Component description() {
         return Component.text(this.description);
     }
-    
+
     public void give(Player player) {
         final PlayerData data = PlayerData.getData(player);
         if (data.hasAchievement(this)) return;
         data.addAchievement(this);
         this.complete(player);
     }
-    
+
     public void complete(Player player) {
         final org.bukkit.advancement.Advancement advancement = Bukkit.getAdvancement(this.key());
         if (advancement == null) return;
@@ -265,5 +265,5 @@ public enum Achievement {
         if (progress.isDone()) return;
         for (String criterion : progress.getRemainingCriteria()) progress.awardCriteria(criterion);
     }
-    
+
 }

@@ -17,42 +17,42 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public record PlayerIcon(PlayerProfile profile) implements ItemArchetype {
-    
+
     public PlayerIcon(Player player) {
         this(player.getPlayerProfile());
     }
-    
+
     @Override
     public boolean isProtected() {
         return true;
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return new HashSet<>();
     }
-    
+
     @Override
     public Component itemName() {
         return Component.text(this.name(), WitchcraftAPI.colors().highlight())
             .decoration(TextDecoration.ITALIC, false);
     }
-    
+
     @Override
     public String name() {
         return Objects.requireNonNullElse(profile.getName(), "Player");
     }
-    
+
     @Override
     public Rarity rarity() {
         return Rarity.RARE;
     }
-    
+
     @Override
     public String id() {
         return Objects.requireNonNull(profile.getId()).toString();
     }
-    
+
     @Override
     public List<Component> itemLore() {
         final List<Component> components = new ArrayList<>(1);
@@ -61,12 +61,12 @@ public record PlayerIcon(PlayerProfile profile) implements ItemArchetype {
             .color(WitchcraftAPI.colors().lowlight()));
         return components;
     }
-    
+
     @Override
     public String description() {
         return "Consumes resources when placed.";
     }
-    
+
     @Override
     public ItemStack create() {
         final ItemStack stack = new ItemStack(Material.PLAYER_HEAD);

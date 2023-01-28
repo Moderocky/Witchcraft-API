@@ -22,8 +22,8 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public interface RecipeType {
-    
-    TextColor[] COLORS = new TextColor[] {
+
+    TextColor[] COLORS = new TextColor[]{
         TextColor.color(239, 66, 92),
         TextColor.color(243, 130, 57),
         TextColor.color(241, 201, 53),
@@ -34,22 +34,22 @@ public interface RecipeType {
         TextColor.color(112, 91, 229),
         TextColor.color(159, 102, 236)
     };
-    
+
     default boolean isShaped() {
         return true;
     }
-    
+
     default boolean isComplex() {
         return false; // i mean this whole fucking thing is complex but...
     }
-    
+
     default TextColor getColor(Ingredient ingredient) {
         int i = List.of(this.ingredients()).indexOf(ingredient);
         return i >= 0 ? COLORS[i] : ResourceManager.DEFAULT_COLOUR;
     }
-    
+
     String id();
-    
+
     default TextColor[] getColorGrid() {
         final Ingredient[] ingredients = this.ingredients();
         final TextColor[] strings = new TextColor[9];
@@ -61,7 +61,7 @@ public interface RecipeType {
         return strings;
         // ◆
     }
-    
+
     default ItemStack getIcon(Player player) {
         final ItemStack result = this.getResult().clone();
         final ItemMeta meta = result.getItemMeta();
@@ -121,7 +121,7 @@ public interface RecipeType {
         result.setItemMeta(meta);
         return result;
     }
-    
+
     default ItemStack complete(ItemStack[] matrix) {
         final ItemStack stack = this.getResult(matrix).clone();
         final Ingredient[] ingredients = this.ingredients();
@@ -141,20 +141,20 @@ public interface RecipeType {
         }
         return stack;
     }
-    
+
     default ItemStack getResult(ItemStack[] contextMatrix) {
         return this.getResult();
     }
-    
+
     Ingredient[] ingredients();
-    
+
     default boolean matches(Ingredient[] ingredients, ItemStack[] contextMatrix) {
         for (int i = 0; i < ingredients.length; i++) if (ingredients[i] == null) ingredients[i] = Ingredient.EMPTY;
         if (contextMatrix.length < ingredients.length) return false;
         for (int i = 0; i < ingredients.length; i++) if (!ingredients[i].matches(contextMatrix[i])) return false;
         return true;
     }
-    
+
     default ItemStack complete(Ingredient[] ingredients, ItemStack[] matrix) {
         final ItemStack stack = this.getResult(matrix).clone();
         if (matrix.length < ingredients.length) return stack;
@@ -164,9 +164,9 @@ public interface RecipeType {
         }
         return stack;
     }
-    
+
     ItemStack getResult();
-    
+
     default boolean canComplete(Player player) {
         if (player == null) return false;
         final Ingredient[] ingredients = this.ingredients();
@@ -180,7 +180,7 @@ public interface RecipeType {
         }
         return true;
     }
-    
+
     default void complete(Player player) {
         if (player == null) return;
         final Ingredient[] ingredients = this.ingredients();
@@ -197,7 +197,7 @@ public interface RecipeType {
         final ItemArchetype archetype = ItemArchetype.of(this.getResult());
         if (archetype.hasTag(Tag.parse("arcane"))) Achievement.CRAFT_ARCANE_ITEM.give(player);
     }
-    
+
     default boolean matches(ItemStack[] contextMatrix) {
         final Ingredient[] ingredients = this.ingredients();
         if (ingredients.length < contextMatrix.length) {
@@ -218,7 +218,7 @@ public interface RecipeType {
             return this.matches(sample, contextMatrix);
         }
     }
-    
+
     default boolean couldMatch(ItemStack[] contextMatrix) {
         final Ingredient[] ingredients = this.ingredients();
         for (int i = 0; i < contextMatrix.length; i++) {
@@ -227,7 +227,7 @@ public interface RecipeType {
         }
         return true;
     }
-    
+
     default ItemStack[] exampleIngredients() {
         final Ingredient[] ingredients = this.ingredients();
         final ItemStack[] stacks = new ItemStack[9];
@@ -236,13 +236,13 @@ public interface RecipeType {
         if (i < 9) for (int j = 0; j < 9 - i; j++) stacks[j] = Ingredient.EMPTY.getExample();
         return stacks;
     }
-    
+
     default String getGroup() {
         return "";
     }
-    
+
     default boolean isLocked() {
         return false;
     }
-    
+
 }

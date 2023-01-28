@@ -10,16 +10,16 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class MinorGenesisSpell extends PocketPortalSpell {
-    
+
     public MinorGenesisSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return super.canCast(caster) && !RealmManager.getInstance().worldExists(caster.getUniqueId());
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final RealmManager manager = RealmManager.getInstance();
@@ -28,5 +28,5 @@ public class MinorGenesisSpell extends PocketPortalSpell {
         caster.getWorld().playSound(start, Sound.MUSIC_DRAGON, 1.0F, 1.0F);
         this.enterRealm(caster, future, start);
     }
-    
+
 }

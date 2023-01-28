@@ -24,68 +24,68 @@ public class LearnedSpell implements ItemArchetype {
     public int level = 1;
     public String id;
     private transient Spell spell;
-    
+
     public LearnedSpell() {
     }
-    
+
     public LearnedSpell(Spell spell) {
         this(spell, 1);
     }
-    
+
     public LearnedSpell(Spell spell, int level) {
         this.id = spell.getId();
         this.spell = spell;
         this.level = level;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LearnedSpell spell)) return false;
         return Objects.equals(id, spell.id);
     }
-    
+
     @Override
     public boolean isProtected() {
         return true;
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return new HashSet<>();
     }
-    
+
     @Override
     public String name() {
         return spell.getName();
     }
-    
+
     @Override
     public Rarity rarity() {
         return Rarity.values()[Math.min(Math.max(0, spell.getPoints() - 4), Rarity.values().length)];
     }
-    
+
     @Override
     public String id() {
         return id;
     }
-    
+
     @Override
     public String description() {
         return spell.getDescription();
     }
-    
+
     @Override
     public Component typeDescriptor() {
         return Component.text("Level " + spell.getPoints() + " " + spell.getType().qualifiedName())
             .color(this.rarity().color());
     }
-    
+
     @Override
     public ItemStack create() {
         final ItemStack item = (switch (this.getStyle()) {
@@ -139,16 +139,16 @@ public class LearnedSpell implements ItemArchetype {
         item.setItemMeta(meta);
         return item;
     }
-    
+
     public MagicClass getStyle() {
         return this.getSpell().getStyle();
     }
-    
+
     public Spell getSpell() {
         if (spell != null) return spell;
         return spell = WitchcraftAPI.spells.getSpell(id);
     }
-    
+
     @Override
     public Set<LearnedSpell> getSpells() {
         return new HashSet<>(List.of(this));

@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TeleportationCircleSpell extends TeleportSpell {
-    
+
     public TeleportationCircleSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -32,7 +32,7 @@ public class TeleportationCircleSpell extends TeleportSpell {
         list.removeIf(position -> position.getWorld() != caster.getWorld());
         this.createMenu(player, list);
     }
-    
+
     @Override
     protected void doTeleport(LivingEntity caster, Position target, int range) {
         final Location start = caster.getLocation();
@@ -59,5 +59,5 @@ public class TeleportationCircleSpell extends TeleportSpell {
             this.drawShape(spiral, start);
         }
     }
-    
+
 }

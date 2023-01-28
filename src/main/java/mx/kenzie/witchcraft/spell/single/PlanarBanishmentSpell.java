@@ -23,12 +23,12 @@ public class PlanarBanishmentSpell extends StandardSpell {
     public PlanarBanishmentSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final World world = caster.getWorld();
@@ -56,7 +56,7 @@ public class PlanarBanishmentSpell extends StandardSpell {
         };
         assembleMenu(player, buttons, gui, consumer);
     }
-    
+
     protected void doBanish(Player player, World world) {
         final PlayerData data = PlayerData.getData(player);
         data.banish(world);

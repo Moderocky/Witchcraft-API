@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import java.util.List;
 
 public interface LocatedShape extends VectorShape {
-    
+
     default void draw(long delay) {
         WitchcraftAPI.executor.submit(() -> {
             for (Location point : this.getLocations()) {
@@ -15,6 +15,6 @@ public interface LocatedShape extends VectorShape {
             }
         });
     }
-    
+
     List<Location> getLocations();
 }

@@ -26,23 +26,23 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class TeleportSpell extends AbstractTeleportSpell {
-    
+
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
         .color(Color.fromRGB(35, 173, 252))
         .count(0).force(true);
     protected final ParticleBuilder soul = new ParticleBuilder(Particle.SOUL).count(0).extra(0);
-    
+
     public TeleportSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
         final PlayerData data = PlayerData.getData(player);
         this.createMenu(player, data.getKnownLocations());
     }
-    
+
     protected PaginatedGUI createMenu(Player player, Collection<Position> list) {
         final Position[] positions = list.toArray(new Position[0]);
         final List<ItemStack> buttons = new ArrayList<>(positions.length);
@@ -59,11 +59,11 @@ public class TeleportSpell extends AbstractTeleportSpell {
         assembleMenu(player, buttons, gui, consumer);
         return gui;
     }
-    
+
     protected void doTeleport(LivingEntity caster, Position target, int range) {
         this.doTeleport(caster, target);
     }
-    
+
     protected void doTeleport(LivingEntity caster, Position target) {
         final Location start = caster.getLocation();
         final Location location = target.getLocation();
@@ -86,7 +86,7 @@ public class TeleportSpell extends AbstractTeleportSpell {
         poof.draw(start.add(0, 1, 0));
         this.drawShape(spiral, start);
     }
-    
+
     protected void drawShape(VectorShape shape, Location location) {
         WitchcraftAPI.executor.submit(() -> {
             final ParticleBuilder builder = shape.builder();

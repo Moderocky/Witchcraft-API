@@ -8,11 +8,11 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 
 public class PortalSpawnSpell extends AbstractPortalSpell {
-    
+
     public PortalSpawnSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0, 0.5, 0);

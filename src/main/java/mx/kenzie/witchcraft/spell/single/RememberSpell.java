@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class RememberSpell extends StandardSpell {
     protected transient final ParticleCreator creator;
-    
+
     public RememberSpell(Map<String, Object> map) {
         super(map);
         if (!WitchcraftAPI.isTest)
@@ -22,7 +22,7 @@ public class RememberSpell extends StandardSpell {
                 .count(0).force(true));
         else creator = null;
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         if (!(caster instanceof Player player)) return false;
@@ -33,7 +33,7 @@ public class RememberSpell extends StandardSpell {
         }
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;

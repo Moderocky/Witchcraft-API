@@ -15,17 +15,17 @@ import java.awt.*;
 import java.util.Map;
 
 public class DarkBlastSpell extends AbstractProjectileSpell {
-    
+
     protected transient final Color color = new Color(33, 5, 44);
     protected transient final ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE)
         .color(org.bukkit.Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue()))
         .count(0)
         .force(true);
-    
+
     public DarkBlastSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public Projectile createProjectile(LivingEntity caster, float scale, double amplitude, int range) {
         final Location location = caster.getEyeLocation();

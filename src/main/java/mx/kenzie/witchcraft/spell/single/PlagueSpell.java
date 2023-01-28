@@ -26,11 +26,11 @@ public class PlagueSpell extends AbstractWardSpell {
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0)
         .force(true);
-    
+
     public PlagueSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
@@ -53,5 +53,5 @@ public class PlagueSpell extends AbstractWardSpell {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
     }
-    
+
 }

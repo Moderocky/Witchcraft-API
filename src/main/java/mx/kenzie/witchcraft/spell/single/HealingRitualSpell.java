@@ -15,16 +15,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class HealingRitualSpell extends StandardSpell {
-    
+
     public HealingRitualSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Minecraft minecraft = Minecraft.getInstance();

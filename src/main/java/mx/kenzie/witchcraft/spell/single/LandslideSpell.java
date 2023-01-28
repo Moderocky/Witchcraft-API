@@ -18,16 +18,16 @@ public class LandslideSpell extends BulwarkSpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.MUD);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 2.2, 60);
     protected transient Collection<Block> blocks;
-    
+
     public LandslideSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return super.canCast(caster) && this.getBlocks(caster).size() > 1;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = caster.getLocation();
@@ -46,7 +46,7 @@ public class LandslideSpell extends BulwarkSpell {
             minecraft.launchBlock(block, caster, i * 5, damage);
         }
     }
-    
+
     protected Collection<Block> getBlocks(LivingEntity caster) {
         final int radius = 8;
         final Location location = caster.getLocation();
@@ -64,5 +64,5 @@ public class LandslideSpell extends BulwarkSpell {
         }
         return this.blocks = blocks;
     }
-    
+
 }

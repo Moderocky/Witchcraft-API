@@ -18,12 +18,12 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
     public AbstractDemonSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return !Modifier.get(caster).isPresent(Modifier.Type.DEMON_COOLDOWN) && super.canCast(caster);
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Location location = target.getLocation().add(0.5, 0.2, 0.5);
@@ -37,12 +37,12 @@ public abstract class AbstractDemonSpell extends AbstractSummonSpell {
         demon.setOwner(caster);
         grave.attemptGrow(demon);
     }
-    
+
     protected abstract DemonMaker getDemon();
-    
+
     @FunctionalInterface
     protected interface DemonMaker {
         Demon make(Location location, WarlockDeity deity);
     }
-    
+
 }

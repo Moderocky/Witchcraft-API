@@ -34,7 +34,7 @@ public class PlayerData extends CasterData<PlayerData> {
     public String nickname, name;
     public long joined, seen, discord_id;
     public Memory[] history = new Memory[0];
-    public Title[] titles = new Title[] {Title.NOVICE};
+    public Title[] titles = new Title[]{Title.NOVICE};
     public Achievement[] achievements = new Achievement[0];
     public Title current_title = Title.NOVICE;
     public int generation = 1;
@@ -42,10 +42,10 @@ public class PlayerData extends CasterData<PlayerData> {
     private transient Player player;
     private transient List<ItemArchetype> outfit;
     private transient WeakReference<Facsimile> facsimile;
-    
+
     PlayerData() {
     }
-    
+
     public static PlayerData getData(Player player) {
         if (LOCAL_CACHE.containsKey(player)) return LOCAL_CACHE.get(player);
         final PlayerData data = getData(player.getUniqueId());
@@ -54,7 +54,7 @@ public class PlayerData extends CasterData<PlayerData> {
         LOCAL_CACHE.put(player, data);
         return data;
     }
-    
+
     public static PlayerData getData(UUID uuid) {
         if (CasterData.DATA.get(uuid) instanceof PlayerData player) return player;
         final PlayerData data = new PlayerData();
@@ -64,7 +64,7 @@ public class PlayerData extends CasterData<PlayerData> {
         CasterData.DATA.put(uuid, data);
         return data;
     }
-    
+
     public Facsimile getFacsimile() {
         if (!this.hasFacsimile(true)) return null;
         final Facsimile stashed = facsimile.get();
@@ -79,7 +79,22 @@ public class PlayerData extends CasterData<PlayerData> {
         }
         return null;
     }
-    
+
+    public void setFacsimile(Facsimile image) {
+        if (image == null && this.facsimile_location == null) return;
+        else if (image == null) {
+            this.facsimile = null;
+            this.facsimile_location = null;
+        } else if (facsimile != null && image == facsimile.get()) {
+            if (facsimile_location.getLocation().distanceSquared(image.getLocation()) < 48) return;
+            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
+        } else {
+            this.facsimile = new WeakReference<>(image);
+            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
+        }
+        this.scheduleSave();
+    }
+
     public boolean hasFacsimile(boolean guarantee) {
         if (facsimile_location == null || !facsimile_location.isValid()) return false;
         if (!guarantee) return true;
@@ -95,26 +110,11 @@ public class PlayerData extends CasterData<PlayerData> {
         }
         return false;
     }
-    
-    public void setFacsimile(Facsimile image) {
-        if (image == null && this.facsimile_location == null) return;
-        else if (image == null) {
-            this.facsimile = null;
-            this.facsimile_location = null;
-        } else if (facsimile != null && image == facsimile.get()) {
-            if (facsimile_location.getLocation().distanceSquared(image.getLocation()) < 48) return;
-            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
-        } else {
-            this.facsimile = new WeakReference<>(image);
-            this.facsimile_location = new Position.Static(image.getLocation(), "Facsimile");
-        }
-        this.scheduleSave();
-    }
-    
+
     public boolean hasPocketRealm() {
         return RealmManager.getInstance().worldExists(uuid);
     }
-    
+
     public void regenerate() {
         this.generation++;
         this.style = MagicClass.PURE;
@@ -128,7 +128,7 @@ public class PlayerData extends CasterData<PlayerData> {
         this.history = memories;
         this.scheduleSave();
     }
-    
+
     public void setMemory(Memory memory) {
         this.style = memory.style;
         this.current_title = Title.NOVICE;
@@ -138,43 +138,43 @@ public class PlayerData extends CasterData<PlayerData> {
         this.history = memories;
         this.scheduleSave();
     }
-    
+
     public long getDiscordId() {
         return discord_id;
     }
-    
+
     public void setDiscordId(long discord) {
         this.discord_id = discord;
         this.scheduleSave();
     }
-    
+
     public boolean isDiscordLinked() {
         return discord_id > 0;
     }
-    
+
     public boolean hasModifier(Modifier.Type type) {
         return temporary.modifiers.isPresent(type);
     }
-    
+
     public double getModifier(Modifier.Type type) {
         return temporary.modifiers.get(type);
     }
-    
+
     public boolean hasAchievement(Achievement achievement) {
         return this.getAchievements().contains(achievement);
     }
-    
+
     public Set<Achievement> getAchievements() {
         return new HashSet<>(List.of(achievements));
     }
-    
+
     public void addAchievement(Achievement... achievements) {
         final Set<Achievement> set = new HashSet<>(List.of(achievements));
         set.addAll(List.of(achievements));
         this.achievements = set.toArray(new Achievement[0]);
         this.scheduleSave();
     }
-    
+
     public boolean learnSpell(Spell spell) { // true if new, false if levelled
         final Set<LearnedSpell> set = this.getSpells();
         for (LearnedSpell learned : set) {
@@ -187,18 +187,18 @@ public class PlayerData extends CasterData<PlayerData> {
         this.scheduleSave();
         return true;
     }
-    
+
     public Set<LearnedSpell> getSpells() {
         return new HashSet<>(List.of(memory.spells));
     }
-    
+
     public void removeSpellsFrom(MagicClass style) {
         final Set<LearnedSpell> set = this.getSpells();
         final boolean result = set.removeIf(learned -> learned.getStyle() == style);
         this.memory.spells = set.toArray(new LearnedSpell[0]);
         this.scheduleSave();
     }
-    
+
     public boolean forgetSpell(Spell spell) { // true if yes, false if none
         final Set<LearnedSpell> set = this.getSpells();
         final boolean result = set.removeIf(learned -> learned.getSpell() == spell);
@@ -206,34 +206,34 @@ public class PlayerData extends CasterData<PlayerData> {
         this.scheduleSave();
         return result;
     }
-    
+
     public boolean knows(Spell spell) {
         for (LearnedSpell learned : memory.spells) if (learned.getSpell() == spell) return true;
         return false;
     }
-    
+
     public void giveTitle(Title... titles) {
         final Set<Title> set = new LinkedHashSet<>(List.of(this.titles));
         set.addAll(List.of(titles));
         this.titles = set.toArray(new Title[0]);
         this.scheduleSave();
     }
-    
+
     public String getTitle() {
         if (current_title == null) return null;
         return current_title.toString();
     }
-    
+
     public boolean hasTitle(Title title) {
         for (Title test : titles) if (test == title) return true;
         return false;
     }
-    
+
     private Player findPlayer() {
         if (player != null) return player;
         return this.player = Bukkit.getPlayer(uuid);
     }
-    
+
     public MagicClass setClass(MagicClass style) {
         final MagicClass old = this.style;
         this.style = style;
@@ -242,7 +242,7 @@ public class PlayerData extends CasterData<PlayerData> {
         WitchcraftAPI.plugin.syncToDiscord(this);
         return old;
     }
-    
+
     public Component displayName() {
         return Component.textOfChildren(
                 Component.text('('),
@@ -253,12 +253,12 @@ public class PlayerData extends CasterData<PlayerData> {
                 this.covenDisplayName()
             ));
     }
-    
+
     public Component displayTitle() {
         if (current_title == null) return style.displayName();
         return current_title.displayName();
     }
-    
+
     public Component nickname() {
         return (nickname != null && !nickname.isBlank())
             ? Component.text(nickname)
@@ -266,33 +266,33 @@ public class PlayerData extends CasterData<PlayerData> {
             ? player.name()
             : Component.text(this.name);
     }
-    
+
     public Component covenDisplayName() {
         final Coven coven = this.getCoven();
         if (coven == null) return Component.text("No Coven");
         else return coven.displayName();
     }
-    
+
     public Coven getCoven() {
         return Coven.getCoven(coven);
     }
-    
+
     public void update() {
         if (player != null) player.displayName(this.displayName());
     }
-    
+
     public OfflinePlayer getPlayer() {
         return Bukkit.getOfflinePlayer(uuid);
     }
-    
+
     public boolean hasCoven() {
         return coven != null;
     }
-    
+
     public boolean hasStyle() {
         return style != null && style != MagicClass.PURE;
     }
-    
+
     public List<Position> getKnownLocations() {
         final Coven coven = this.getCoven();
         final int online = coven == null ? 0 : coven.size();
@@ -303,25 +303,25 @@ public class PlayerData extends CasterData<PlayerData> {
         if (coven != null && coven.isHomeValid(false)) positions.add(coven.getHome());
         return positions;
     }
-    
+
     public void learnLocation(Location location) {
         final List<Position.Static> list = new ArrayList<>(List.of(memory.locations));
         list.add(new Position.Static(location));
         this.memory.locations = list.toArray(new Position.Static[0]);
         this.scheduleSave();
     }
-    
+
     @Override
     public String toString() {
         return Fern.out(this, "\t");
     }
-    
+
     @Override
     public void save() {
         this.memory.style = style;
         super.save();
     }
-    
+
     public void banish(World world) {
         final WorldData data = WorldData.getData(world);
         if (data.main_world) return;
@@ -332,7 +332,7 @@ public class PlayerData extends CasterData<PlayerData> {
         this.memory.banished_planes = set.toArray(new UUID[0]);
         this.scheduleSave();
     }
-    
+
     public boolean isBanished(World world) {
         final WorldData data = WorldData.getData(world);
         if (data.main_world) return false;
@@ -341,7 +341,7 @@ public class PlayerData extends CasterData<PlayerData> {
         final Set<UUID> set = new HashSet<>(List.of(memory.banished_planes));
         return set.contains(world.getUID());
     }
-    
+
     public void wear(ItemArchetype archetype) {
         if (!archetype.isOutfit()) return;
         final Clothing slot = archetype.asOutfit().slot;
@@ -349,7 +349,7 @@ public class PlayerData extends CasterData<PlayerData> {
         this.outfit.removeIf(item -> !item.isOutfit() || item.asOutfit().slot == slot);
         this.saveOutfit();
     }
-    
+
     public ItemArchetype[] getClothes() {
         if (outfit != null) return outfit.toArray(new ItemArchetype[0]);
         final String[] clothes = this.clothes == null ? new String[0] : this.clothes;
@@ -357,7 +357,7 @@ public class PlayerData extends CasterData<PlayerData> {
         for (String clothe : clothes) outfit.add(ItemArchetype.of(clothe));
         return outfit.toArray(new ItemArchetype[0]);
     }
-    
+
     private void saveOutfit() {
         final ItemArchetype[] items = outfit.toArray(new ItemArchetype[0]);
         final String[] clothes = new String[items.length];
@@ -365,35 +365,35 @@ public class PlayerData extends CasterData<PlayerData> {
         this.clothes = clothes;
         this.scheduleSave();
     }
-    
+
     public boolean isSworn() {
         return memory.deity != null && memory.deity != WarlockDeity.NONE;
     }
-    
+
     public WarlockDeity getDeity() {
         return memory.deity;
     }
-    
+
     public boolean canWear(ItemArchetype archetype) {
         return archetype.isOutfit();
     }
-    
+
     public boolean isSorcerer() {
         return false;
     }
-    
+
     public class Temporary {
         public final ModifierMap modifiers = new ModifierMap();
         public Session session;
     }
-    
+
     public class Memory {
         public MagicClass style;
         public WarlockDeity deity = WarlockDeity.NONE;
         public LearnedSpell[] spells = new LearnedSpell[0];
         public Position.Static[] locations = new Position.Static[0];
         public UUID[] banished_planes = new UUID[0];
-        
+
         public ItemStack icon() {
             final ItemStack stack = new ItemStack(Material.TOTEM_OF_UNDYING);
             final ItemMeta meta = stack.getItemMeta();

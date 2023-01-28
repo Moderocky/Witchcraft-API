@@ -8,16 +8,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ArrayLinkedSet<Type> extends LinkedHashSet<Type> {
-    
-    protected transient Consumer<ArrayLinkedSet<Type>> update = (thing) -> {};
+
+    protected transient Consumer<ArrayLinkedSet<Type>> update = (thing) -> {
+    };
     protected transient boolean flagDirty;
-    
+
     public ArrayLinkedSet(Type[] array, Consumer<ArrayLinkedSet<Type>> update) {
         super(array.length);
         super.addAll(List.of(array));
         this.update = update;
     }
-    
+
     @Override
     public boolean removeAll(Collection<?> c) {
         this.flagDirty = true;
@@ -26,27 +27,27 @@ public class ArrayLinkedSet<Type> extends LinkedHashSet<Type> {
         if (b) this.update.accept(this);
         return b;
     }
-    
+
     @Override
     public boolean add(Type type) {
         boolean add = super.add(type);
         if (add && !flagDirty) this.update.accept(this);
         return add;
     }
-    
+
     @Override
     public boolean remove(Object o) {
         boolean remove = super.remove(o);
         if (remove) this.update.accept(this);
         return remove;
     }
-    
+
     @Override
     public void clear() {
         super.clear();
         this.update.accept(this);
     }
-    
+
     @Override
     public boolean addAll(@NotNull Collection<? extends Type> c) {
         this.flagDirty = true;

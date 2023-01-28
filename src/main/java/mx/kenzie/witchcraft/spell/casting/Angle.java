@@ -9,7 +9,7 @@ public record Angle(double yaw, double pitch) {
             player.getLocation().getPitch()
         );
     }
-    
+
     @Override
     public String toString() {
         return "[%06.2f ψ + %06.2f θ]".formatted(yaw, pitch);

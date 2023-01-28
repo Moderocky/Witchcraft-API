@@ -22,7 +22,7 @@ public class FacsimileSpell extends StandardSpell {
     public FacsimileSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     public static boolean tryUseFacsimile(Player player) {
         if (!hasFacsimile(player, true)) return false;
         final Facsimile image = getFacsimile(player);
@@ -39,17 +39,17 @@ public class FacsimileSpell extends StandardSpell {
         registerFacsimile(player, null);
         return true;
     }
-    
+
     public static boolean hasFacsimile(Player player, boolean guarantee) {
         final PlayerData data = PlayerData.getData(player);
         return data.hasFacsimile(guarantee);
     }
-    
+
     public static Facsimile getFacsimile(Player player) {
         final PlayerData data = PlayerData.getData(player);
         return data.getFacsimile();
     }
-    
+
     private static void drawRings(Location start) {
         final ParticleCreator creator = ParticleCreator.of(Material.CRYING_OBSIDIAN);
         final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 0.8, 26);
@@ -61,17 +61,17 @@ public class FacsimileSpell extends StandardSpell {
             }
         });
     }
-    
+
     public static void registerFacsimile(Player player, Facsimile image) {
         final PlayerData data = PlayerData.getData(player);
         data.setFacsimile(image);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return caster instanceof Player;
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (!(caster instanceof Player player)) return;
@@ -90,5 +90,5 @@ public class FacsimileSpell extends StandardSpell {
         registerFacsimile(player, image);
         player.sendMessage(component);
     }
-    
+
 }

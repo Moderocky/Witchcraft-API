@@ -16,11 +16,11 @@ import java.util.Map;
 public class BoneCageSpell extends AbstractEntitySpell {
     protected transient final ParticleCreator creator = ParticleCreator.of(Material.BONE_BLOCK);
     protected transient final VectorShape circle = creator.createCircle(new Vector(0, 1, 0), 0.8, 26);
-    
+
     public BoneCageSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     protected void run(LivingEntity caster, int range, float scale, double amplitude) {
         if (target == null) throw new RuntimeException();

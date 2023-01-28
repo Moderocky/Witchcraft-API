@@ -37,7 +37,7 @@ public abstract class StandardSpell implements Spell {
     public final int points, energy;
     public final Pattern pattern;
     public String patternChar;
-    
+
     @SuppressWarnings("unchecked")
     public StandardSpell(Map<String, Object> map) {
         this.id = map.get("id").toString().trim();
@@ -57,7 +57,7 @@ public abstract class StandardSpell implements Spell {
         this.energy = (int) map.get("energy");
         this.pattern = WitchcraftAPI.spells.generate(points, new Random(id.hashCode()));
     }
-    
+
     public static void assembleMenu(Player player, List<ItemStack> buttons, PaginatedGUI gui, BiConsumer<Player, InventoryClickEvent> consumer) {
         SpellManager.makeMenu(gui);
         gui.setEntryConsumer(consumer);
@@ -66,67 +66,67 @@ public abstract class StandardSpell implements Spell {
         gui.finalise();
         gui.open(player);
     }
-    
+
     @Override
     public MagicClass getStyle() {
         return style;
     }
-    
+
     @Override
     public SpellType getType() {
         return type;
     }
-    
+
     @Override
     public String getId() {
         return id;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
     @Override
     public String getPatternPicture() {
         return patternChar;
     }
-    
+
     @Override
     public String getDescription() {
         return description;
     }
-    
+
     @Override
     public Ingredient[] getMaterials() {
         return materials;
     }
-    
+
     @Override
     public String getCircumstances() {
         return circumstances;
     }
-    
+
     @Override
     public String getRealm() {
         return realm;
     }
-    
+
     @Override
     public int getPoints() {
         return points;
     }
-    
+
     @Override
     public int getEnergy() {
         return energy;
     }
-    
+
     @Override
     public Pattern getPattern() {
         return pattern;
     }
-    
+
     @Override
     public void cast(LivingEntity caster, int range, float scale, double amplitude) {
         if (!this.canCast(caster)) return; // update any requirements
@@ -134,7 +134,7 @@ public abstract class StandardSpell implements Spell {
         Bukkit.getPluginManager().callEvent(event);
         this.run(caster, range, scale, amplitude);
     }
-    
+
     @Override
     public SpellResult checkCast(LivingEntity caster, int range, float scale, double amplitude) {
         if (caster instanceof Player player) check:{
@@ -159,18 +159,18 @@ public abstract class StandardSpell implements Spell {
         this.cast(caster, range, scale, amplitude);
         return SpellResult.SUCCESS;
     }
-    
+
     /**
      * Whether the spell is literally capable of being cast.
      * This is verified in every cast before the `run` portion.
      */
     public abstract boolean canCast(LivingEntity caster);
-    
+
     public void takeIngredients(LivingEntity caster) {
         if (!(caster instanceof Player player)) return;
         for (Ingredient material : this.getMaterials()) material.remove(player.getInventory());
     }
-    
+
     public int takeEnergy(LivingEntity caster) {
         final int bonus = WitchcraftAPI.spells.getBonusEnergy(caster, caster.getEquipment());
         if (!(caster instanceof Player player)) return 0;
@@ -180,22 +180,22 @@ public abstract class StandardSpell implements Spell {
         player.setFoodLevel(player.getFoodLevel() - (taken * 2));
         return taken;
     }
-    
+
     protected abstract void run(LivingEntity caster, int range, float scale, double amplitude);
-    
+
 }
 
 class NoEffectSpell extends StandardSpell {
-    
+
     public NoEffectSpell(Map<String, Object> map) {
         super(map);
     }
-    
+
     @Override
     public boolean canCast(LivingEntity caster) {
         return true;
     }
-    
+
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         caster.sendMessage(Component.textOfChildren(

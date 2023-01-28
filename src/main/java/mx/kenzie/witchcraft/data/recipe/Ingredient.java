@@ -15,7 +15,7 @@ import java.security.MessageDigest;
 import java.util.*;
 
 public class Ingredient implements ItemArchetype {
-    
+
     public static final Ingredient EMPTY = new Ingredient(null, null, 0);
     private final Type type;
     public String id = null;
@@ -25,12 +25,12 @@ public class Ingredient implements ItemArchetype {
     public boolean isEmpty = false;
     public int count = 1;
     public ItemArchetype inner;
-    
+
     public <T> Ingredient(Type type, T choice, int count) {
         this(type, choice);
         this.count = count;
     }
-    
+
     public <T> Ingredient(Type type, T choice) {
         this.type = type;
         if (choice == null || type == null) {
@@ -55,7 +55,7 @@ public class Ingredient implements ItemArchetype {
             case MATERIAL -> new BukkitMaterial(material);
         };
     }
-    
+
     public static Ingredient fromJson(Object element) {
         if (!(element instanceof Map<?, ?> map) || map.size() < 1) return new Ingredient(null, null, 0);
         final Map<String, Object> object = (Map<String, Object>) element;
@@ -67,15 +67,15 @@ public class Ingredient implements ItemArchetype {
             return new Ingredient(Type.MATERIAL, Material.valueOf(string.toUpperCase()), count);
         else return new Ingredient(null, null, 0);
     }
-    
+
     public int getCount() {
         return count;
     }
-    
+
     public Type getType() {
         return type;
     }
-    
+
     public ItemStack getExample() {
         if (isEmpty) return new ItemStack(Material.AIR);
         final ItemStack stack = inner.create();
@@ -83,9 +83,9 @@ public class Ingredient implements ItemArchetype {
         if (stack.getType() != Material.AIR) stack.setAmount(count);
         return stack;
     }
-    
+
     public ItemStack[] getAllPossibilities() {
-        if (isEmpty) return new ItemStack[] {new ItemStack(Material.AIR)};
+        if (isEmpty) return new ItemStack[]{new ItemStack(Material.AIR)};
         final List<ItemStack> items = new ArrayList<>();
         ItemStack stack;
         switch (type) {
@@ -116,7 +116,7 @@ public class Ingredient implements ItemArchetype {
         }
         return items.toArray(new ItemStack[0]);
     }
-    
+
     public boolean matchesBarAmount(ItemStack stack) {
         if (stack == null || stack.getType() == Material.AIR) return isEmpty;
         ItemArchetype item;
@@ -125,7 +125,7 @@ public class Ingredient implements ItemArchetype {
         } else item = null;
         return this.checkType(stack, item);
     }
-    
+
     private boolean checkType(ItemStack stack, ItemArchetype item) {
         if (type == null) return (stack == null || stack.getType() == Material.AIR);
         switch (type) {
@@ -143,14 +143,14 @@ public class Ingredient implements ItemArchetype {
         }
         return false;
     }
-    
+
     public boolean matches(ItemStack stack) {
         if (stack == null || stack.getType() == Material.AIR) return isEmpty;
         if (stack.getAmount() < count) return false;
         final ItemArchetype item = WitchcraftAPI.resources.getArchetype(stack);
         return this.checkType(stack, item);
     }
-    
+
     public int remove(Iterable<ItemStack> inventory) {
         if (this.isEmpty()) return 0;
         if (inventory == null) return 0;
@@ -175,7 +175,7 @@ public class Ingredient implements ItemArchetype {
         }
         return count;
     }
-    
+
     public boolean canComplete(Player player) {
         if (this.isEmpty()) return true;
         if (player == null) return false;
@@ -199,7 +199,7 @@ public class Ingredient implements ItemArchetype {
         }
         return count < 1;
     }
-    
+
     public TextColor getColor() {
         final long hash = Math.abs(this.hash(this.toString()));
         final String sample = (hash + "111111111").substring(0, 12);
@@ -208,11 +208,11 @@ public class Ingredient implements ItemArchetype {
         final int b = Math.min(250, Math.max(65, (Integer.parseInt(sample.substring(8, 11)) / 3) + 15));
         return TextColor.color(r, g, b);
     }
-    
+
     private long hash(final String str) {
         return this.hash(str.getBytes());
     }
-    
+
     public long hash(final byte[] buf) {
         try {
             final MessageDigest md = MessageDigest.getInstance("MD5");
@@ -223,14 +223,14 @@ public class Ingredient implements ItemArchetype {
             throw new RuntimeException(throwable);
         }
     }
-    
+
     //
     private long getLong(final byte[] array, final int offset) {
         long value = 0;
         for (int i = 0; i < 8; i++) value = ((value << 8) | (array[offset + i] & 0xFF));
         return value;
     }
-    
+
     public String lookupItemKey() {
         if (type == null) return "";
         final String part;
@@ -242,16 +242,16 @@ public class Ingredient implements ItemArchetype {
         if (this.count > 1) return part + " x" + count;
         else return part;
     }
-    
+
     public TextColor getColor(RecipeType recipe) {
         return recipe.getColor(this);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(count, id, item, tag, material, type, isEmpty);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -264,7 +264,7 @@ public class Ingredient implements ItemArchetype {
             material == that.material &&
             type == that.type;
     }
-    
+
     @Override
     public String toString() {
         return "Ingredient{" +
@@ -277,46 +277,46 @@ public class Ingredient implements ItemArchetype {
             ", isEmpty=" + isEmpty +
             '}';
     }
-    
+
     @Override
     public boolean isProtected() {
         return inner.isProtected();
     }
-    
+
     @Override
     public Set<Tag> tags() {
         return inner.tags();
     }
-    
+
     @Override
     public String name() {
         return inner.name();
     }
-    
+
     @Override
     public Rarity rarity() {
         return inner.rarity();
     }
-    
+
     @Override
     public String id() {
         return inner.id();
     }
-    
+
     @Override
     public String description() {
         return inner.description();
     }
-    
+
     @Override
     public ItemStack create() {
         return inner.create();
     }
-    
+
     public boolean isEmpty() {
         return isEmpty;
     }
-    
+
     public enum Type {
         ID,
         ITEM,

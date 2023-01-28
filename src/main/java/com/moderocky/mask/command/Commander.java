@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Commander<S> {
-    
+
     final List<String> patterns = new ArrayList<>();
     final Map<String, @Nullable String> patternDescriptions = new HashMap<>();
     final Set<String> aliases = new HashSet<>();
@@ -18,11 +18,11 @@ public abstract class Commander<S> {
     private BiFunction<S, Throwable, Boolean> error = null;
     private String namespace;
     private volatile String input;
-    
+
     {
         this.compile();
     }
-    
+
     final void compile() {
         patterns.clear();
         patternDescriptions.clear();
@@ -81,9 +81,9 @@ public abstract class Commander<S> {
             this.patternDescriptions.putAll(map);
         }
     }
-    
+
     protected abstract CommandImpl create();
-    
+
     public List<String> getPossibleArguments(String... inputs) {
         if (inputs.length == 0) {
             final List<String> strings = new ArrayList<>(tree.size());
@@ -97,13 +97,13 @@ public abstract class Commander<S> {
         for (ArgumentEntry entry : list) strings.add(entry.args);
         return strings;
     }
-    
+
     private @NotNull Map<@NotNull String, @Nullable String> getPatternDesc() {
         Map<@NotNull String, @Nullable String> map = new HashMap<>();
         for (ArgumentEntry entry : tree.keySet()) map.put(entry.args, entry.description);
         return map;
     }
-    
+
     public synchronized boolean execute(S sender, String... inputs) {
         try {
             input = String.join(" ", inputs);
@@ -143,18 +143,18 @@ public abstract class Commander<S> {
             return false;
         }
     }
-    
+
     public abstract CommandSingleAction<S> getDefault();
-    
+
     public @NotNull String getCommand() {
         return namespace;
     }
-    
+
     public List<String> getTabCompletions(String input) {
         String[] inputs = input.split(" ");
         return getTabCompletions(inputs);
     }
-    
+
     public List<String> getTabCompletions(String... inputs) {
         List<String> list = new ArrayList<>();
         for (ArgumentEntry arguments : tree.keySet()) {
@@ -165,87 +165,87 @@ public abstract class Commander<S> {
         }
         return list;
     }
-    
+
     public @NotNull Collection<String> getPatterns() {
         return new ArrayList<>(patterns);
     }
-    
+
     public @NotNull Map<@NotNull String, @Nullable String> getPatternDescriptions() {
         return new HashMap<>(patternDescriptions);
     }
-    
+
     public String getInput() {
         return input;
     }
-    
+
     protected CommandImpl command(String namespace, String... aliases) {
         this.namespace = namespace;
         this.aliases.addAll(List.of(aliases));
         return new CommandImpl();
     }
-    
+
     public Description desc(@Nullable String string) {
         return string != null ? new Description(string) : null;
     }
-    
+
     public SubArg arg(String arg, CommandSingleAction<S> action) {
         return new SubArg(new ArgLiteral(arg), action);
     }
-    
+
     public SubArg arg(String arg, Description description, CommandSingleAction<S> action) {
         SubArg subArg = new SubArg(new ArgLiteral(arg), action);
         subArg.description = description;
         return subArg;
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String arg, SubArg... args) {
         return new SubArg(new ArgLiteral(arg), null, args);
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String @NotNull [] arg, SubArg... args) {
         return new SubArg(new ArgLiteralPlural(arg), null, args);
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String @NotNull [] arg, CommandSingleAction<S> action, SubArg... args) {
         return new SubArg(new ArgLiteralPlural(arg), action, args);
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String @NotNull [] arg, Description description, CommandSingleAction<S> action, SubArg... args) {
         SubArg subArg = new SubArg(new ArgLiteralPlural(arg), action, args);
         subArg.description = description;
         return subArg;
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String arg, CommandSingleAction<S> action, SubArg... args) {
         return new SubArg(new ArgLiteral(arg), action, args);
     }
-    
+
     @SafeVarargs
     public final SubArg arg(String arg, Description description, CommandSingleAction<S> action, SubArg... args) {
         SubArg subArg = new SubArg(new ArgLiteral(arg), action, args);
         subArg.description = description;
         return subArg;
     }
-    
+
     public SubArg arg(CommandSingleAction<S> action, String... arg) {
         return new SubArg(new ArgLiteralPlural(arg), action);
     }
-    
+
     public SubArg arg(CommandSingleAction<S> action, Description description, String... arg) {
         SubArg subArg = new SubArg(new ArgLiteralPlural(arg), action);
         subArg.description = description;
         return subArg;
     }
-    
+
     public SubArg arg(CommandBiAction<S> action, @NotNull Argument<?>... arguments) {
         return arg(null, action, arguments);
     }
-    
+
     public SubArg arg(Description description, CommandBiAction<S> action, @NotNull Argument<?>... arguments) {
         if (arguments.length == 0) throw new IllegalArgumentException("No arguments were provided!");
         SubArg top = null;
@@ -262,67 +262,67 @@ public abstract class Commander<S> {
         arg.description = description;
         return top;
     }
-    
+
     public @NotNull List<String> getAliases() {
         return new ArrayList<>(aliases);
     }
-    
+
     interface CommandAction<S> {
         default void execute(S sender, Object[] object) {
             if (isSingle()) accept(sender);
             else accept(sender, object);
         }
-        
+
         boolean isSingle();
-        
+
         void accept(S sender);
-        
+
         void accept(S sender, Object[] object);
-        
+
     }
-    
+
     @FunctionalInterface
     public interface CommandSingleAction<S> extends CommandAction<S> {
         default boolean isSingle() {
             return true;
         }
-        
+
         void accept(S sender);
-        
+
         @Override
         default void accept(S sender, Object[] object) {
             accept(sender);
         }
     }
-    
+
     @FunctionalInterface
     public interface CommandBiAction<S> extends CommandAction<S> {
         default boolean isSingle() {
             return false;
         }
-        
+
         @Override
         default void accept(S sender) {
             accept(sender, new Object[0]);
         }
-        
+
         void accept(S sender, Object[] object);
     }
-    
+
     private static class Description {
         protected final @Nullable String string;
-        
+
         public Description(@Nullable String string) {
             this.string = string;
         }
     }
-    
+
     static class ArgumentEntry extends ArrayList<Argument<?>> {
-        
+
         final Pattern pattern;
         final String args;
         String description;
-        
+
         {
             StringBuilder builder = new StringBuilder();
             List<String> strings = new ArrayList<>();
@@ -337,24 +337,24 @@ public abstract class Commander<S> {
             pattern = Pattern.compile("^" + builder.toString().trim());
             args = String.join(" ", strings);
         }
-        
+
         public ArgumentEntry(Argument<?>... arguments) {
             super(List.of(arguments));
         }
-        
+
         public ArgumentEntry(Collection<Argument<?>> arguments) {
             super(arguments);
         }
-        
+
         Pattern getPattern() {
             return pattern;
         }
-        
+
         boolean matches(String input) {
             Matcher matcher = pattern.matcher(input.trim());
             return matcher.matches();
         }
-        
+
         public Result matchesEntry(String input) {
             StringReader reader = new StringReader(input);
             for (Argument<?> argument : this) {
@@ -374,7 +374,7 @@ public abstract class Commander<S> {
             }
             return reader.readRest().trim().isEmpty() ? Result.TRUE : Result.TRAILING;
         }
-        
+
         public Object[] compileEntry(String input) {
             List<Object> objects = new ArrayList<>();
             StringReader reader = new StringReader(input);
@@ -393,7 +393,7 @@ public abstract class Commander<S> {
             }
             return objects.toArray(new Object[0]);
         }
-        
+
         Collection<String> getCompletions(int position, String[] inputs) {
             List<String> list = new ArrayList<>();
             if (position < 2) {
@@ -408,7 +408,7 @@ public abstract class Commander<S> {
             }
             return list;
         }
-        
+
         boolean inputMatches(String[] inputs) {
             StringBuilder builder = new StringBuilder();
             int i = 1;
@@ -448,55 +448,55 @@ public abstract class Commander<S> {
             Pattern pattern = Pattern.compile("^" + builder.toString().toLowerCase().trim() + ".*");
             return pattern.matcher(String.join(" ", inputs).toLowerCase().trim()).matches();
         }
-        
+
         public enum Result {
             FALSE,
             TRAILING,
             TRUE
         }
-        
+
     }
-    
+
     public class CommandImpl {
-        
+
         private CommandImpl() {
         }
-        
+
         public CommandImpl arg(String arg, CommandSingleAction<S> action) {
             return arg(arg, null, action);
         }
-        
+
         public CommandImpl arg(String arg, Description description, CommandSingleAction<S> action) {
             final ArgumentEntry entry = new ArgumentEntry(new ArgLiteral(arg));
             if (description != null) entry.description = description.string;
             tree.put(entry, action);
             return this;
         }
-        
+
         public CommandImpl arg(CommandSingleAction<S> action, String arg) {
             return arg(action, arg, (Description) null);
         }
-        
+
         public CommandImpl arg(CommandSingleAction<S> action, String arg, Description description) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteral(arg));
             if (description != null) entry.description = description.string;
             tree.put(entry, action);
             return this;
         }
-        
+
         public CommandImpl arg(CommandSingleAction<S> action, String... arg) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteralPlural(arg));
             tree.put(entry, action);
             return this;
         }
-        
+
         public CommandImpl arg(CommandSingleAction<S> action, Description description, String... arg) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteralPlural(arg));
             if (description != null) entry.description = description.string;
             tree.put(entry, action);
             return this;
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(String @NotNull [] arg, SubArg... subArguments) {
             final List<Argument<?>> list = new ArrayList<>(List.of(new ArgLiteralPlural(arg)));
@@ -505,7 +505,7 @@ public abstract class Commander<S> {
             }
             return this;
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(String arg, SubArg... subArguments) {
             final List<Argument<?>> list = new ArrayList<>(List.of(new ArgLiteral(arg)));
@@ -514,12 +514,12 @@ public abstract class Commander<S> {
             }
             return this;
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(String arg, CommandSingleAction<S> action, SubArg... subArguments) {
             return arg(arg, null, action, subArguments);
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(String arg, Description description, CommandSingleAction<S> action, SubArg... subArguments) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteral(arg));
@@ -531,7 +531,7 @@ public abstract class Commander<S> {
             }
             return this;
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(CommandSingleAction<S> action, String arg, SubArg... subArguments) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteral(arg));
@@ -542,17 +542,17 @@ public abstract class Commander<S> {
             }
             return this;
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(CommandSingleAction<S> action, String arg, Description description, SubArg... subArguments) {
             return arg(arg, description, action, subArguments);
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(CommandSingleAction<S> action, String @NotNull [] arg, SubArg... subArguments) {
             return arg(action, arg, null, subArguments);
         }
-        
+
         @SafeVarargs
         public final CommandImpl arg(CommandSingleAction<S> action, String @NotNull [] arg, Description description, SubArg... subArguments) {
             ArgumentEntry entry = new ArgumentEntry(new ArgLiteralPlural(arg));
@@ -564,11 +564,11 @@ public abstract class Commander<S> {
             }
             return this;
         }
-        
+
         public final CommandImpl arg(CommandBiAction<S> action, @NotNull Argument<?>... arguments) {
             return arg(null, action, arguments);
         }
-        
+
         public final CommandImpl arg(Description description, CommandBiAction<S> action, @NotNull Argument<?>... arguments) {
             if (arguments.length == 0) {
                 return this;
@@ -588,49 +588,49 @@ public abstract class Commander<S> {
             top.compile(new ArrayList<>());
             return this;
         }
-        
+
         public CommandImpl arg(Argument<?> argument, CommandBiAction<S> action) {
             return arg(null, argument, action);
         }
-        
+
         public CommandImpl arg(Description description, Argument<?> argument, CommandBiAction<S> action) {
             SubArg top = new SubArg(argument, action);
             top.description = description;
             top.compile(new ArrayList<>());
             return this;
         }
-        
+
         public final CommandImpl onException(@Nullable BiFunction<S, Throwable, Boolean> errorFunction) {
             Commander.this.error = errorFunction;
             return this;
         }
-        
+
     }
-    
+
     public class SubArg {
         public final Argument<?> argument;
         public final List<SubArg> children = new LinkedList<>();
         public CommandAction<S> action;
         public Description description = null;
-        
+
         public SubArg(Argument<?> argument, CommandAction<S> action) {
             this.argument = argument;
             this.action = action;
         }
-        
+
         public SubArg(Argument<?> argument, Description description, CommandAction<S> action) {
             this.argument = argument;
             this.action = action;
             this.description = description;
         }
-        
+
         @SafeVarargs
         public SubArg(Argument<?> argument, CommandAction<S> action, SubArg... children) {
             this.argument = argument;
             this.action = action;
             Collections.addAll(this.children, children);
         }
-        
+
         @SafeVarargs
         public SubArg(Argument<?> argument, Description description, CommandAction<S> action, SubArg... children) {
             this.argument = argument;
@@ -638,14 +638,14 @@ public abstract class Commander<S> {
             this.description = description;
             Collections.addAll(this.children, children);
         }
-        
+
         @SafeVarargs
         public SubArg(Argument<?> argument, SubArg... children) {
             this.argument = argument;
             this.action = null;
             Collections.addAll(this.children, children);
         }
-        
+
         public void compile(List<Argument<?>> list) {
             list.add(argument);
             if (action != null) {
@@ -660,8 +660,8 @@ public abstract class Commander<S> {
             }
         }
     }
-    
+
     class ArgumentTree extends LinkedHashMap<ArgumentEntry, CommandAction<S>> {
     }
-    
+
 }
