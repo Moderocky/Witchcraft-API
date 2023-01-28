@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.data;
 
 import mx.kenzie.eris.api.entity.Channel;
+import mx.kenzie.eris.api.utility.LazyList;
 import mx.kenzie.sloth.Cache;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.data.collection.ArrayLinkedSet;
@@ -16,7 +17,7 @@ import java.io.File;
 import java.util.*;
 
 public class Coven extends LazyWrittenData<Coven> {
-    
+
     private static final Cache<UUID, Coven> COVEN_CACHE = Cache.soft(WeakHashMap::new);
     private static final Cache<Entity, Coven> ENTITY_COVEN_CACHE = Cache.soft(WeakHashMap::new);
     public transient Channel channel;
@@ -24,12 +25,31 @@ public class Coven extends LazyWrittenData<Coven> {
     protected String name;
     protected UUID creator;
     protected UUID[] members = new UUID[0];
+    protected UUID[] invited = new UUID[0];
     protected Position.Static home;
     protected long discord_id;
     protected transient Team team;
     protected transient Set<UUID> _members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
+    protected transient Set<UUID> _invited = new ArrayLinkedSet<>(invited, set -> invited = set.toArray(new UUID[0]));
     private transient byte wasHomeValid;
-    
+
+    public static LazyList<Coven> findAllCovens() {
+        final List<Coven> covens = new LinkedList<>();
+        final LazyList<Coven> list = new LazyList<>(Coven.class, covens);
+        WitchcraftAPI.executor.submit(() -> {
+            final File folder = new File("data/coven/");
+            final File[] files = folder.listFiles();
+            if (files != null) for (File file : files) {
+                if (!file.getName().endsWith(".fern")) continue;
+                final Coven coven = Coven.getCoven(file);
+                if (coven == null) continue;
+                covens.add(coven);
+            }
+            list.finish();
+        });
+        return list;
+    }
+
     public static Coven getCoven(Entity entity) {
         if (entity == null) return null;
         if (ENTITY_COVEN_CACHE.containsKey(entity)) return ENTITY_COVEN_CACHE.get(entity);
@@ -47,11 +67,11 @@ public class Coven extends LazyWrittenData<Coven> {
         ENTITY_COVEN_CACHE.put(entity, coven);
         return coven;
     }
-    
+
     public static Coven getCoven(Player player) {
         return getCoven(PlayerData.getData(player).coven);
     }
-    
+
     public static Coven getCoven(UUID id) {
         if (id == null) return null;
         if (COVEN_CACHE.isPresent(id)) return COVEN_CACHE.get(id);
@@ -63,14 +83,32 @@ public class Coven extends LazyWrittenData<Coven> {
         COVEN_CACHE.put(id, coven);
         return coven;
     }
-    
+
+    protected static Coven getCoven(File file) {
+        final UUID id;
+        try {
+            final String name = file.getName();
+            id = UUID.fromString(name.substring(name.lastIndexOf('/') + 1, name.indexOf('.')));
+        } catch (Throwable ex) {
+            return null;
+        }
+        if (COVEN_CACHE.isPresent(id)) return COVEN_CACHE.get(id);
+        final Coven coven = new Coven();
+        coven.uuid = id;
+        coven.file = file;
+        coven.scheduleLoad();
+        COVEN_CACHE.put(id, coven);
+        coven.await();
+        return coven;
+    }
+
     public static Team getTeam(Player player) {
         final PlayerData data = PlayerData.getData(player);
         if (data.coven == null) return null;
         final Coven coven = getCoven(data.coven);
         return coven.getTeam();
     }
-    
+
     public Team getTeam() {
         if (team != null) return team;
         final Team here = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(uuid.toString());
@@ -80,7 +118,7 @@ public class Coven extends LazyWrittenData<Coven> {
         created.setAllowFriendlyFire(false);
         return team = created;
     }
-    
+
     public static Coven createNewCoven(UUID creator) {
         final Coven coven = new Coven();
         coven.uuid = UUID.randomUUID();
@@ -94,25 +132,30 @@ public class Coven extends LazyWrittenData<Coven> {
         coven.scheduleSave();
         return coven;
     }
-    
+
     @Override
     public void load() {
         super.load();
+        this._invited = new ArrayLinkedSet<>(invited, set -> invited = set.toArray(new UUID[0]));
         this._members = new ArrayLinkedSet<>(members, set -> members = set.toArray(new UUID[0]));
     }
-    
+
     public long getDiscordId() {
         return discord_id;
     }
-    
+
     public void setDiscordId(long id) {
         this.discord_id = id;
     }
-    
+
     public UUID getId() {
         return uuid;
     }
-    
+
+    public Set<UUID> getInvitations() {
+        return _invited;
+    }
+
     public boolean isHomeValid(boolean guarantee) {
         if (home == null) return false;
         final World world = home.getWorld();
@@ -129,11 +172,11 @@ public class Coven extends LazyWrittenData<Coven> {
         });
         return (wasHomeValid == 2);
     }
-    
+
     public Position getHome() {
         return home;
     }
-    
+
     public void setHome(Block block) {
         final Position old = home;
         if (block == null) home = null;
@@ -158,7 +201,7 @@ public class Coven extends LazyWrittenData<Coven> {
             this.sendDiscordMessage("Your coven home was placed at " + "`" + block.getX() + ", " + block.getY() + ", " + block.getX() + "`.");
         }
     }
-    
+
     public void messagePlayers(Component component) {
         for (UUID member : members) {
             final Player player = Bukkit.getPlayer(member);
@@ -166,15 +209,15 @@ public class Coven extends LazyWrittenData<Coven> {
             player.sendMessage(component);
         }
     }
-    
+
     public void sendDiscordMessage(String message) {
         WitchcraftAPI.discord.sendMessage(this, message);
     }
-    
+
     public int size() {
         return _members.size();
     }
-    
+
     public Collection<Position> getPositions() {
         final List<Position> positions = new ArrayList<>(_members.size());
         for (UUID member : members) {
@@ -184,22 +227,22 @@ public class Coven extends LazyWrittenData<Coven> {
         }
         return positions;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public Component displayName() {
         if (name != null) return Component.text(name);
         return Component.text("Unknown Coven");
     }
-    
+
     public boolean addMember(UUID id) {
         final boolean add = _members.add(id);
         this.scheduleSave();
         return add;
     }
-    
+
     public boolean removeMember(UUID id) {
         final boolean remove = _members.remove(id);
         if (this.creator == id) {
@@ -212,7 +255,7 @@ public class Coven extends LazyWrittenData<Coven> {
         this.scheduleSave();
         return remove;
     }
-    
+
     public void delete() {
         if (file != null) file.delete();
         COVEN_CACHE.remove(this.uuid);
@@ -223,39 +266,39 @@ public class Coven extends LazyWrittenData<Coven> {
         final Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(this.uuid.toString());
         if (team != null) team.unregister();
     }
-    
+
     public List<OfflinePlayer> getMembers() {
         final List<OfflinePlayer> list = new ArrayList<>(_members.size());
         for (UUID member : members) list.add(Bukkit.getOfflinePlayer(member));
         return list;
     }
-    
+
     public OfflinePlayer getCreator() {
         return Bukkit.getOfflinePlayer(creator);
     }
-    
+
     public boolean isOwner(UUID id) {
         return creator.equals(id);
     }
-    
+
     public boolean isOwner(OfflinePlayer entity) {
         return creator.equals(entity.getUniqueId());
     }
-    
+
     public boolean isOwner(Entity entity) {
         return creator.equals(entity.getUniqueId());
     }
-    
+
     public boolean isMember(UUID id) {
         return _members.contains(id);
     }
-    
+
     public boolean isMember(OfflinePlayer entity) {
         return _members.contains(entity.getUniqueId());
     }
-    
+
     public boolean isMember(Entity entity) {
         return _members.contains(entity.getUniqueId());
     }
-    
+
 }
