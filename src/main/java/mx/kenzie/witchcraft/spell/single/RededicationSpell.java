@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -61,12 +62,15 @@ public class RededicationSpell extends StandardSpell {
         if (!container.has(key)) return;
         final String name = container.getOrDefault(key, PersistentDataType.STRING, "NONE");
         final WarlockDeity deity = WarlockDeity.valueOf(name);
+        if (!deity.canUse(player)) return;
         final PlayerData data = PlayerData.getData(player);
         final WarlockDeity old = data.getDeity();
         player.getInventory().remove(old.getWeapon().create());
         data.memory.deity = deity;
         deity.updateHorns(player);
+        player.getWorld().playSound(player, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1.0F, 1.0F);
         player.sendMessage(Component.text("You have dedicated yourself to a new master...", WitchcraftAPI.colors().lowlight()));
+        player.closeInventory();
     }
 
 }

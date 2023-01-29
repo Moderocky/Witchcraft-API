@@ -6,6 +6,7 @@ import mx.kenzie.witchcraft.data.item.BukkitMaterial;
 import mx.kenzie.witchcraft.data.item.ItemArchetype;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
@@ -71,17 +72,17 @@ public enum WarlockDeity {
         if (this == NONE) archetype = new BukkitMaterial(Material.STRUCTURE_VOID);
         else archetype = this.getHorns();
         return archetype.mutate()
-            .setName(Component.text(ResourceManager.pascalCase(this.name()), magicClass.colour()))
+            .setName(Component.text(ResourceManager.pascalCase(this.name()), magicClass.colour()).decoration(TextDecoration.ITALIC, false))
             .setLore(ItemArchetype.wrapText(text))
             .addLore(
                 Component.empty(),
-                magicClass.displayName(),
-                evil
+                magicClass.displayName().decoration(TextDecoration.ITALIC, false),
+                (evil
                     ? Component.text("Evil", NamedTextColor.RED)
-                    : Component.text("Good", NamedTextColor.GREEN),
-                this.canUse(player)
+                    : Component.text("Good", NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false),
+                (this.canUse(player)
                     ? Component.text("Click to Select", WitchcraftAPI.colors().pop())
-                    : Component.text("Locked", NamedTextColor.RED)
+                    : Component.text("Locked", NamedTextColor.RED)).decoration(TextDecoration.ITALIC, false)
             )
             .meta(meta -> meta.getPersistentDataContainer().set(WitchcraftAPI.plugin.getKey("deity"), PersistentDataType.STRING, this.name()));
     }
