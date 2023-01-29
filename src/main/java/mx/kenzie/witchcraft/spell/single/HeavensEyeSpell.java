@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
@@ -30,8 +29,7 @@ public class HeavensEyeSpell extends AbstractWardSpell {
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
         final int lifetime = 20 * 30;
-        final WardCube entity = this.summonWard(caster, lifetime);
-        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
+        final WardCube cube = this.summonWard(caster, lifetime);
         final ParticleBuilder ticker = new ParticleBuilder(Particle.ELECTRIC_SPARK)
             .count(0)
             .force(true);
@@ -40,13 +38,13 @@ public class HeavensEyeSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BEACON_AMBIENT, 0.7F, 1.8F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            final List<LivingEntity> list = this.getAffected(caster, entity, false);
+            final List<LivingEntity> list = this.getAffected(caster, cube, false);
             if (list.isEmpty()) return;
             final LivingEntity target = list.get(random.nextInt(list.size()));
             creator.drawLightning(thing.getEyeLocation(), target.getEyeLocation(), 0.15);
             WitchcraftAPI.minecraft.damageEntitySafely(target, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, cube::remove, lifetime);
     }
 
 }

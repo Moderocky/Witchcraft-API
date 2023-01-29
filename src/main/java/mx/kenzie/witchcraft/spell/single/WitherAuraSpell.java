@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
@@ -38,8 +37,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final Random random = ThreadLocalRandom.current();
         final int lifetime = 20 * 30;
-        final WardCube entity = this.summonWard(caster, lifetime);
-        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
+        final WardCube cube = this.summonWard(caster, lifetime);
         final ParticleBuilder ticker = new ParticleBuilder(Particle.SPELL_MOB)
             .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
             .count(0)
@@ -47,7 +45,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
         final ParticleCreator creator = WitchcraftAPI.client.particles(ticker);
         cube.setMajorTickConsumer(thing -> {
             thing.getWorld().playSound(thing.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.4F, 0.2F);
-            for (final Entity found : this.getAffected(caster, entity, true)) {
+            for (final Entity found : this.getAffected(caster, cube, true)) {
                 WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 0.5 + amplitude, EntityDamageEvent.DamageCause.WITHER);
                 for (int i = 0; i < 3; i++) {
                     final Location point = found.getLocation();
@@ -58,7 +56,7 @@ public class WitherAuraSpell extends AbstractWardSpell {
             final Location centre = thing.getEyeLocation();
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, cube::remove, 20 * 30L);
     }
 
 }

@@ -40,8 +40,7 @@ public class CircleOfPowerSpell extends AbstractWarhammerSpell {
         final String id = "power_circle_spell";
         final long end = System.currentTimeMillis() + (lifetime * 50);
         final Modifier modifier = new Modifier(Modifier.Type.AMPLITUDE, bonus, end);
-        final LivingEntity entity = this.summonHammer(caster, range);
-        final Hammer hammer = WitchcraftAPI.minecraft.getHandle(entity);
+        final Hammer hammer = this.summonHammer(caster, range);
         hammer.setMinorTickConsumer(thing -> {
             for (int i = 0; i < 2; i++) {
                 final Location point = getRandom(thing.getLocation());
@@ -57,7 +56,7 @@ public class CircleOfPowerSpell extends AbstractWarhammerSpell {
                 data.temporary.modifiers.put(id, modifier);
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, hammer::remove, lifetime);
     }
 
 }

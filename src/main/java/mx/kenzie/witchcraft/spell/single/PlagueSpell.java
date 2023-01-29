@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
@@ -34,8 +33,7 @@ public class PlagueSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
-        final WardCube entity = this.summonWard(caster, lifetime);
-        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
+        final WardCube cube = this.summonWard(caster, lifetime);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         final ParticleCreator bubbles = WitchcraftAPI.client.particles(bubble);
         final Location centre = caster.getEyeLocation();
@@ -43,7 +41,7 @@ public class PlagueSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, 0.6F, 0.5F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            final List<LivingEntity> list = this.getAffected(caster, entity, false);
+            final List<LivingEntity> list = this.getAffected(caster, cube, false);
             if (list.isEmpty()) return;
             for (LivingEntity living : list) {
                 bubbles.drawPoof(living.getLocation(), 0.6, 8);
@@ -51,7 +49,7 @@ public class PlagueSpell extends AbstractWardSpell {
                 living.addPotionEffect(effect);
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, cube::remove, lifetime);
     }
 
 }

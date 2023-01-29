@@ -55,7 +55,7 @@ public class Coven extends LazyWrittenData<Coven> {
         if (ENTITY_COVEN_CACHE.containsKey(entity)) return ENTITY_COVEN_CACHE.get(entity);
         final Coven coven;
         if (entity instanceof Player player) coven = getCoven(player);
-        else if (WitchcraftAPI.minecraft.getHandle(entity) instanceof Summon summon) {
+        else if (entity instanceof Summon summon) {
             final UUID id = summon.getOwnerID();
             if (id == null) coven = null;
             else {

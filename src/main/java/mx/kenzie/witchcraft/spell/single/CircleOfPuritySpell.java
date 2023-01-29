@@ -34,8 +34,7 @@ public class CircleOfPuritySpell extends AbstractWarhammerSpell {
 
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
-        final LivingEntity entity = this.summonHammer(caster, range);
-        final Hammer hammer = WitchcraftAPI.minecraft.getHandle(entity);
+        final Hammer hammer = this.summonHammer(caster, range);
         hammer.setMinorTickConsumer(thing -> {
             for (int i = 0; i < 4; i++) {
                 final Location point = getRandom(thing.getLocation());
@@ -49,7 +48,7 @@ public class CircleOfPuritySpell extends AbstractWarhammerSpell {
                 WitchcraftAPI.minecraft.damageEntitySafely(found, caster, 0.2 + amplitude, EntityDamageEvent.DamageCause.MAGIC);
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, 20 * 30L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, hammer::remove, 20 * 30L);
     }
 
 }

@@ -36,8 +36,7 @@ public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
-        final LivingEntity entity = this.summonHammer(caster, range);
-        final Hammer hammer = WitchcraftAPI.minecraft.getHandle(entity);
+        final Hammer hammer = this.summonHammer(caster, range);
         final PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, lifetime, (int) (2 + amplitude), true, false, false);
         if (!caster.hasPotionEffect(PotionEffectType.ABSORPTION)) caster.addPotionEffect(effect);
         hammer.setMinorTickConsumer(thing -> {
@@ -57,7 +56,7 @@ public class CircleOfDefianceSpell extends AbstractWarhammerSpell {
                 living.addPotionEffect(effect);
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, hammer::remove, lifetime);
     }
 
 }

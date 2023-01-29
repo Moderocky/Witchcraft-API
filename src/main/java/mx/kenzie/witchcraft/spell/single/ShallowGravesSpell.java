@@ -3,7 +3,6 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
-import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.entity.handle.Grave;
 import org.bukkit.Bukkit;
@@ -37,8 +36,7 @@ public class ShallowGravesSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
-        final WardCube entity = this.summonWard(caster, lifetime);
-        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
+        final WardCube cube = this.summonWard(caster, lifetime);
         cube.setMajorTickConsumer(thing -> {
             final List<Grave> graves = AbstractGraveSpell.getGraves(thing, range);
             if (graves.isEmpty()) return;
@@ -52,7 +50,7 @@ public class ShallowGravesSpell extends AbstractWardSpell {
                 break;
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, cube::remove, lifetime);
     }
 
 }

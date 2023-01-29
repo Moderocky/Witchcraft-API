@@ -2,7 +2,6 @@ package mx.kenzie.witchcraft.spell.single;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.Totem;
 import mx.kenzie.witchcraft.entity.WardCube;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Bukkit;
@@ -34,8 +33,7 @@ public class GravityBubbleSpell extends AbstractWardSpell {
     @Override
     public void run(LivingEntity caster, int range, float scale, double amplitude) {
         final int lifetime = 20 * 30;
-        final WardCube entity = this.summonWard(caster, lifetime);
-        final Totem cube = WitchcraftAPI.minecraft.getHandle(entity);
+        final WardCube cube = this.summonWard(caster, lifetime);
         final ParticleCreator creator = WitchcraftAPI.client.particles(builder);
         final ParticleCreator bubbles = WitchcraftAPI.client.particles(bubble);
         final Location centre = caster.getEyeLocation();
@@ -44,7 +42,7 @@ public class GravityBubbleSpell extends AbstractWardSpell {
         cube.setMajorTickConsumer(thing -> {
             centre.getWorld().playSound(centre, Sound.BLOCK_BEACON_AMBIENT, 0.7F, 0.7F);
             WitchcraftAPI.executor.submit(() -> this.drawCircle(creator, centre));
-            for (LivingEntity living : this.getAffected(caster, entity, true)) {
+            for (LivingEntity living : this.getAffected(caster, cube, true)) {
                 bubbles.drawPoof(living.getLocation(), 0.6, 8);
                 living.removePotionEffect(PotionEffectType.SLOW_FALLING);
                 living.addPotionEffect(effect);
@@ -52,7 +50,7 @@ public class GravityBubbleSpell extends AbstractWardSpell {
                 living.addPotionEffect(jump);
             }
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, entity::remove, lifetime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(WitchcraftAPI.plugin, cube::remove, lifetime);
     }
 
 }
