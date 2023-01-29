@@ -42,6 +42,18 @@ public interface ItemArchetype {
         return BukkitMaterial.AIR;
     }
 
+    static Component[] wrapText(String text) {
+        final List<String> lines = new ArrayList<>(6);
+        final Matcher matcher = LINE.matcher(text);
+        while (matcher.find()) lines.add(matcher.group(1));
+        final List<Component> components = new ArrayList<>(lines.size());
+        for (String line : lines)
+            components.add(Component.text(line, Style.style()
+                .color(TextColor.color(200, 200, 200))
+                .decoration(TextDecoration.ITALIC, true).build()));
+        return components.toArray(new Component[0]);
+    }
+
     default boolean isOutfit() {
         return false;
     }

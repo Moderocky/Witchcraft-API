@@ -63,6 +63,36 @@ public enum MagicClass {
             return 1062691586858811473L;
         }
     },
+    ARCANA {
+        @Override
+        public TextColor colour() {
+            return TextColor.color(19, 201, 242);
+        }
+    },
+    DEMON {
+        @Override
+        public TextColor colour() {
+            return TextColor.color(230, 109, 23);
+        }
+    },
+    ARCH_DEMON {
+        @Override
+        public TextColor colour() {
+            return TextColor.color(237, 63, 14);
+        }
+    },
+    MINOR_GOD {
+        @Override
+        public TextColor colour() {
+            return TextColor.color(130, 251, 255);
+        }
+    },
+    FALLEN_DEITY {
+        @Override
+        public TextColor colour() {
+            return TextColor.color(217, 31, 11);
+        }
+    },
     DIVINE {
         @Override
         public TextColor colour() {

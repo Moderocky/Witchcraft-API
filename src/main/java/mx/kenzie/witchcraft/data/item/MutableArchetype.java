@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -50,6 +51,15 @@ public class MutableArchetype implements ItemArchetype {
 
     public MutableArchetype setLore(Component... lore) {
         this.meta.lore(List.of(lore));
+        return this;
+    }
+
+    public MutableArchetype addLore(Component... lore) {
+        final List<Component> components, original = meta.lore();
+        if (original == null) components = new ArrayList<>();
+        else components = new ArrayList<>(original);
+        components.addAll(List.of(lore));
+        this.meta.lore(components);
         return this;
     }
 
