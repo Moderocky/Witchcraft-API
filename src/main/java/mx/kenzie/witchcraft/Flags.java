@@ -10,13 +10,18 @@ import java.util.WeakHashMap;
 
 public enum Flags {
 
-    ;
+    SPELL_DEMON_BALLS,
+    SPELL_FIRE_RING;
 
     private static final Map<Entity, FlagSet> MAP = new WeakHashMap<>();
     private static final FlagSet EMPTY = new EmptyFlagSet();
 
     public static @NotNull FlagSet of(Entity entity) {
         MAP.putIfAbsent(entity, new FlagSet());
+        return MAP.getOrDefault(entity, EMPTY);
+    }
+
+    public static @NotNull FlagSet read(Entity entity) {
         return MAP.getOrDefault(entity, EMPTY);
     }
 
