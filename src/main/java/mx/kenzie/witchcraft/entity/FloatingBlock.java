@@ -19,7 +19,7 @@ public interface FloatingBlock extends CustomEntity, ArmorStand, NoSpawnGrave, A
     void setDamage(double damage);
 
     enum Type {
-        STATIC, ROTATING, BURNING_SPHERE
+        STATIC, ROTATING, BURNING_SPHERE, DEMON_BALL
     }
 
 }

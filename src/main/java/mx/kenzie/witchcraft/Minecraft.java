@@ -194,6 +194,8 @@ public interface Minecraft {
     @SuppressWarnings("unchecked")
     FloatingBlock spawnFloatingBlock(Location location, LivingEntity caster, FloatingBlock.Type type, Material material);
 
+    void spawnDemonBalls(LivingEntity caster, double damage);
+
     void spawnBlockShield(LivingEntity caster);
 
     void spawnFireRing(LivingEntity caster, double damage);
