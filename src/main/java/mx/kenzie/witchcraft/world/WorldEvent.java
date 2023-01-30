@@ -20,7 +20,7 @@ public abstract class WorldEvent implements Keyed {
     protected @NotNull Status status;
 
     protected WorldEvent(Type type, Location location) {
-        this.location = location;
+        this.location = location.toCenterLocation();
         this.type = type;
         this.start = System.currentTimeMillis();
         this.status = Status.STARTING;
