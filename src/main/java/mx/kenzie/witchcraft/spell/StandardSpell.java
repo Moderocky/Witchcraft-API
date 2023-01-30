@@ -23,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.BiConsumer;
 
 public abstract class StandardSpell implements Spell {
@@ -55,7 +54,7 @@ public abstract class StandardSpell implements Spell {
         this.type = SpellType.get(map.get("type").toString());
         this.points = (int) map.get("points");
         this.energy = (int) map.get("energy");
-        this.pattern = WitchcraftAPI.spells.generate(points, new Random(id.hashCode()));
+        this.pattern = WitchcraftAPI.spells.generate(points, id);
     }
 
     public static void assembleMenu(Player player, List<ItemStack> buttons, PaginatedGUI gui, BiConsumer<Player, InventoryClickEvent> consumer) {

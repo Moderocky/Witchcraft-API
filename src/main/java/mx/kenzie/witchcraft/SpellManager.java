@@ -52,6 +52,8 @@ public interface SpellManager {
         });
     }
 
+    Pattern generate(int points, String id);
+
     Pattern generate(int points, Random random);
 
     @NotNull SpellSupplier create(String id);
