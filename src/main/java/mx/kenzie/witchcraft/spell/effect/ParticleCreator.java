@@ -58,6 +58,8 @@ public interface ParticleCreator {
 
     void drawPoof(Location start, double radius, int particles);
 
+    void drawPoof(Location start, BoundingBox box, int particles);
+
     VectorShape createPoof(double radius, int particles);
 
     VectorShape createPoof(double radiusX, double radiusY, int particles);
@@ -163,6 +165,11 @@ class TestParticleCreator implements ParticleCreator {
 
     @Override
     public void drawPoof(Location start, double radius, int particles) {
+
+    }
+
+    @Override
+    public void drawPoof(Location start, BoundingBox box, int particles) {
 
     }
 
