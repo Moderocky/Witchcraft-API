@@ -22,10 +22,14 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class DimensionDoorSpell extends ThassalurgySpell {
-    protected transient Target target;
 
     public DimensionDoorSpell(Map<String, Object> map) {
         super(map);
+    }
+
+    @Override
+    public boolean canCast(LivingEntity caster) {
+        return super.canCast(caster) && target != null;
     }
 
     @Override
