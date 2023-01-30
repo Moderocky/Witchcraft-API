@@ -35,7 +35,7 @@ public class ThassalurgySpell extends AbstractTargetedSpell {
         if (!(caster instanceof Player)) return false;
         if (!Protection.getInstance().canTeleport(caster, caster.getLocation())) return false;
         this.target = this.getTarget(caster, 10, false);
-        return target.target() != null && target.result() != null && target.result().getHitBlock() != null;
+        return target != null && target.target() != null && target.result() != null && target.result().getHitBlock() != null;
     }
 
     @Override
