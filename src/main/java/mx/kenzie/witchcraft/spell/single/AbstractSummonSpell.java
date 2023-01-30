@@ -43,7 +43,6 @@ abstract class AbstractSummonSpell extends StandardSpell {
                     if (AbstractTeleportSpell.isInvalidStand(block)) continue;
                     if (AbstractTeleportSpell.isInvalidAbove(block)) continue;
                     if (AbstractTeleportSpell.isInvalidBelow(block)) continue;
-                    if (!WitchcraftAPI.minecraft.hasLineOfSight(sample, centre)) continue;
                     blocks.add(sample.getBlock());
                 }
             }
