@@ -5,6 +5,7 @@ import mx.kenzie.witchcraft.data.Coven;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
 public class CustomEntityType<EntityClass extends CustomEntity> {
@@ -65,6 +66,7 @@ public class CustomEntityType<EntityClass extends CustomEntity> {
     public static final CustomEntityType<? extends Demon> SOLDIER_DEMON = new CustomEntityType<>("SOLDIER_DEMON");
     public static final CustomEntityType<? extends Demon> INQUISITOR_DEMON = new CustomEntityType<>("INQUISITOR_DEMON");
     public static final CustomEntityType<?> DEMON_FANGS = new CustomEntityType<>("DEMON_FANGS");
+    public static final CustomEntityType<? extends Mob> DEMON_TRAP = new CustomEntityType<>("DEMON_TRAP");
     public static final CustomEntityType<? extends LivingEntity> SEAT = new CustomEntityType<>("SEAT");
     public static final CustomEntityType<? extends FloatingBlock> FLOATING_BLOCK = new CustomEntityType<>("FLOATING_BLOCK") {
         @Override
