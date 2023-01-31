@@ -9,10 +9,10 @@ import org.bukkit.entity.LivingEntity;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class DemonBallsSpell extends StandardSpell {
+public class HellShieldSpell extends StandardSpell {
     public static final int TIME_LIFE = 200;
 
-    public DemonBallsSpell(Map<String, Object> map) {
+    public HellShieldSpell(Map<String, Object> map) {
         super(map);
     }
 
