@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 
 public class PolymorphSpell extends AbstractTargetedSpell {
 
+    public static final Class<? extends Animals>[] ANIMALS = new Class[]{Pig.class, Sheep.class, Cow.class};
     protected transient final Color color = new Color(147, 18, 183);
     protected transient final ParticleCreator creator = ParticleCreator.of(new ParticleBuilder(Particle.SPELL_MOB)
         .offset(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0)
         .count(0)
         .force(true));
-    public static final Class<? extends Animals>[] ANIMALS = new Class[]{Pig.class, Sheep.class, Cow.class};
 
     public PolymorphSpell(Map<String, Object> map) {
         super(map);
