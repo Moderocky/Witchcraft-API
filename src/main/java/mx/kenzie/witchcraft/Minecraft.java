@@ -8,6 +8,7 @@ import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.entity.handle.Handle;
 import mx.kenzie.witchcraft.entity.handle.NPC;
+import mx.kenzie.witchcraft.world.BuildTask;
 import mx.kenzie.witchcraft.world.CollisionTraceResult;
 import mx.kenzie.witchcraft.world.WorldEvent;
 import org.bukkit.Location;
@@ -24,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.structure.Structure;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -207,4 +209,6 @@ public interface Minecraft {
     void registerHuman(Human human, Consumer<PlayerJoinEvent> onJoin);
 
     void notifyHumans(PlayerJoinEvent event);
+
+    BuildTask createBuildTask(Structure structure, Location location);
 }
