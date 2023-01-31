@@ -94,7 +94,8 @@ public class LearnedSpell implements ItemArchetype {
             case GLADIOMAGUS -> ItemArchetype.of("battle_spell_book");
             case THAUMATURGE -> ItemArchetype.of("thaumaturgy_spell_book");
             case WARLOCK -> ItemArchetype.of("warlock_spell_book");
-            case DIVINE -> ItemArchetype.of("divine_spell_book");
+            case DIVINE, FALLEN_DEITY, MINOR_GOD -> ItemArchetype.of("divine_spell_book");
+            case DEMON, ARCH_DEMON -> ItemArchetype.of("demon_spell_book");
             default -> ItemArchetype.of("pure_spell_book");
         }).create();
         item.addItemFlags(ItemFlag.values());
