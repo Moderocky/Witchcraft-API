@@ -3,6 +3,7 @@ package mx.kenzie.witchcraft.spell.single;
 import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.WitchcraftAPI;
 import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.Owned;
 import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
@@ -44,7 +45,7 @@ public class BladesOfGlorySpell extends AbstractSummonSpell {
         }
     }
 
-    protected CustomEntityType getEntityType() {
+    protected CustomEntityType<? extends Owned> getEntityType() {
         return CustomEntityType.BLADE_OF_GLORY;
     }
 
