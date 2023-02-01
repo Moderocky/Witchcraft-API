@@ -45,10 +45,10 @@ public class BindingSpell extends AbstractProjectileSpell {
             return true;
         });
         projectile.onCollide(() -> {
-            world.playSound(projectile.getLocation(), Sound.BLOCK_CHAIN_PLACE, 1.5F, 1.0F);
+            world.playSound(projectile.getLocation(), Sound.BLOCK_CHAIN_PLACE, 2.0F, 1.0F);
             creator.drawPoof(projectile.getLocation(), 1, 12);
         });
-        world.playSound(location, Sound.BLOCK_CHAIN_HIT, 0.6F, 1.0F);
+        world.playSound(location, Sound.BLOCK_CHAIN_HIT, 0.8F, 1.0F);
         return projectile;
     }
 }
