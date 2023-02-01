@@ -1,6 +1,7 @@
 package mx.kenzie.witchcraft.spell.single;
 
 import mx.kenzie.witchcraft.entity.CustomEntityType;
+import mx.kenzie.witchcraft.entity.Owned;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class CallToArmsSpell extends BladesOfGlorySpell {
     }
 
     @Override
-    protected CustomEntityType getEntityType() {
+    protected CustomEntityType<? extends Owned> getEntityType() {
         return CustomEntityType.DEAD_SOLDIER_SUMMON;
     }
 
