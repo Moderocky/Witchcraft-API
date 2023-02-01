@@ -88,6 +88,6 @@ public abstract class WorldEvent implements Keyed {
     }
 
     public enum Type {
-        DEMON_INVASION
+        DEMON_INVASION, RAGNAROK
     }
 }
