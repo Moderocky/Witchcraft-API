@@ -211,4 +211,8 @@ public interface Minecraft {
     void notifyHumans(PlayerJoinEvent event);
 
     BuildTask createBuildTask(Structure structure, Location location);
+
+    Object switchFlyController(LivingEntity caster);
+
+    void resetController(LivingEntity caster, Object controller);
 }
