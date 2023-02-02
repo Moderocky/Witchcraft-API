@@ -33,6 +33,14 @@ public class HealingRitualSpell extends StandardSpell {
         final double amount = 4 + amplitude;
         final List<LivingEntity> entities = new ArrayList<>(centre.getNearbyLivingEntities(10, 5));
         entities.removeIf(target -> !minecraft.isAlly(caster, target));
+        this.doVibration(centre, world, entities);
+        WitchcraftAPI.scheduler.schedule(() -> {
+            for (LivingEntity entity : entities)
+                entity.setHealth(Math.min(minecraft.getMaxHealth(entity), entity.getHealth() + amount));
+        }, 2, TimeUnit.SECONDS);
+    }
+
+    protected void doVibration(Location centre, World world, List<LivingEntity> entities) {
         for (int i = 0; i < 5; i++) {
             WitchcraftAPI.scheduler.schedule(() -> {
                 for (LivingEntity entity : entities) {
@@ -42,9 +50,5 @@ public class HealingRitualSpell extends StandardSpell {
                 }
             }, i * 380, TimeUnit.MILLISECONDS);
         }
-        WitchcraftAPI.scheduler.schedule(() -> {
-            for (LivingEntity entity : entities)
-                entity.setHealth(Math.min(minecraft.getMaxHealth(entity), entity.getHealth() + amount));
-        }, 2, TimeUnit.SECONDS);
     }
 }
