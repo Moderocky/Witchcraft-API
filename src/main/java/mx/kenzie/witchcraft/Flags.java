@@ -11,7 +11,7 @@ import java.util.WeakHashMap;
 public enum Flags {
 
     SPELL_DEMON_BALLS,
-    SPELL_FIRE_RING;
+    SPELL_FIRE_RING, FLIGHT;
 
     private static final Map<Entity, FlagSet> MAP = new WeakHashMap<>();
     private static final FlagSet EMPTY = new EmptyFlagSet();
