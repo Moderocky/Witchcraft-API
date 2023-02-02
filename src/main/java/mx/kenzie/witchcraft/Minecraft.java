@@ -45,6 +45,8 @@ public interface Minecraft {
         return WitchcraftAPI.minecraft;
     }
 
+    org.bukkit.entity.Mob createChains(LivingEntity target, Location location, boolean pull);
+
     Projectile spawnProjectile(LivingEntity shooter, Location location, Vector velocity, float diameter, double range);
 
     /**
