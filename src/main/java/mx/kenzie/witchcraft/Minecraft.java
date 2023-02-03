@@ -10,9 +10,11 @@ import mx.kenzie.witchcraft.entity.handle.Handle;
 import mx.kenzie.witchcraft.entity.handle.NPC;
 import mx.kenzie.witchcraft.world.BuildTask;
 import mx.kenzie.witchcraft.world.CollisionTraceResult;
+import mx.kenzie.witchcraft.world.SpawnTask;
 import mx.kenzie.witchcraft.world.WorldEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
@@ -217,4 +219,6 @@ public interface Minecraft {
     Object switchFlyController(LivingEntity caster);
 
     void resetController(LivingEntity caster, Object controller);
+
+    void addSpawnTask(World world, SpawnTask task);
 }
