@@ -8,10 +8,7 @@ import mx.kenzie.witchcraft.entity.*;
 import mx.kenzie.witchcraft.entity.handle.Grave;
 import mx.kenzie.witchcraft.entity.handle.Handle;
 import mx.kenzie.witchcraft.entity.handle.NPC;
-import mx.kenzie.witchcraft.world.BuildTask;
-import mx.kenzie.witchcraft.world.CollisionTraceResult;
-import mx.kenzie.witchcraft.world.SpawnTask;
-import mx.kenzie.witchcraft.world.WorldEvent;
+import mx.kenzie.witchcraft.world.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -221,4 +218,6 @@ public interface Minecraft {
     void resetController(LivingEntity caster, Object controller);
 
     void addSpawnTask(World world, SpawnTask task);
+
+    Block findClosest(World world, PointOfInterest interest, Location location);
 }
