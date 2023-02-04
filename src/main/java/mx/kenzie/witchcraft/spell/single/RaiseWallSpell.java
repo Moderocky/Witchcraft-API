@@ -1,22 +1,22 @@
 package mx.kenzie.witchcraft.spell.single;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import mx.kenzie.witchcraft.Minecraft;
 import mx.kenzie.witchcraft.WitchcraftAPI;
-import mx.kenzie.witchcraft.entity.FloatingBlock;
 import mx.kenzie.witchcraft.spell.StandardSpell;
+import mx.kenzie.witchcraft.spell.effect.ParticleCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class ShieldSpell extends StandardSpell {
+public class RaiseWallSpell extends StandardSpell {
 
-    protected transient final Material material = Material.LIGHT_BLUE_STAINED_GLASS;
-
-    public ShieldSpell(Map<String, Object> map) {
+    public RaiseWallSpell(Map<String, Object> map) {
         super(map);
     }
 
@@ -39,12 +39,32 @@ public class ShieldSpell extends StandardSpell {
                     point.setYaw(point.getYaw() - factor + (space * x));
                     point.setPitch(point.getPitch() + (space * y));
                     point.add(point.getDirection().multiply(size));
-                    final FloatingBlock block = Minecraft.getInstance()
-                        .spawnFloatingBlock(point, caster, FloatingBlock.Type.ROTATING, Material.LIGHT_BLUE_STAINED_GLASS);
-                    block.getBuilder().count(0).particle(Particle.WATER_BUBBLE).data(null);
+                    this.drawBlock(point, this.getMaterial());
                 }
                 WitchcraftAPI.sleep(200);
             }
+        });
+    }
+
+    protected Material getMaterial() {
+        final Material[] materials = new Material[]{Material.MUD, Material.DIRT, Material.ROOTED_DIRT, Material.COARSE_DIRT};
+        return materials[ThreadLocalRandom.current().nextInt(materials.length)];
+    }
+
+    protected void drawBlock(Location location, Material material) {
+        final Location start = location.add(0, -4, 0);
+        final ParticleCreator creator = ParticleCreator.of(material);
+        WitchcraftAPI.executor.submit(() -> {
+            final ParticleBuilder builder = creator.getBuilder();
+            for (Vector vector : creator.createLine(start, location, 0.2)) {
+                final Location point = start.clone().add(vector);
+                builder.location(point).spawn();
+                WitchcraftAPI.sleep(50);
+            }
+            Minecraft.getInstance().ensureMain(() -> {
+                final Block block = location.getBlock();
+                if (block.isEmpty()) block.setType(material, false);
+            });
         });
     }
 
