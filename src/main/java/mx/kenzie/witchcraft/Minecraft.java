@@ -18,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -216,6 +217,8 @@ public interface Minecraft {
     Object switchFlyController(LivingEntity caster);
 
     void resetController(LivingEntity caster, Object controller);
+
+    Horse spawnHorseDemon(Location location, WarlockDeity deity);
 
     void addSpawnTask(World world, SpawnTask task);
 
